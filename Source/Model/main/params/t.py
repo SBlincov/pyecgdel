@@ -1,0 +1,28 @@
+from Source.Model.main.params.t_default import TDefaultParams
+
+TParams = dict()
+
+TParams['START_SHIFT'] = TDefaultParams.START_SHIFT
+TParams['END_PROPORTION'] = TDefaultParams.END_PROPORTION
+TParams['PEAK_END_PROPORTION'] = TDefaultParams.PEAK_END_PROPORTION
+
+TParams['BIPHASIC_AMPLITUDE_LEFT'] = TDefaultParams.BIPHASIC_AMPLITUDE_LEFT
+TParams['BIPHASIC_AMPLITUDE_RIGHT'] = TDefaultParams.BIPHASIC_AMPLITUDE_RIGHT
+TParams['THRESHOLD'] = TDefaultParams.THRESHOLD
+
+TParams['BIPHASIC_LIMIT_SHIFT'] = TDefaultParams.BIPHASIC_LIMIT_SHIFT
+
+TParams['FLEXURE_SHIFT'] = TDefaultParams.FLEXURE_SHIFT
+TParams['FLEXURE_AMPLITUDE'] = TDefaultParams.FLEXURE_AMPLITUDE
+TParams['LITTLE_AMPLITUDE_COMP'] = TDefaultParams.LITTLE_AMPLITUDE_COMP
+
+TParams['P_CORR'] = TDefaultParams.P_CORR
+TParams['AMPLITUDE_DECREASING'] = TDefaultParams.AMPLITUDE_DECREASING
+
+TParams['MUTABILITY_PERCENTAGE'] = TDefaultParams.MUTABILITY_PERCENTAGE
+
+TParams['T_WDC_SCALE_ID'] = TDefaultParams.T_WDC_SCALE_ID
+
+TParams['T_ONSET_SHARP'] = TDefaultParams.T_ONSET_SHARP
+
+TParams['MM_WINDOW'] = TDefaultParams.MM_WINDOW

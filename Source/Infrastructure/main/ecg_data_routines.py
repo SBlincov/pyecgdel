@@ -1,0 +1,2 @@
+class InvalidECGData(Exception):
+    pass
