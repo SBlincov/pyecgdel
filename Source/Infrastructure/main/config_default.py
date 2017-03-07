@@ -1,0 +1,20 @@
+class ConfigDefaultParams:
+
+    EXTENSION = ".txt"
+    SAMPLING_RATE = 1000.0
+    LEADS_NAMES = ["lead_i",
+                   "lead_ii",
+                   "lead_iii",
+                   "lead_avr",
+                   "lead_avl",
+                   "lead_avf",
+                   "lead_v1",
+                   "lead_v2",
+                   "lead_v3",
+                   "lead_v4",
+                   "lead_v5",
+                   "lead_v6"]
+
+    NUM_LEADS_STABLE_LIMIT = 0.3
+    NUM_WDC_SCALES = 3
+

@@ -1,3 +1,26 @@
+# Main exludes:
+
+.idea/*
+
+Data/*
+!Data/**/properties.txt
+!Data/**/*_param.txt
+
+presentation/*
+!presentation/**/*.pptx
+!presentation/**/*.ppt
+!presentation/**/*.pdf
+
+Report/*
+!Report/**/*.docx
+!Report/**/*.doc
+
+Script/*
+!Script/**/*.m
+
+
+Source/**/*.dll
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
