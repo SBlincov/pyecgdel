@@ -3,12 +3,10 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 3185;
+record = 3167;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
-%leads = {'lead_ii'};
-
-
+%leads = {'lead_v1'};
 
 for lead_id = 1:12
     

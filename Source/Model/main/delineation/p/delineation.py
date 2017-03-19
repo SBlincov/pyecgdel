@@ -50,7 +50,6 @@ def get_p_delineation(ecg_lead, qrs_id):
     if not zcs:
         return delineation
 
-
     if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['P_FLAT_OFFSET_WINDOW']) * sampling_rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['P_OFFSET_SHARP'])):
         zcs.pop(-1)
 
@@ -85,8 +84,8 @@ def get_p_delineation(ecg_lead, qrs_id):
     peak_zcs_ids.check_flexure_p(ecg_lead, qrs_id, zcs, delineation)
 
     peak_zcs_ids.check_left_biphasic_p(ecg_lead, zcs, delineation)
-    if delineation.specification is not WaveSpecification.biphasic:
-        peak_zcs_ids.check_right_biphasic_p(ecg_lead, zcs, delineation)
+    # if delineation.specification is not WaveSpecification.biphasic:
+    #     peak_zcs_ids.check_right_biphasic_p(ecg_lead, zcs, delineation)
 
     define_p_onset_index(ecg_lead, delineation, zcs, peak_zcs_ids.left_zc_id, begin_index)
     define_p_offset_index(ecg_lead, delineation, zcs, peak_zcs_ids.right_zc_id, end_index)

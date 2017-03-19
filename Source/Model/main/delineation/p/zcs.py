@@ -21,7 +21,7 @@ def get_p_zcs(ecg_lead, qrs_id, window):
     begin_index = get_p_begin_index(ecg_lead, qrs_id)
     end_index = get_p_end_index(ecg_lead, qrs_id)
 
-    zcs = get_zcs_with_special_mms(wdc, begin_index, end_index, window)
+    zcs = get_zcs_with_special_mms_for_p(wdc, begin_index, end_index, window)
 
     return zcs
 

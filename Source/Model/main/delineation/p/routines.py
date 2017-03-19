@@ -61,7 +61,7 @@ def get_p_end_index(ecg_lead, qrs_id):
     tmp_mm = find_left_mm(cur_qrs_dels_seq[qrs_id].onset_index, wdc)
     end_index_candidate_1 = tmp_mm.index - 1
     end_index_candidate_2 = find_left_thc_index(wdc, cur_qrs_dels_seq[qrs_id].onset_index - 1, begin_index, 0.0)
-    end_index = max(end_index_candidate_1, end_index_candidate_2)
+    end_index = max(end_index_candidate_1, end_index_candidate_2 - 1)
 
     return end_index
 
