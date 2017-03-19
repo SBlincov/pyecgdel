@@ -1,7 +1,7 @@
 from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 
-DBConfig.name = 'qtdb'
+DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -22,28 +22,6 @@ records_names = []
 for record_name in os.listdir(DBConfig.get_db_path()):
     if os.path.isdir(os.path.join(DBConfig.get_db_path(), record_name)):
         records_names.append(record_name)
-
-# records_names = ['record_1',
-#                  'record_2',
-#                  'record_3',
-#                  'record_4',
-#                  'record_5',
-#                  'record_6',
-#                  'record_7',
-#                  'record_8',
-#                  'record_9',
-#                  'record_10',
-#                  'record_11',
-#                  'record_12',
-#                  'record_13',
-#                  'record_14',
-#                  'record_15',
-#                  'record_16',
-#                  'record_17',
-#                  'record_18',
-#                  'record_19',
-#                  'record_20'
-#                  ]
 
 for record_name in records_names:
     print('Record Name: ', record_name)

@@ -113,8 +113,6 @@ def get_qrs_onset_mm_id(ecg_lead, qrs_zc, mms, onset_mm_id):
                     qrs_onset_mm_id = mm_id
                 else:
                     break
-            else:
-                break
 
     return qrs_onset_mm_id
 
