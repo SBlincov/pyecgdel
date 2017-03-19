@@ -16,7 +16,7 @@ db_path = DBConfig.get_db_path()
 cb = Cardiobase()
 cb.connect()
 
-max_id_file = 2170
+max_id_file = 0
 
 columns = ["lead_i_original",
            "lead_ii_original",
@@ -35,7 +35,9 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    data = cb.bulk_data_get([column], "device_model='AT-101' AND id_file>" + str(max_id_file))
+
+    #data = cb.bulk_data_get([column], "device_model='AT-101' AND id_file>" + str(max_id_file))
+    data = cb.bulk_data_get([column], "device_model='AT-101'")
     records_ids = data['id']
     ecg_data = data['data']
 

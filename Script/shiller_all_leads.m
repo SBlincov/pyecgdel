@@ -3,10 +3,10 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 702;
+record = 3185;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
-%leads = {'lead_v6'};
+%leads = {'lead_ii'};
 
 
 for lead_id = 1:12
@@ -16,7 +16,7 @@ for lead_id = 1:12
     
     wdc_scale = 1;
     markerWidth = 10;
-    is_filtered = 0;
+    is_filtered = 1;
     
     db_path = sprintf('../Data/%s/', base_name);
     record_path = sprintf('record_%d/', record);
@@ -155,15 +155,15 @@ for lead_id = 1:12
     
     wdc_shifts = [0 1 3 7 15 31 65];
     
-%     for wdc_scale = 1:wdc_num
-%         
-%         curr_wdc = wdc(:,wdc_scale);
-%         title(lead);
-%         hLine = plot(times(1:size(wdc, 1)), curr_wdc, 'LineWidth', 1);
-%         legend(hLine, sprintf('wdc %d', wdc_scale));
-%         set(gca, 'FontSize', 18);
-%         hold all;
-%     end
+    for wdc_scale = 3:5
+        
+        curr_wdc = wdc(:,wdc_scale);
+        title(lead);
+        hLine = plot(times(1:size(wdc, 1)), curr_wdc, 'LineWidth', 1);
+        legend(hLine, sprintf('wdc %d', wdc_scale));
+        set(gca, 'FontSize', 18);
+        hold all;
+    end
     
     grid on;
     

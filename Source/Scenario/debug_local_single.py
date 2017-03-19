@@ -1,7 +1,8 @@
 from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 
-DBConfig.name = 'qtdb'
+
+DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -17,9 +18,10 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
-ConfigParams['LEADS_NAMES'] = ['lead_ii']
 
-record_id = 5
+ConfigParams['LEADS_NAMES'] = ['lead_v1']
+
+record_id = 3183
 
 record_name = "record_" + str(record_id)
 
