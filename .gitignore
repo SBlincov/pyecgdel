@@ -3,8 +3,8 @@
 .idea/*
 
 Data/*
-!Data/**/properties.txt
-!Data/**/*_param.txt
+!Data/*/*.txt
+!Data/*/*.txt
 
 presentation/*
 !presentation/**/*.pptx

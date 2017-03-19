@@ -50,13 +50,14 @@ def get_p_delineation(ecg_lead, qrs_id):
     if not zcs:
         return delineation
 
-    if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['P_FLAT_ONSET_WINDOW']) * sampling_rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['P_ONSET_SHARP'])):
+
+    if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['P_FLAT_OFFSET_WINDOW']) * sampling_rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['P_OFFSET_SHARP'])):
         zcs.pop(-1)
 
     if not zcs:
         return delineation
 
-    if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['P_FLAT_OFFSET_WINDOW']) * sampling_rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['P_OFFSET_SHARP'])):
+    if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['P_FLAT_ONSET_WINDOW']) * sampling_rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['P_ONSET_SHARP'])):
         zcs.pop(0)
 
     window = get_window(ecg_lead, qrs_id)
