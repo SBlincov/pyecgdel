@@ -9,6 +9,7 @@ leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'l
 %leads = {'lead_ii'};
 
 
+
 for lead_id = 1:12
     
     figure;
@@ -16,6 +17,7 @@ for lead_id = 1:12
     
     wdc_scale = 1;
     markerWidth = 10;
+
     is_filtered = 1;
     
     db_path = sprintf('../Data/%s/', base_name);
