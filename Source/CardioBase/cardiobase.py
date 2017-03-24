@@ -2,9 +2,10 @@
 
 
 
-from Source.CardioBase.CardioBase import CardioBase
+from Source.CardioBase.cardiobase_python import CardioBase
 from Source.CardioBase.cardiodata import CardioData, CardiobaseError
 from _pickle import dumps, loads
+import json
 
 
 
@@ -13,6 +14,7 @@ class Cardiobase():
 
 
     _id_columns_hash = 20
+    _id_columns_hash_json = 27
 
 
     #   Конструктор
@@ -20,15 +22,16 @@ class Cardiobase():
         self._cardiobase = CardioBase()
         self.leads = ["i", "ii", "iii", "avr", "avl", "avf", "v1", "v2", "v3", "v4", "v5", "v6"]
         self._cardiodata = CardioData()
-        self.dict_types = {}
+        self.dict_types = dict()
         self.dict_types["default"] = 276
 
 
     #   Подключаемся к базе
-    def connect(self):
-        self._cardiobase.connect()
+    def connect(self, ip="10.0.30.30"):
+        self._cardiobase.connect(ip)
         columns = self.get_hash(Cardiobase._id_columns_hash)
-        self._cardiodata.set_dictionary(columns)
+        columns_json = self._cardiobase.get_hash(Cardiobase._id_columns_hash_json)
+        self._cardiodata.set_dictionary(columns, columns_json)
 
             
     #   Отключаемся от базы
@@ -52,11 +55,11 @@ class Cardiobase():
 
     
     #   Создаем файл
-    def create_file(self, id_patient, fname, type_id_str="default"):
+    def create_file(self, id_patient, fname, type_id_str="default", user_id=1):
         list_keys = list(self.dict_types.keys())
         if type_id_str in list_keys:
             type_id = self.dict_types[type_id_str]
-            return self._cardiobase.create_file(id_patient, fname, type_id)
+            return self._cardiobase.create_file(id_patient, fname, type_id, user_id)
         else:
             CardioError = CardiobaseError("Нет типа данных '" + type_id_str + "'. Используйте " + str(list_keys))
             raise CardioError   
@@ -69,14 +72,15 @@ class Cardiobase():
 
     #   Берем массив данных
     def bulk_data_get(self, columns, additionally=""):
-        nums = []
-        for col in columns:
-            nums.append(self._cardiodata.get_index(col))
+        nums = [self._cardiodata.get_index(col) for col in columns]
         data = self._cardiobase.bulk_data_get(nums, additionally)
         for file_id in data['data']:
             for i, info in enumerate(file_id):
                 if info is not None:
-                    file_id[i] = loads(info.encode('ISO-8859-1'))
+                    if nums[i] <= 1000:
+                        file_id[i] = loads(info.encode('ISO-8859-1'))
+                    else:
+                        file_id[i] = json.loads(info)
         return data
 
 
@@ -86,7 +90,10 @@ class Cardiobase():
         for key, column in data.items():
             for value in column:
                 index = self._cardiodata.check_and_get_index(key, value[1])
-                data_list.append([value[0], index, dumps(value[1], 2).decode('ISO-8859-1') ])
+                if (index <= 1000):
+                    data_list.append([ value[0], index, dumps(value[1], 2).decode('ISO-8859-1') ])
+                else:
+                    data_list.append([ value[0], index, json.dumps(value[1]) ])
         self._cardiobase.bulk_data_set(data_list)
 
         
@@ -100,13 +107,13 @@ class Cardiobase():
 
 
     #   Возвращаем список файлов с заданным type_id
-    def get_files(self, type_id, begin_date="01.01.1000, 00:00:00", end_date="01.01.3000, 00:00:00"):
-        return self._cardiobase.get_files(type_id, begin_date, end_date)
+    def get_files(self, type_id, begin_date="01.01.1000, 00:00:00", end_date="01.01.3000, 00:00:00", user_id=602669172):
+        return self._cardiobase.get_files(type_id, begin_date, end_date, user_id)
         
     
     #   Возвращает id файла по его имени
-    def get_file_id(self, fname):
-        return self._cardiobase.get_file_id(fname)
+    def get_file_id(self, fname, user_id=602669172):
+        return self._cardiobase.get_file_id(fname, user_id)
 
 
     #   Создаем пациента
@@ -157,13 +164,18 @@ class Cardiobase():
         return self._cardiobase.update_hash_row(id_, id_type_hash, name, dumps("", 2).decode('ISO-8859-1'), 1, 0)
 
 
-    #   	Загрузить edf файла id_file локально по пути fname
-    def read_edf(self, id_file, fname):
-        return self._cardiobase.read_edf(id_file, fname)
+    #   Загрузить edf файла id_file локально по пути fname
+    def read_edf(self, id_file):
+        return self._cardiobase.read_edf(id_file)
 
 
     #   Сгенерировать событие в базе
     def cardio_event(self, object_name, event_name, id_file):
         self._cardiobase.cardio_event(object_name, event_name, id_file, "diagnostics")
+
+        
+    #   Получить диагноз по файлу
+    def get_diagnosis(self, id_file):
+        return self._cardiobase.get_diagnosis(id_file)
 
 

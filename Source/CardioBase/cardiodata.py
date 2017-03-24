@@ -23,10 +23,12 @@ class CardioData:
 
         
     #   Загружаем словарь
-    def set_dictionary(self, columns):
+    def set_dictionary(self, columns, columns_json):
         self._dictionary = {}
         for i, name in enumerate(columns['name']):
-            self._dictionary[name] = (columns['id'][i], columns['data'][i])          
+            self._dictionary[name] = (columns['id'][i], columns['data'][i])    
+        for i, name in enumerate(columns_json['name']):
+            self._dictionary["json_" + name] = (columns_json['id'][i], columns_json['data'][i])
     
 
     #   Возвращает индекс в базе по названию признака
@@ -36,7 +38,8 @@ class CardioData:
             index = self._dictionary[column][0]
         except KeyError:
             raise CardiobaseError("Нет столбца с именем '" + column + "'")
-        self._checkType(column, data, self._dictionary[column][1])
+        if index <= 1000:
+            self._checkType(column, data, self._dictionary[column][1])
         return index
         
         
