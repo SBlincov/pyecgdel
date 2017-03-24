@@ -12,8 +12,6 @@ presentation/*
 !presentation/**/*.pdf
 
 Report/*
-!Report/**/*.docx
-!Report/**/*.doc
 
 Script/*
 !Script/**/*.m
