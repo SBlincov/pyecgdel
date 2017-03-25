@@ -19,10 +19,10 @@ from Source.Model.main.delineation.t.zcs import *
 
 def define_t_onset_index(ecg_lead, delineation, zcs, left_peak_zc_id, begin_index):
 
-    wdc_scale_id = get_p_wdc_scale_id(ecg_lead)
+    wdc_scale_id = get_t_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
 
-    threshold = zcs[left_peak_zc_id].left_mm.value * float(TParams['THRESHOLD'])
+    threshold = zcs[left_peak_zc_id].left_mm.value * float(TParams['ONSET_OFFSET_THRESHOLD_MM'])
     start_searching_onset_index = zcs[left_peak_zc_id].left_mm.index
 
     if start_searching_onset_index < begin_index:

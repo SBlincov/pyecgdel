@@ -10,7 +10,7 @@ lead_ids = 1:12;
 
 is_filtered = 1;
 wdc_scales = [3 4];
-x_axis_type = 1;
+x_axis_type = 0;
 
 markerWidth = 10;
 

@@ -28,8 +28,8 @@ def define_p_offset_index(ecg_lead, delineation, zcs, right_peak_zc_id, end_inde
         searching_offset_right_border_index = end_index
 
     current_mm = find_right_mm(zcs[right_peak_zc_id].index, wdc)
-    offset_mm_candidate_coeff = abs(current_mm.value) * float(PParams['OFFSET_CANDIDATE_COEFF'])
-    offset_mm_candidate_coeff_overflow = abs(current_mm.value) * float(PParams['OFFSET_CANDIDATE_COEFF_OVERFLOW'])
+    offset_mm_candidate_coeff = abs(current_mm.value) * float(PParams['OFFSET_MM_COEFF'])
+    offset_mm_candidate_coeff_overflow = abs(current_mm.value) * float(PParams['OFFSET_MM_COEFF_OVERFLOW'])
 
     mm_list = []
     while current_mm.index < searching_offset_right_border_index:
@@ -56,7 +56,7 @@ def define_p_offset_index(ecg_lead, delineation, zcs, right_peak_zc_id, end_inde
                 return
 
     offset_start_searching_index = mm_list[correct_offset_mm_id].index
-    threshold = mm_list[correct_offset_mm_id].value * float(PParams['THRESHOLD'])
+    threshold = mm_list[correct_offset_mm_id].value * float(PParams['ONSET_OFFSET_THRESHOLD'])
 
     offset_index_candidate_1 = find_right_thc_index(wdc, offset_start_searching_index, end_index, threshold)
     offset_index_candidate_2 = find_right_mm(offset_start_searching_index + 1, wdc).index

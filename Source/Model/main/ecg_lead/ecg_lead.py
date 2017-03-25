@@ -55,12 +55,12 @@ class ECGLead:
 
     def delineation(self):
         self.cur_qrs_dels_seq = get_qrs_delineations(self, 0, len(self.wdc[0]))
-        self.cur_p_dels_seq = get_p_delineations(self)
         self.cur_t_dels_seq = get_t_delineations(self)
+        self.cur_p_dels_seq = get_p_delineations(self)
 
         self.qrs_dels.append(self.cur_qrs_dels_seq)
-        self.p_dels.append(self.cur_p_dels_seq)
         self.t_dels.append(self.cur_t_dels_seq)
+        self.p_dels.append(self.cur_p_dels_seq)
 
         if not self.cur_qrs_dels_seq:
             return
@@ -68,25 +68,26 @@ class ECGLead:
         next_seq_start = self.cur_qrs_dels_seq[-1].offset_index
 
         self.cur_qrs_dels_seq = []
-        self.cur_p_dels_seq = []
         self.cur_t_dels_seq = []
+        self.cur_p_dels_seq = []
 
         while next_seq_start < int(len(self.wdc[0]) * 0.8):
             self.cur_qrs_dels_seq = get_qrs_delineations(self, next_seq_start, len(self.wdc[0]))
-            self.cur_p_dels_seq = get_p_delineations(self)
             self.cur_t_dels_seq = get_t_delineations(self)
+            self.cur_p_dels_seq = get_p_delineations(self)
 
             if self.cur_qrs_dels_seq:
                 self.qrs_dels.append(self.cur_qrs_dels_seq)
-                self.p_dels.append(self.cur_p_dels_seq)
                 self.t_dels.append(self.cur_t_dels_seq)
+                self.p_dels.append(self.cur_p_dels_seq)
+
                 next_seq_start = self.cur_qrs_dels_seq[-1].offset_index
             else:
                 next_seq_start += int((len(self.wdc[0]) - next_seq_start) * 0.1)
 
             self.cur_qrs_dels_seq = []
-            self.cur_p_dels_seq = []
             self.cur_t_dels_seq = []
+            self.cur_p_dels_seq = []
 
     def calc_characteristics(self):
         qrs_characteristics = get_qrs_characteristics(self)

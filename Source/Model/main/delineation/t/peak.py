@@ -14,52 +14,35 @@ from Source.Model.main.modulus_maxima.routines import *
 from Source.Model.main.delineation.t.routines import *
 
 
-def is_t_peak_zc_candidate_exist(ecg_lead, qrs_id, zcs):
-
-    sampling_rate = ecg_lead.sampling_rate
-
-    begin_index = get_t_begin_index(ecg_lead, qrs_id)
-    end_index = get_t_end_index(ecg_lead, qrs_id)
-
-    zcs_peaks_candidates_begin_index = begin_index
-    zcs_peaks_candidates_end_index = end_index + int(float(TParams['PEAK_END_PROPORTION']) * sampling_rate)
-
-    result = False
-
-    for zc in zcs:
-        if zcs_peaks_candidates_begin_index < zc.index < zcs_peaks_candidates_end_index:
-            result = True
-            break
-
-    return result
-
-
 def get_t_peak_zc_id(ecg_lead, qrs_id, zcs):
 
-    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
-
-    rr = cur_qrs_dels_seq[qrs_id].peak_index - cur_qrs_dels_seq[qrs_id - 1].peak_index
-
     begin_index = get_t_begin_index(ecg_lead, qrs_id)
     end_index = get_t_end_index(ecg_lead, qrs_id)
 
-    zcs_peaks_candidates_begin_index = begin_index
-    zcs_peaks_candidates_end_index = min(begin_index + rr * float(TParams['PEAK_END_PROPORTION']), end_index)
+    zcs_peaks_candidates_begin_index = zcs[0].index - (zcs[0].index - begin_index) * TParams['PEAK_ZC_AMPLITUDE_DECREASING_LEFT_PRIVILEGE']
+    zcs_peaks_candidates_end_index = zcs[-1].index + (end_index - zcs[-1].index) * TParams['PEAK_ZC_AMPLITUDE_DECREASING_RIGHT_PRIVILEGE']
     zcs_peaks_candidates_window = zcs_peaks_candidates_end_index - zcs_peaks_candidates_begin_index
-    zcs_peaks_candidates_point = zcs_peaks_candidates_begin_index + zcs_peaks_candidates_window / 3
+
+    begin_part = float(TParams['PEAK_ZC_AMPLITUDE_DECREASING_BEGIN_PART'])
+    end_part = 1.0 - begin_part
+    zcs_peaks_candidates_point = zcs_peaks_candidates_begin_index + zcs_peaks_candidates_window * begin_part
 
     peak_zc_id = 0
     peak_zc_mm_amplitude = 0.0
 
     for candidate_zc_id in range(len(zcs)):
-        if zcs_peaks_candidates_begin_index < zcs[candidate_zc_id].index < zcs_peaks_candidates_end_index:
 
-            shift_percentage = abs(float(zcs[candidate_zc_id].index - zcs_peaks_candidates_point)) / float(zcs_peaks_candidates_window)
-            amplitude_part = 1.0 - shift_percentage * float(TParams['AMPLITUDE_DECREASING'])
+        shift_percentage = float(zcs[candidate_zc_id].index - zcs_peaks_candidates_point)
+        if shift_percentage < 0.0:
+            shift_percentage = abs(shift_percentage) / (zcs_peaks_candidates_window * begin_part)
+        else:
+            shift_percentage = abs(shift_percentage) / (zcs_peaks_candidates_window * end_part)
 
-            if zcs[candidate_zc_id].mm_amplitude * amplitude_part >= peak_zc_mm_amplitude:
-                peak_zc_id = candidate_zc_id
-                peak_zc_mm_amplitude = zcs[candidate_zc_id].mm_amplitude * amplitude_part
+        amplitude_part = 1.0 - pow(shift_percentage, float(TParams['PEAK_ZC_AMPLITUDE_DECREASING_POW'])) * float(TParams['PEAK_ZC_AMPLITUDE_DECREASING'])
+
+        if zcs[candidate_zc_id].mm_amplitude * amplitude_part >= peak_zc_mm_amplitude:
+            peak_zc_id = candidate_zc_id
+            peak_zc_mm_amplitude = zcs[candidate_zc_id].mm_amplitude * amplitude_part
 
     return peak_zc_id
 
@@ -76,18 +59,17 @@ def get_t_flexure_zc_id(ecg_lead, qrs_id, zcs, peak_zc_id):
     end_index = get_t_end_index(ecg_lead, qrs_id)
 
     zcs_peaks_candidates_begin_index = begin_index
-    zcs_peaks_candidates_end_index = min(begin_index + rr * float(TParams['PEAK_END_PROPORTION']), end_index)
+    zcs_peaks_candidates_end_index = end_index
     zcs_peaks_candidates_window = zcs_peaks_candidates_end_index - zcs_peaks_candidates_begin_index
 
     for zc_id in range(1, len(zcs) - 1):
-        if zcs_peaks_candidates_begin_index + zcs_peaks_candidates_window * 0.15 < \
-                zcs[zc_id].index < zcs_peaks_candidates_end_index - zcs_peaks_candidates_window * 0.40:
+        if zcs_peaks_candidates_begin_index + zcs_peaks_candidates_window * float(TParams['FLEXURE_BEGIN_PART']) < zcs[zc_id].index < zcs_peaks_candidates_begin_index + zcs_peaks_candidates_window * float(TParams['FLEXURE_END_PART']):
             if abs(zcs[zc_id - 1].index - zcs[zc_id].index) < float(TParams['FLEXURE_SHIFT']) * rr \
                     and abs(zcs[zc_id + 1].index - zcs[zc_id].index) < float(TParams['FLEXURE_SHIFT']) * rr \
-                    and zcs[zc_id].mm_amplitude < float(TParams['FLEXURE_AMPLITUDE']) * zcs[zc_id - 1].mm_amplitude \
-                    and zcs[zc_id].mm_amplitude < float(TParams['FLEXURE_AMPLITUDE']) * zcs[zc_id + 1].mm_amplitude\
-                    and zcs[zc_id - 1].mm_amplitude > float(TParams['LITTLE_AMPLITUDE_COMP']) * zcs[peak_zc_id].mm_amplitude\
-                    and zcs[zc_id + 1].mm_amplitude > float(TParams['LITTLE_AMPLITUDE_COMP']) * zcs[peak_zc_id].mm_amplitude:
+                    and zcs[zc_id].mm_amplitude < float(TParams['FLEXURE_AMPLITUDE_NEIGHBOUR']) * zcs[zc_id - 1].mm_amplitude \
+                    and zcs[zc_id].mm_amplitude < float(TParams['FLEXURE_AMPLITUDE_NEIGHBOUR']) * zcs[zc_id + 1].mm_amplitude\
+                    and zcs[zc_id - 1].mm_amplitude > float(TParams['FLEXURE_AMPLITUDE_OLD_ZC']) * zcs[peak_zc_id].mm_amplitude\
+                    and zcs[zc_id + 1].mm_amplitude > float(TParams['FLEXURE_AMPLITUDE_OLD_ZC']) * zcs[peak_zc_id].mm_amplitude:
                 flexure_zc_id = zc_id
 
     return flexure_zc_id

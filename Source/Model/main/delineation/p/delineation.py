@@ -12,7 +12,10 @@
 from Source.Model.main.delineation.p.offset import *
 from Source.Model.main.delineation.p.peak import *
 from Source.Model.main.delineation.p.onset import *
-from Source.Model.main.delineation.peaks_zcs_ids import PeakZCsIds
+from Source.Model.main.delineation.peaks_zcs_ids import *
+from Source.Model.main.delineation.p.zcs import *
+from Source.Model.main.delineation.p.routines import *
+
 import numpy as np
 
 
@@ -50,20 +53,20 @@ def get_p_delineation(ecg_lead, qrs_id):
     if not zcs:
         return delineation
 
-    if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['P_FLAT_OFFSET_WINDOW']) * sampling_rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['P_OFFSET_SHARP'])):
+    if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['RIGHT_MM_DIST']) * sampling_rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['OFFSET_MM_SHARPNESS'])):
         zcs.pop(-1)
 
     if not zcs:
         return delineation
 
-    if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['P_FLAT_ONSET_WINDOW']) * sampling_rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['P_ONSET_SHARP'])):
+    if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['LEFT_MM_DIST']) * sampling_rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['ONSET_MM_SHARPNESS'])):
         zcs.pop(0)
 
     window = get_window(ecg_lead, qrs_id)
     begin_index = get_p_begin_index(ecg_lead, qrs_id)
     end_index = get_p_end_index(ecg_lead, qrs_id)
 
-    if window < int(float(PParams['SHIFT_WINDOW']) * sampling_rate):
+    if window < int(float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * sampling_rate):
         return delineation
 
     if not is_p_peak_zc_candidate_exist(ecg_lead, qrs_id, zcs):
@@ -84,8 +87,6 @@ def get_p_delineation(ecg_lead, qrs_id):
     peak_zcs_ids.check_flexure_p(ecg_lead, qrs_id, zcs, delineation)
 
     peak_zcs_ids.check_left_biphasic_p(ecg_lead, zcs, delineation)
-    # if delineation.specification is not WaveSpecification.biphasic:
-    #     peak_zcs_ids.check_right_biphasic_p(ecg_lead, zcs, delineation)
 
     define_p_onset_index(ecg_lead, delineation, zcs, peak_zcs_ids.left_zc_id, begin_index)
     define_p_offset_index(ecg_lead, delineation, zcs, peak_zcs_ids.right_zc_id, end_index)
@@ -103,15 +104,15 @@ def check_for_atrial_fibrillation(delineation, zcs):
 
     zcs_amplitudes = np.asarray(zcs_amplitudes)
 
-    if len(zcs) > int(PParams['NUM_ZCS_FIB']):
+    if len(zcs) > int(PParams['FIB_NUM_ZCS']):
 
         zcs_amplitudes = np.sort(zcs_amplitudes)[::-1]
-        zcs_amplitudes = zcs_amplitudes[1:int(PParams['NUM_ZCS_FIB']) + 1]
+        zcs_amplitudes = zcs_amplitudes[1:int(PParams['FIB_NUM_ZCS']) + 1]
 
         zcs_amplitudes_mean = np.mean(zcs_amplitudes)
         zcs_amplitudes_std = np.std(zcs_amplitudes)
 
-        if zcs_amplitudes_std < zcs_amplitudes_mean * float(PParams['STD_MM_ZCS_PART_FIB']):
+        if zcs_amplitudes_std < zcs_amplitudes_mean * float(PParams['FIB_STD']):
             delineation.specification = WaveSpecification.atrial_fibrillation
 
 
@@ -135,7 +136,7 @@ def is_small_p(ecg_lead, qrs_id, zcs, peak_zc_id):
 
         qrs_amplitude = qrs_zc.mm_amplitude
 
-        if p_amplitude < float(PParams['SMALL_P']) * qrs_amplitude:
+        if p_amplitude < float(PParams['LOW_LIMIT_AMPLITUDE']) * qrs_amplitude:
             answer = True
 
     return answer

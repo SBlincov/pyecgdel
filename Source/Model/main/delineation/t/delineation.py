@@ -20,9 +20,6 @@ class InvalidPDelineation(Exception):
 
 def get_t_delineations(ecg_lead):
 
-    wdc_scale_id = get_t_wdc_scale_id(ecg_lead)
-    wdc = ecg_lead.wdc
-
     delineations = []
 
     for qrs_id in range(1, len(ecg_lead.cur_qrs_dels_seq)):
@@ -31,9 +28,6 @@ def get_t_delineations(ecg_lead):
 
         if delineation.specification is not WaveSpecification.absence:
             delineations.append(delineation)
-
-    # if wdc_scale_id is not 0:
-    #     peaks_indexes_correction(delineations, wdc[0])
 
     return delineations
 
@@ -46,19 +40,21 @@ def get_t_delineation(ecg_lead, qrs_id):
 
     mm_window = int(float(TParams['MM_WINDOW']) * sampling_rate)
 
+    qrs_gap = ecg_lead.cur_qrs_dels_seq[qrs_id].peak_index - ecg_lead.cur_qrs_dels_seq[qrs_id - 1].peak_index
+    shift = int(float(TParams['BEGIN_SHIFT']) * sampling_rate)
+    if shift >= qrs_gap:
+        return delineation
+
     zcs = get_t_zcs(ecg_lead, qrs_id, mm_window)
 
     if not zcs:
         return delineation
 
-    if abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(TParams['T_ONSET_SHARP']):
+    if abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(TParams['MM_SHARPNESS']):
         zcs.pop(0)
 
     begin_index = get_t_begin_index(ecg_lead, qrs_id)
     end_index = get_t_end_index(ecg_lead, qrs_id)
-
-    if not is_t_peak_zc_candidate_exist(ecg_lead, qrs_id, zcs):
-        return delineation
 
     peak_zc_id = get_t_peak_zc_id(ecg_lead, qrs_id, zcs)
 
