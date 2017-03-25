@@ -37,14 +37,6 @@ def get_zcs_with_special_mms(wdc, begin_index, end_index, window):
     return zcs
 
 
-def get_zcs_with_special_mms_for_p(wdc, begin_index, end_index, window):
-
-    zcs = get_zcs_only_indexes(wdc, begin_index, end_index)
-    init_zcs_with_special_mms(wdc, zcs, begin_index, max(end_index, zcs[-1].index + window), window)
-
-    return zcs
-
-
 def get_zcs_only_indexes(wdc, begin_index, end_index):
 
     zcs = []

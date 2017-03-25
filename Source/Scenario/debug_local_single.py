@@ -19,9 +19,9 @@ init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
 
-ConfigParams['LEADS_NAMES'] = ['lead_v6']
+ConfigParams['LEADS_NAMES'] = ['lead_v2']
 
-record_id = 3185
+record_id = 2331
 
 record_name = "record_" + str(record_id)
 

@@ -53,6 +53,9 @@ def get_t_delineation(ecg_lead, qrs_id):
     if abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(TParams['MM_SHARPNESS']):
         zcs.pop(0)
 
+    if not zcs:
+        return delineation
+
     begin_index = get_t_begin_index(ecg_lead, qrs_id)
     end_index = get_t_end_index(ecg_lead, qrs_id)
 

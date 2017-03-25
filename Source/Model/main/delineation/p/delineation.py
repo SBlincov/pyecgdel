@@ -62,6 +62,9 @@ def get_p_delineation(ecg_lead, qrs_id):
     if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['LEFT_MM_DIST']) * sampling_rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['ONSET_MM_SHARPNESS'])):
         zcs.pop(0)
 
+    if not zcs:
+        return delineation
+
     window = get_window(ecg_lead, qrs_id)
     begin_index = get_p_begin_index(ecg_lead, qrs_id)
     end_index = get_p_end_index(ecg_lead, qrs_id)
