@@ -1,7 +1,8 @@
-from Source.Model.main.ecg.ecg import *
-from Source.CardioBase.cardiobase import Cardiobase
+import sys
 
-id_file = 1007
+sys.path.append('..\\..\\libs\\cardiobase')
+from cardiobase import Cardiobase
+from Source.Model.main.ecg.ecg import *
 
 cb = Cardiobase()
 cb.connect()
@@ -22,11 +23,11 @@ init_params(filter_params_from_hash, ParamsType.filter_params)
 
 leads_names = ConfigParams['LEADS_NAMES']
 
-all_columns_names = []
+columns_names = []
 for lead_name in leads_names:
-    all_columns_names.append(lead_name + "_original")
+    columns_names.append(lead_name + "_original")
 
-data = cb.bulk_data_get(all_columns_names, "id_file=" + str(id_file))
+data = cb.bulk_data_get(columns_names, "cardio_file.id=" + str(id_file))
 ecg_data = data['data']
 
 ecg_input_data_dict = dict()
@@ -49,6 +50,6 @@ ecg.add_characteristics_data_to_dict(result_data_dict, result_columns_names, id_
 cb.bulk_data_set(result_data_dict)
 cb.commit()
 
-#cb.cardio_event("FEATURES", "DELINEATION_DONE", id_file)
+cb.cardio_event("FEATURES", "DELINEATION_DONE", id_file)
 
 cb.disconnect()

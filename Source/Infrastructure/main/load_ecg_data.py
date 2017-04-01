@@ -43,7 +43,10 @@ def init_params(data_dict=LOCAL_DB, params_type=ParamsType.config_params):
                     if len(param) > 2:
                         ConfigParams[param[0]] = param[1:]
                     else:
-                        ConfigParams[param[0]] = param[1]
+                        if param[0] == 'LEADS_NAMES':
+                            ConfigParams[param[0]] = [param[1]]
+                        else:
+                            ConfigParams[param[0]] = param[1]
                 else:
                     raise InvalidECGData('Unknown config params keys')
 

@@ -2,7 +2,7 @@ from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 
 
-DBConfig.name = 'shiller'
+DBConfig.name = 'physionet2017'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 

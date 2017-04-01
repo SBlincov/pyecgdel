@@ -1,14 +1,10 @@
-globalPath = ('../Data/ptbdb/');
+globalPath = ('../Data/physionet2017/');
 
-numPatients = 549;
-numLeads = 15;
-leadNames = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6', 'lead_vx', 'lead_vy', 'lead_vz'};
+numRecords = 8528;
+numLeads = 1;
+leadNames = {'lead'};
 
-% numPatients = 75;
-% numLeads = 12;
-% leadNames = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
-
-numCharacteristics = 31;
+numCharacteristics = 38;
 
 missingNumber = -10000;
 missingCharacter = 'n';
@@ -16,12 +12,12 @@ missingCharacter = 'n';
 dataArray = zeros(1, numCharacteristics * numLeads);
 diagnosisArray = cell(1);
 
-for patientID = 1:numPatients
-    fprintf('patient %d \n', patientID);
+for recordID = 1:numRecords
+    fprintf('patient %d \n', recordID);
     leadDataArray = zeros;
     leadNamesArray = zeros;
     for leadID = 1:numLeads
-        localPath = sprintf('patient_%d/%s/characteristics.txt', patientID, leadNames{leadID});
+        localPath = sprintf('record_%d/%s/characteristics.txt', recordID, leadNames{leadID});
         fullPath = strcat(globalPath, localPath);
         delimiter = ' ';
         data = readtable(fullPath, 'ReadRowNames', 0, 'ReadVariableNames', 0, 'Delimiter', delimiter, 'FileType', 'text', 'TreatAsEmpty',{missingCharacter});
@@ -36,13 +32,13 @@ for patientID = 1:numPatients
         clearvars values names
     end
     
-    diagnosisPath = sprintf('patient_%d/diagnosis.txt', patientID);
+    diagnosisPath = sprintf('record_%d/diagnosis.txt', recordID);
     fullPath = strcat(globalPath, diagnosisPath);
     diagnosisFile = fopen(fullPath);
     diagnosis = fgets(diagnosisFile);
     fclose(diagnosisFile);
     
-    diagnosisArray{patientID} = char(strtrim(diagnosis));
+    diagnosisArray{recordID} = char(strtrim(diagnosis));
     
     leadDataArray = leadDataArray(2:end);
     leadNamesArray = leadNamesArray(2:end);
