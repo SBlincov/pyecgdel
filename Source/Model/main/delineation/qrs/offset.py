@@ -34,7 +34,7 @@ def define_qrs_offset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
         delineation.specification = WaveSpecification.flexure
         offset_mm_id = get_qrs_offset_mm_id(ecg_lead, zc, mms, offset_mm_id_wide_morphology)
 
-    threshold_xi = mms[offset_mm_id].value * float(QRSParams['OFFSET_THRESHOLD_INDEX'])
+    threshold_xi = mms[offset_mm_id].value * float(QRSParams['OFFSET_THRESHOLD'])
 
     first_mm = mms[offset_mm_id]
     next_mm = find_right_mm(first_mm.index + 1, wdc)
@@ -104,9 +104,9 @@ def check_qrs_offset_mm_id_with_wide_morphology(offset_mm_id, qrs_zc, mms):
         candidate_mm_id = offset_mm_id
 
         for mm_id in range(begin_mm_id, len(mms)):
-            if abs(mms[mm_id].value) > float(QRSParams['WIDE_MORPHOLOGY_AMPLITUDE']) * abs(qrs_zc.mm_amplitude) \
-                    or abs(mms[mm_id].value) > float(QRSParams['WIDE_MORPHOLOGY_SIDE']) * abs(qrs_zc.left_mm.value) \
-                    or abs(mms[mm_id].value) > float(QRSParams['WIDE_MORPHOLOGY_SIDE']) * abs(qrs_zc.right_mm.value):
+            if abs(mms[mm_id].value) > float(QRSParams['WIDE_ZC_AMPLITUDE_COEFF']) * abs(qrs_zc.mm_amplitude) \
+                    or abs(mms[mm_id].value) > float(QRSParams['WIDE_MM_VALUE_COEFF']) * abs(qrs_zc.left_mm.value) \
+                    or abs(mms[mm_id].value) > float(QRSParams['WIDE_MM_VALUE_COEFF']) * abs(qrs_zc.right_mm.value):
                 candidate_mm_id = mm_id
                 break
 

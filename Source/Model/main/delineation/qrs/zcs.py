@@ -35,7 +35,7 @@ def get_candidates_qrs_zcs_ids(ecg_lead, qrs_zcs):
 
     candidates_zcs_ids = []
 
-    window = int(sampling_rate * float(QRSParams['WINDOW_ZCS']))
+    window = int(sampling_rate * float(QRSParams['CANDIDATE_WINDOW_MIN_BEAT']))
 
     current_zc_id = 0
 
@@ -66,16 +66,16 @@ def get_confirmed_qrs_zcs_ids(ecg_lead, wdc_scale_id, candidates_zcs_ids, qrs_zc
     sampling_rate = ecg_lead.sampling_rate
     wdc = ecg_lead.wdc[wdc_scale_id]
 
-    if len(wdc) * sampling_rate <= 2.0 * float(QRSParams['TRAINING_WINDOW']):
+    if len(wdc) * sampling_rate <= 2.0 * float(QRSParams['CANDIDATE_WINDOW_TRAINING_PERIOD']):
         training_window = len(wdc) * sampling_rate * 0.5
         training_deltas_count = int(training_window * 0.5)
     else:
-        training_window = float(QRSParams['TRAINING_WINDOW'])
-        training_deltas_count = int(QRSParams['TRAINING_DELTAS_COUNT'])
+        training_window = float(QRSParams['CANDIDATE_WINDOW_TRAINING_PERIOD'])
+        training_deltas_count = int(QRSParams['CANDIDATE_BEATS_COUNT_TRAINING_PERIOD'])
 
     confirmed_zcs_ids = []
 
-    window = int(sampling_rate * float(QRSParams['DELTA_W_CONFIRMED']))
+    window = int(sampling_rate * float(QRSParams['CANDIDATE_WINDOW_DELTA']))
 
     deltas = []
     training_deltas = []
@@ -89,30 +89,30 @@ def get_confirmed_qrs_zcs_ids(ecg_lead, wdc_scale_id, candidates_zcs_ids, qrs_zc
     correct_training_deltas = np.sort(training_deltas)[:-(training_deltas_count + 1):-1]
 
     if training_deltas_count > 1:
-        epsilon = float(QRSParams['TRAINING_THRESHOLD']) * np.sum(correct_training_deltas[1:]) / (training_deltas_count - 1)
+        epsilon = float(QRSParams['CANDIDATE_THRESHOLD_DELTA']) * np.sum(correct_training_deltas[1:]) / (training_deltas_count - 1)
     else:
-        epsilon = float(QRSParams['TRAINING_THRESHOLD']) * np.sum(correct_training_deltas) / training_deltas_count
+        epsilon = float(QRSParams['CANDIDATE_THRESHOLD_DELTA']) * np.sum(correct_training_deltas) / training_deltas_count
 
     for i in range(len(training_deltas), len(deltas)):
         current_delta = deltas[i]
         if current_delta > epsilon:
             confirmed_zcs_ids.append(candidates_zcs_ids[i])
             correct_training_deltas = np.concatenate((correct_training_deltas[1:training_deltas_count], [current_delta]))
-            epsilon = float(QRSParams['TRAINING_THRESHOLD']) * np.sum(correct_training_deltas) / training_deltas_count
+            epsilon = float(QRSParams['CANDIDATE_THRESHOLD_DELTA']) * np.sum(correct_training_deltas) / training_deltas_count
 
     reversed_correct_training_deltas = []
 
     for i in range(min(training_deltas_count, len(confirmed_zcs_ids))):
         reversed_correct_training_deltas.append(get_delta(wdc, qrs_zcs[confirmed_zcs_ids[i]], window))
 
-    epsilon = float(QRSParams['TRAINING_THRESHOLD']) * np.sum(reversed_correct_training_deltas) / training_deltas_count
+    epsilon = float(QRSParams['CANDIDATE_THRESHOLD_DELTA']) * np.sum(reversed_correct_training_deltas) / training_deltas_count
 
     for i in range(len(training_deltas) - 1, -1, -1):
         current_delta = deltas[i]
         if current_delta > epsilon:
             confirmed_zcs_ids = [candidates_zcs_ids[i]] + confirmed_zcs_ids
             reversed_correct_training_deltas = np.concatenate(([current_delta], reversed_correct_training_deltas[0:training_deltas_count - 1]))
-            epsilon = float(QRSParams['TRAINING_THRESHOLD']) * np.sum(reversed_correct_training_deltas) / training_deltas_count
+            epsilon = float(QRSParams['CANDIDATE_THRESHOLD_DELTA']) * np.sum(reversed_correct_training_deltas) / training_deltas_count
 
     return confirmed_zcs_ids
 

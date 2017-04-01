@@ -34,7 +34,7 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
         delineation.specification = WaveSpecification.flexure
         onset_mm_id = get_qrs_onset_mm_id(ecg_lead, zc, mms, onset_mm_id_wide_morphology)
 
-    threshold_xi = mms[onset_mm_id].value * float(QRSParams['ONSET_THRESHOLD_INDEX'])
+    threshold_xi = mms[onset_mm_id].value * float(QRSParams['ONSET_THRESHOLD'])
 
     first_mm = mms[onset_mm_id]
     next_mm = find_left_mm(first_mm.index - 1, wdc)
@@ -43,7 +43,7 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
 
         candidate_mm = find_left_mm(next_mm.index - 1, wdc)
 
-        if abs(candidate_mm.value) > float(QRSParams['ONSET_MM_VALUE_COMP']) * abs(first_mm.value) and abs(first_mm.index - candidate_mm.index) < int(float(QRSParams['ONSET_MM_VALUE_SHIFT']) * sampling_rate):
+        if abs(candidate_mm.value) > float(QRSParams['ONSET_MM_VALUE_COEFF']) * abs(first_mm.value) and abs(first_mm.index - candidate_mm.index) < int(float(QRSParams['ONSET_MM_INDEX_SHIFT']) * sampling_rate):
             first_mm = candidate_mm
             next_mm = find_left_mm(first_mm.index - 1, wdc)
         else:
@@ -57,8 +57,8 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
     left_zc_index = find_left_thc_index(wdc, first_mm.index, next_mm.index, 0.0)
 
     # Compromise
-    if (right_zc_index - left_zc_index) > int(float(QRSParams['ONSET_MAX_ZC_DISTANCE']) * sampling_rate) \
-            and abs(first_mm.value) < float(QRSParams['ONSET_MM_VALUE_PART']) * min(abs(zc.left_mm.value), abs(zc.right_mm.value)):
+    if (right_zc_index - left_zc_index) > int(float(QRSParams['ONSET_COMPROMISE_WINDOW']) * sampling_rate) \
+            and abs(first_mm.value) < float(QRSParams['ONSET_COMPROMISE_MM_VALUE_COEFF']) * min(abs(zc.left_mm.value), abs(zc.right_mm.value)):
         onset_index = first_mm.index
     else:
         onset_index = find_left_thc_index(wdc, first_mm.index, next_mm.index, threshold_xi)
@@ -127,9 +127,9 @@ def check_qrs_onset_mm_id_with_wide_morphology(onset_mm_id, qrs_zc, mms):
         candidate_mm_id = onset_mm_id
 
         for mm_id in range(begin_mm_id, len(mms)):
-            if abs(mms[mm_id].value) > float(QRSParams['WIDE_MORPHOLOGY_AMPLITUDE']) * abs(qrs_zc.mm_amplitude) \
-                    or abs(mms[mm_id].value) > float(QRSParams['WIDE_MORPHOLOGY_SIDE']) * abs(qrs_zc.left_mm.value) \
-                    or abs(mms[mm_id].value) > float(QRSParams['WIDE_MORPHOLOGY_SIDE']) * abs(qrs_zc.right_mm.value):
+            if abs(mms[mm_id].value) > float(QRSParams['WIDE_ZC_AMPLITUDE_COEFF']) * abs(qrs_zc.mm_amplitude) \
+                    or abs(mms[mm_id].value) > float(QRSParams['WIDE_MM_VALUE_COEFF']) * abs(qrs_zc.left_mm.value) \
+                    or abs(mms[mm_id].value) > float(QRSParams['WIDE_MM_VALUE_COEFF']) * abs(qrs_zc.right_mm.value):
                 candidate_mm_id = mm_id
                 break
 
