@@ -14,8 +14,10 @@ from Source.Model.main.params.common import *
 
 def find_left_thc_index(wdc, begin_searching_index, end_searching_index, threshold):
 
+    is_found = False
+
     if begin_searching_index == 0:
-        return begin_searching_index
+        return begin_searching_index, is_found
 
     current_index = begin_searching_index
     prev_index = begin_searching_index - 1
@@ -27,6 +29,7 @@ def find_left_thc_index(wdc, begin_searching_index, end_searching_index, thresho
         criterion = (wdc[current_index] - threshold) * (wdc[prev_index] - threshold)
 
         if criterion < 0:
+            is_found = True
             break
         elif abs(wdc[prev_index] - threshold) < EPSILON:
             threshold_period = 0
@@ -37,13 +40,15 @@ def find_left_thc_index(wdc, begin_searching_index, end_searching_index, thresho
             current_index -= 1
             prev_index -= 1
 
-    return prev_index
+    return prev_index, is_found
 
 
 def find_right_thc_index(wdc, begin_searching_index, end_searching_index, threshold):
 
+    is_found = False
+
     if begin_searching_index == len(wdc) - 1:
-        return begin_searching_index
+        return begin_searching_index, is_found
 
     current_index = begin_searching_index
     next_index = begin_searching_index + 1
@@ -55,6 +60,7 @@ def find_right_thc_index(wdc, begin_searching_index, end_searching_index, thresh
         criterion = (wdc[current_index] - threshold) * (wdc[next_index] - threshold)
 
         if criterion < 0:
+            is_found = True
             break
         elif abs(wdc[next_index] - threshold) < EPSILON:
             threshold_period = 0
@@ -65,5 +71,5 @@ def find_right_thc_index(wdc, begin_searching_index, end_searching_index, thresh
             current_index += 1
             next_index += 1
 
-    return next_index
+    return next_index, is_found
 

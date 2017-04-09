@@ -15,6 +15,7 @@ from Source.Model.main.delineation.qrs.peak import *
 from Source.Model.main.delineation.qrs.zcs import *
 from Source.Model.main.delineation.qrs.routines import *
 from Source.Model.main.params.qrs import *
+from Source.Model.main.delineation.qrs.morphology import *
 
 
 class InvalidQRSDelineation(Exception):
@@ -32,9 +33,12 @@ def get_qrs_delineations(ecg_lead, start_index, end_index):
     qrs_zcs_ids = get_qrs_zcs_ids(ecg_lead, wdc_scale_id, aux_wdc_scale_id, qrs_zcs)
 
     delineations = []
+    morphologies = []
     for qrs_zc_id in qrs_zcs_ids:
         delineation = get_qrs_delineation(ecg_lead, qrs_zc_id, qrs_zcs)
+        morphology = get_qrs_morphology(ecg_lead, qrs_zc_id, delineation)
         delineations.append(delineation)
+        morphologies.append(morphology)
 
     mean_rr = 0.0
 
@@ -49,7 +53,7 @@ def get_qrs_delineations(ecg_lead, start_index, end_index):
         if rr < float(QRSParams['EXTRA_BEAT_PART']) * mean_rr:
             delineations[qrs_delineation_id].specification = WaveSpecification.extra
 
-    return delineations
+    return delineations, morphologies
 
 
 def get_qrs_delineation(ecg_lead, qrs_zc_id, qrs_zcs):

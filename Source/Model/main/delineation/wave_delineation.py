@@ -30,3 +30,13 @@ class WaveDelineation:
         self.special_points_indexes = []
         self.specification = specification
 
+
+class Morphology:
+
+    def __init__(self, del_id, points):
+        self.del_id = del_id
+        self.points = points
+
+
+
+

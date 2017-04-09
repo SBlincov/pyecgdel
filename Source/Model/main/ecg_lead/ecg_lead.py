@@ -35,10 +35,14 @@ class ECGLead:
         self.wdc = []
 
         self.cur_qrs_dels_seq = []
+        self.cur_qrs_morph_seq = []
+
         self.cur_p_dels_seq = []
         self.cur_t_dels_seq = []
 
         self.qrs_dels = []
+        self.qrs_morphs = []
+
         self.p_dels = []
         self.t_dels = []
 
@@ -54,11 +58,16 @@ class ECGLead:
         self.wdc = get_wdc(self.filtrated)
 
     def delineation(self):
-        self.cur_qrs_dels_seq = get_qrs_delineations(self, 0, len(self.wdc[0]))
+        cur_qrs_dels_seq, cur_qrs_morph_seq = get_qrs_delineations(self, 0, len(self.wdc[0]))
+        self.cur_qrs_dels_seq = cur_qrs_dels_seq
+        self.cur_qrs_morph_seq = cur_qrs_morph_seq
+
         self.cur_t_dels_seq = get_t_delineations(self)
         self.cur_p_dels_seq = get_p_delineations(self)
 
         self.qrs_dels.append(self.cur_qrs_dels_seq)
+        self.qrs_morphs.append(self.cur_qrs_morph_seq)
+
         self.t_dels.append(self.cur_t_dels_seq)
         self.p_dels.append(self.cur_p_dels_seq)
 
@@ -68,16 +77,24 @@ class ECGLead:
         next_seq_start = self.cur_qrs_dels_seq[-1].offset_index
 
         self.cur_qrs_dels_seq = []
+        self.cur_qrs_morph_seq = []
+
         self.cur_t_dels_seq = []
         self.cur_p_dels_seq = []
 
         while next_seq_start < int(len(self.wdc[0]) * 0.8):
-            self.cur_qrs_dels_seq = get_qrs_delineations(self, next_seq_start, len(self.wdc[0]))
+
+            cur_qrs_dels_seq, cur_qrs_morph_seq = get_qrs_delineations(self, next_seq_start, len(self.wdc[0]))
+            self.cur_qrs_dels_seq = cur_qrs_dels_seq
+            self.cur_qrs_morph_seq = cur_qrs_morph_seq
+
             self.cur_t_dels_seq = get_t_delineations(self)
             self.cur_p_dels_seq = get_p_delineations(self)
 
             if self.cur_qrs_dels_seq:
                 self.qrs_dels.append(self.cur_qrs_dels_seq)
+                self.qrs_morphs.append(self.cur_qrs_morph_seq)
+
                 self.t_dels.append(self.cur_t_dels_seq)
                 self.p_dels.append(self.cur_p_dels_seq)
 
@@ -86,6 +103,8 @@ class ECGLead:
                 next_seq_start += int((len(self.wdc[0]) - next_seq_start) * 0.1)
 
             self.cur_qrs_dels_seq = []
+            self.cur_qrs_morph_seq = []
+
             self.cur_t_dels_seq = []
             self.cur_p_dels_seq = []
 

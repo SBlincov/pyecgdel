@@ -3,13 +3,13 @@ clear all;
 base_name = 'physionet2017';
 freq = 300.0;
 
-record = 1001;
+record = 1;
 
 leads = {'lead'};
 lead_ids = 1;
 
 is_filtered = 1;
-wdc_scales = [3 4];
+wdc_scales = [1 2 3 4];
 x_axis_type = 0;
 
 markerWidth = 10;
