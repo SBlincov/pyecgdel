@@ -17,7 +17,7 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
-record_id = 1
+record_id = 7
 
 record_name = "record_" + str(record_id)
 
