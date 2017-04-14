@@ -1,7 +1,7 @@
 from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 
-DBConfig.name = 'shiller'
+DBConfig.name = 'qtdb'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -17,7 +17,7 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
-record_id = 3185
+record_id = 1
 
 record_name = "record_" + str(record_id)
 
@@ -29,6 +29,7 @@ ecg.dwt()
 ecg.save_data_local(ECGDataDetails.wdc)
 ecg.delineation()
 ecg.save_data_local(ECGDataDetails.qrs_delineation)
+ecg.save_data_local(ECGDataDetails.qrs_morphology)
 ecg.save_data_local(ECGDataDetails.p_delineation)
 ecg.save_data_local(ECGDataDetails.t_delineation)
 

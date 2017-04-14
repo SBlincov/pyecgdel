@@ -34,11 +34,13 @@ def get_qrs_delineations(ecg_lead, start_index, end_index):
 
     delineations = []
     morphologies = []
+    num_dels = 0
     for qrs_zc_id in qrs_zcs_ids:
         delineation = get_qrs_delineation(ecg_lead, qrs_zc_id, qrs_zcs)
-        morphology = get_qrs_morphology(ecg_lead, qrs_zc_id, delineation)
+        morphology = get_qrs_morphology(ecg_lead, num_dels, delineation)
         delineations.append(delineation)
         morphologies.append(morphology)
+        num_dels += 1
 
     mean_rr = 0.0
 

@@ -43,6 +43,47 @@ def save_ecg_data_local(ecg, details):
 
             np.savetxt(data_file_name, delineation_info, fmt='%d')
 
+        elif details is ECGDataDetails.qrs_morphology:
+
+            del_ids = []
+            names = []
+            indexes = []
+            values = []
+            signs = []
+            branch_ids = []
+
+            for morph_seq in ecg.leads[lead_id].qrs_morphs:
+                for morph in morph_seq:
+
+                    del_id = morph.del_id
+                    branch_id = morph.branch_id
+
+                    for point in morph.points:
+
+                        name = str(point.name)
+                        index = point.index
+                        value = point.value
+                        sign = int(point.sign)
+
+                        del_ids.append(del_id)
+                        names.append(name)
+                        indexes.append(index)
+                        values.append(value)
+                        signs.append(sign)
+                        branch_ids.append(branch_id)
+
+            morphology_info = np.zeros(len(del_ids), dtype=[('var1', int), ('var2', 'U50'), ('var3', int), ('var4', float), ('var5', int), ('var6', int)])
+            fmt = "%d %s %d %8e %d %d"
+
+            morphology_info['var1'] = del_ids
+            morphology_info['var2'] = names
+            morphology_info['var3'] = indexes
+            morphology_info['var4'] = values
+            morphology_info['var5'] = signs
+            morphology_info['var6'] = branch_ids
+
+            np.savetxt(data_file_name, morphology_info, fmt=fmt)
+
         elif details is ECGDataDetails.p_delineation:
             delineation_info = []
             for del_seq in ecg.leads[lead_id].p_dels:

@@ -40,7 +40,7 @@ def find_left_thc_index(wdc, begin_searching_index, end_searching_index, thresho
             current_index -= 1
             prev_index -= 1
 
-    return prev_index, is_found
+    return prev_index
 
 
 def find_right_thc_index(wdc, begin_searching_index, end_searching_index, threshold):
@@ -71,5 +71,5 @@ def find_right_thc_index(wdc, begin_searching_index, end_searching_index, thresh
             current_index += 1
             next_index += 1
 
-    return next_index, is_found
+    return next_index
 

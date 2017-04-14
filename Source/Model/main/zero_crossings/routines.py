@@ -106,7 +106,7 @@ def init_zcs_with_global_mms(wdc, zcs, begin_index, end_index):
 
             zcs[-1].init_global_mm_left(zcs[-2].index, wdc)
 
-        for zc_id in range(1, len(zcs) - 1):
+        for zc_id in range(0, len(zcs)):
             zcs[zc_id].init_extremum_sign()
 
 
@@ -144,7 +144,7 @@ def init_zcs_with_local_mms(wdc, zcs, begin_index, end_index):
 
             zcs[-1].init_local_mm_left(zcs[-2].index, wdc)
 
-        for zc_id in range(1, len(zcs) - 1):
+        for zc_id in range(0, len(zcs)):
             zcs[zc_id].init_extremum_sign()
 
 
@@ -181,7 +181,7 @@ def init_zcs_with_special_mms(wdc, zcs, begin_index, end_index, window):
                 zcs[-1].init_special_mm_right(min(end_index, zcs[-1].index + window), wdc)
             zcs[-1].init_special_mm_left(max(zcs[-2].index, zcs[-1].index - window), wdc)
 
-        for zc_id in range(1, len(zcs) - 1):
+        for zc_id in range(0, len(zcs)):
             zcs[zc_id].init_extremum_sign()
 
 

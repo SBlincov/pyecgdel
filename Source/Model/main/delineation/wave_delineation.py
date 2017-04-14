@@ -33,9 +33,10 @@ class WaveDelineation:
 
 class Morphology:
 
-    def __init__(self, del_id, points):
+    def __init__(self, del_id, points, branch_id):
         self.del_id = del_id
         self.points = points
+        self.branch_id = branch_id
 
 
 
