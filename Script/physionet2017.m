@@ -3,7 +3,7 @@ clear all;
 base_name = 'physionet2017';
 freq = 300.0;
 
-record = 1;
+record = 2;
 
 leads = {'lead'};
 lead_ids = 1;

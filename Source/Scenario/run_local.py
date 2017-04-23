@@ -33,6 +33,7 @@ for record_name in records_names:
     ecg.save_data_local(ECGDataDetails.wdc)
     ecg.delineation()
     ecg.save_data_local(ECGDataDetails.qrs_delineation)
+    ecg.save_data_local(ECGDataDetails.qrs_morphology)
     ecg.save_data_local(ECGDataDetails.p_delineation)
     ecg.save_data_local(ECGDataDetails.t_delineation)
 
