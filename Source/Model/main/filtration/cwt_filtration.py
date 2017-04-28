@@ -2,7 +2,7 @@
 Фильтрация на основе непрерывного вейвлет-преобразования.
 """
 
-from pycwt import *
+from Source.Model.main.continuous_wavelet_transform import *
 from Source.Model.main.params.filter import FilterParams
 
 
