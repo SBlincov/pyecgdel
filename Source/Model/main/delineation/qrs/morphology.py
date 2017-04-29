@@ -8,7 +8,6 @@ from Source.Model.main.delineation.morfology_point import *
 
 
 class QRSMorphologyData:
-
     def __init__(self, ecg_lead, delineation, target_scale_id):
 
         wdc = ecg_lead.wdc
@@ -20,16 +19,18 @@ class QRSMorphologyData:
         peak_index = delineation.peak_index
         offset_index = delineation.offset_index
 
-        normal_length = int(0.110 * sampling_rate)
+        normal_length = int(QRSParams['MORPHOLOGY_NORMAL'] * sampling_rate)
         current_length = offset_index - onset_index
         allowed_length_diff = normal_length - current_length
 
         if allowed_length_diff > 0:
-            window_left = int(allowed_length_diff)
-            window_right = int(allowed_length_diff)
+            window_left = int(allowed_length_diff * QRSParams['MORPHOLOGY_ALLOWED_DIFF_PART_LEFT'])
+            window_right = int(allowed_length_diff * QRSParams['MORPHOLOGY_ALLOWED_DIFF_PART_RIGHT'])
             begin_index = onset_index - window_left
             end_index = offset_index + window_right
         else:
+            window_left = 0
+            window_right = 0
             begin_index = onset_index
             end_index = offset_index
 
@@ -56,6 +57,8 @@ class QRSMorphologyData:
             dels_zcs_ids.append(current_dels_zcs_ids)
             peak_zcs_ids.append(peak_zc_id)
 
+        self.window_left = window_left
+        self.window_right = window_right
         self.begin_index = begin_index
         self.end_index = end_index
         self.num_scales = num_scales
@@ -68,56 +71,31 @@ class QRSMorphologyData:
 
 
 def get_qrs_morphology(ecg_lead, del_id, delineation):
-
     points = []
 
     scale_id = 0
 
     qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
 
-    if is_qrs_from_r_morphology(qrs_morphology_data):
+    if is_r_pos_in_del(qrs_morphology_data):
         # Branch #1:
         branch_id = 1
-        processing_qrs_from_r_morphology(ecg_lead, delineation, qrs_morphology_data, points)
+        r_pos_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
-    elif is_qrs_from_rs_morphology(qrs_morphology_data):
+    elif is_q_neg_r_pos_in_del(qrs_morphology_data):
         # Branch #2:
         branch_id = 2
-        processing_qrs_from_rs_morphology(ecg_lead, delineation, qrs_morphology_data, points)
+        q_neg_r_pos_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
-    elif is_qrs_from_qr_morphology(qrs_morphology_data):
+    elif is_r_pos_s_neg_in_del(qrs_morphology_data):
         # Branch #3:
         branch_id = 3
-        processing_qrs_from_qr_morphology(ecg_lead, delineation, qrs_morphology_data, points)
+        r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
-    elif is_qrs_from_qrs_morphology(qrs_morphology_data):
+    elif is_q_neg_r_pos_s_neg_in_del(qrs_morphology_data):
         # Branch #4:
         branch_id = 4
-        processing_qrs_from_qrs_morphology(ecg_lead, delineation, qrs_morphology_data, points)
-
-    elif is_wide_rs_can_be_corrected(qrs_morphology_data):
-        # Branch #5:
-        branch_id = 5
-        correction_wide_rs_morphology(ecg_lead, delineation, qrs_morphology_data, points)
-
-        qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
-
-        if is_wide_q_can_be_corrected(qrs_morphology_data):
-            # Branch #6:
-            branch_id = 6
-            correction_wide_q_morphology(ecg_lead, delineation, qrs_morphology_data, points)
-
-    elif is_wide_qr_can_be_corrected(qrs_morphology_data):
-        # Branch #7:
-        branch_id = 7
-        correction_wide_qr_morphology(ecg_lead, delineation, qrs_morphology_data, points)
-
-        qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
-
-        if is_wide_s_can_be_corrected(qrs_morphology_data):
-            # Branch #8:
-            branch_id = 8
-            correction_wide_s_morphology(ecg_lead, delineation, qrs_morphology_data, points)
+        q_neg_r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
     else:
         # Default:
@@ -130,164 +108,27 @@ def get_qrs_morphology(ecg_lead, del_id, delineation):
     return morphology
 
 
-def is_qrs_from_r_morphology(qrs_morphology_data):
-
-    # Current morphology is "R", but it can be "QRS".
-    # Checking:
-    # 1. Morphology should not be wide
-    # 2. Only one zc founded in [onset, offset], which corresponds "R"
-    # 3. There is zcs around interval [onset, offset] on both sides, which can corresponds to "Q" or "S"
-    # 4. "R" should have positive sign
-
+def is_r_pos_in_del(qrs_morphology_data):
     scale_id = qrs_morphology_data.scale_id
     zcs = qrs_morphology_data.zcs[scale_id]
     dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
 
-    if allowed_length_diff > 0 \
-            and len(dels_zcs_ids) is 1 \
+    if len(dels_zcs_ids) is 1 \
             and peak_zc_id == dels_zcs_ids[0] \
-            and 0 < dels_zcs_ids[0] < (len(zcs) - 1) \
             and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.positive:
         return True
     else:
         return False
 
 
-def is_qrs_from_rs_morphology(qrs_morphology_data):
-    # Current morphology is "RS", but it can be "QRS".
-    # Checking:
-    # 1. Morphology should not be wide
-    # 2. Only two zc founded in [onset, offset], which corresponds to "R" and "S"
-    # 3. There is zcs around interval [onset, offset] on left side, which can corresponds to "Q"
-    # 4. "R" should have positive sign, "S" should have negative sign
-
+def is_q_neg_r_pos_in_del(qrs_morphology_data):
     scale_id = qrs_morphology_data.scale_id
     zcs = qrs_morphology_data.zcs[scale_id]
     dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
 
-    if allowed_length_diff > 0 \
-            and len(dels_zcs_ids) is 2 \
-            and peak_zc_id == dels_zcs_ids[0] \
-            and 0 < dels_zcs_ids[0] \
-            and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.positive \
-            and zcs[dels_zcs_ids[-1]].extremum_sign is ExtremumSign.negative:
-        return True
-    else:
-        return False
-
-
-def is_qrs_from_qr_morphology(qrs_morphology_data):
-    # Current morphology is "RS", but it can be "QRS".
-    # Checking:
-    # 1. Morphology should not be wide
-    # 2. Only two zc founded in [onset, offset], which corresponds to "Q" and "R"
-    # 3. There is zcs around interval [onset, offset] on right side, which can corresponds to "S"
-    # 4. "R" should have positive sign, "Q" should have negative sign
-
-    scale_id = qrs_morphology_data.scale_id
-    zcs = qrs_morphology_data.zcs[scale_id]
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
-
-    if allowed_length_diff > 0 \
-            and len(dels_zcs_ids) is 2 \
-            and peak_zc_id == dels_zcs_ids[-1] \
-            and dels_zcs_ids[-1] < (len(zcs) - 1)\
-            and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.negative \
-            and zcs[dels_zcs_ids[-1]].extremum_sign is ExtremumSign.positive:
-        return True
-    else:
-        return False
-
-
-def is_qrs_from_qrs_morphology(qrs_morphology_data):
-    # Current morphology is "RS", but it can be "QRS".
-    # Checking:
-    # 1. Morphology should not be wide
-    # 2. Only three zc founded in [onset, offset], which corresponds to "Q", "R" and "S"
-    # 3. There is no zcs around interval [onset, offset] on right side, which can corresponds to "S"
-    # 4. "R" should have positive sign, "Q" should have negative sign
-
-    scale_id = qrs_morphology_data.scale_id
-    zcs = qrs_morphology_data.zcs[scale_id]
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
-
-    if allowed_length_diff > 0 \
-            and len(dels_zcs_ids) is 3 \
-            and peak_zc_id == dels_zcs_ids[1] \
-            and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.negative \
-            and zcs[dels_zcs_ids[1]].extremum_sign is ExtremumSign.positive \
-            and zcs[dels_zcs_ids[2]].extremum_sign is ExtremumSign.negative:
-        return True
-    else:
-        return False
-
-
-def is_wide_rs_can_be_corrected(qrs_morphology_data):
-    # Current morphology is "RS", but too wide
-    # Checking:
-    # 1. Morphology should be wide
-    # 2. Only two zc founded in [onset, offset], which corresponds to "R" and "S"
-    # 4. "R" should have positive sign, "S" should have negative sign
-
-    scale_id = qrs_morphology_data.scale_id
-    zcs = qrs_morphology_data.zcs[scale_id]
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
-
-    if allowed_length_diff < 0 \
-            and len(dels_zcs_ids) is 2 \
-            and peak_zc_id == dels_zcs_ids[0] \
-            and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.positive \
-            and zcs[dels_zcs_ids[-1]].extremum_sign is ExtremumSign.negative:
-        return True
-    else:
-        return False
-
-
-def is_wide_q_can_be_corrected(qrs_morphology_data):
-    # Correction "Q" after wide "RS" correction
-
-    scale_id = qrs_morphology_data.scale_id
-    zcs = qrs_morphology_data.zcs[scale_id]
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
-
-    if allowed_length_diff < 0 \
-            and len(dels_zcs_ids) is 3 \
-            and peak_zc_id == dels_zcs_ids[1] \
-            and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.negative \
-            and zcs[dels_zcs_ids[1]].extremum_sign is ExtremumSign.positive \
-            and zcs[dels_zcs_ids[2]].extremum_sign is ExtremumSign.negative:
-        return True
-    else:
-        return False
-
-
-def is_wide_qr_can_be_corrected(qrs_morphology_data):
-    # Current morphology is "QR", but too wide
-    # Checking:
-    # 1. Morphology should be wide
-    # 2. Only two zc founded in [onset, offset], which corresponds to "Q" and "R"
-    # 4. "R" should have positive sign, "Q" should have negative sign
-
-    scale_id = qrs_morphology_data.scale_id
-    zcs = qrs_morphology_data.zcs[scale_id]
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
-
-    if allowed_length_diff < 0 \
-            and len(dels_zcs_ids) is 2 \
+    if len(dels_zcs_ids) is 2 \
             and peak_zc_id == dels_zcs_ids[1] \
             and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.negative \
             and zcs[dels_zcs_ids[1]].extremum_sign is ExtremumSign.positive:
@@ -296,18 +137,29 @@ def is_wide_qr_can_be_corrected(qrs_morphology_data):
         return False
 
 
-def is_wide_s_can_be_corrected(qrs_morphology_data):
-    # Correction "S" after wide "RS" correction
-
+def is_r_pos_s_neg_in_del(qrs_morphology_data):
     scale_id = qrs_morphology_data.scale_id
     zcs = qrs_morphology_data.zcs[scale_id]
     dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
 
-    if allowed_length_diff < 0 \
-            and len(dels_zcs_ids) is 3 \
-            and peak_zc_id == dels_zcs_ids[1] \
+    if len(dels_zcs_ids) is 2 \
+            and peak_zc_id == dels_zcs_ids[0] \
+            and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.positive \
+            and zcs[dels_zcs_ids[1]].extremum_sign is ExtremumSign.negative:
+        return True
+    else:
+        return False
+
+
+def is_q_neg_r_pos_s_neg_in_del(qrs_morphology_data):
+    scale_id = qrs_morphology_data.scale_id
+    zcs = qrs_morphology_data.zcs[scale_id]
+    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+
+    if len(dels_zcs_ids) is 3 \
+            and peak_zc_id == dels_zcs_ids[0] \
             and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.negative \
             and zcs[dels_zcs_ids[1]].extremum_sign is ExtremumSign.positive \
             and zcs[dels_zcs_ids[2]].extremum_sign is ExtremumSign.negative:
@@ -316,42 +168,15 @@ def is_wide_s_can_be_corrected(qrs_morphology_data):
         return False
 
 
-def is_wide_qrs_can_be_corrected(qrs_morphology_data):
-    # Current morphology is "QRS", but too wide
-    # Checking:
-    # 1. Morphology should be wide
-    # 2. Only three zc founded in [onset, offset], which corresponds to "Q", "R" and "S"
-    # 4. "R" should have positive sign, "Q" ans "S" should have negative sign
-
-    scale_id = qrs_morphology_data.scale_id
-    zcs = qrs_morphology_data.zcs[scale_id]
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
-
-    if allowed_length_diff < 0 \
-            and len(dels_zcs_ids) is 3 \
-            and peak_zc_id == dels_zcs_ids[1] \
-            and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.negative \
-            and zcs[dels_zcs_ids[1]].extremum_sign is ExtremumSign.positive \
-            and zcs[dels_zcs_ids[2]].extremum_sign is ExtremumSign.negative:
-        return True
-    else:
-        return False
-
-
-def q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
-
+def q_neg_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
+    begin_index = qrs_morphology_data.begin_index
 
     onset_index = delineation.onset_index
 
-    window_left = max(0, int(allowed_length_diff * 0.8))
-
-    if zcs[q_zc_id].index > onset_index - window_left and zcs[q_zc_id].extremum_sign is ExtremumSign.negative:
+    if q_zc_id >= 0 and zcs[q_zc_id].extremum_sign is ExtremumSign.negative:
 
         q_index = zcs[q_zc_id].index
         q_value = ecg_lead.filtrated[q_index]
@@ -359,29 +184,22 @@ def q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
         q_point = Point(PointName.q, q_index, q_value, q_sign)
         points.insert(0, q_point)
 
-        shift = int(allowed_length_diff * 0.8)
-        window_onset = max(0, shift)
-
         mm_curr = find_left_mm(q_index, wdc)
         mm_next = mm_curr
         mms = []
         # While mms have the same sign and take place in allowed interval
-        while mm_curr.value * mm_next.value > 0 and mm_curr.index > onset_index - window_onset:
+        while mm_curr.value * mm_next.value > 0 and mm_curr.index > begin_index:
             mm_curr = mm_next
             mms.append(mm_curr)
             mm_next = find_left_mm(mm_curr.index - 1, wdc)
 
-        qrs_onset_index = onset_index - window_onset
+        qrs_onset_index = begin_index
 
         if mms:
             mm_onset = mms[0]
             if len(mms) > 1:
-                if mms[1].index < onset_index - shift:
-                    # If current morphology is wide, then shift is negative
-                    mm_onset = mms[0]
-                else:
-                    # Simple way: the second mm in mms is incorrect
-                    mm_onset = mms[1]
+                # Simple way: the second mm in mms is incorrect
+                mm_onset = mms[1]
 
             if mm_onset.index > qrs_onset_index:
                 qrs_onset_index = mm_onset.index
@@ -389,7 +207,10 @@ def q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
         qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]
         qrs_onset_sign = WaveSign.none
         qrs_onset_point = Point(PointName.qrs_onset, qrs_onset_index, qrs_onset_value, qrs_onset_sign)
-        points.insert(0, qrs_onset_point)
+        if direction < 0:
+            points.insert(0, qrs_onset_point)
+        else:
+            points.append(qrs_onset_point)
 
         delineation.onset_index = qrs_onset_index
 
@@ -399,11 +220,13 @@ def q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
         qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]
         qrs_onset_sign = WaveSign.none
         qrs_onset_point = Point(PointName.qrs_onset, qrs_onset_index, qrs_onset_value, qrs_onset_sign)
-        points.insert(0, qrs_onset_point)
+        if direction < 0:
+            points.insert(0, qrs_onset_point)
+        else:
+            points.append(qrs_onset_point)
 
 
-def r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
-
+def r_pos_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
     scale_id = qrs_morphology_data.scale_id
     zcs = qrs_morphology_data.zcs[scale_id]
 
@@ -411,23 +234,23 @@ def r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
     r_value = ecg_lead.filtrated[r_index]
     r_sign = WaveSign.positive
     r_point = Point(PointName.r, r_index, r_value, r_sign)
-    points.append(r_point)
+    if direction < 0:
+        points.insert(0, r_point)
+    else:
+        points.append(r_point)
 
     delineation.peak_index = r_index
 
 
-def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
-
+def s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
-    allowed_length_diff = qrs_morphology_data.allowed_length_diff
+    end_index = qrs_morphology_data.end_index
 
     offset_index = delineation.offset_index
 
-    window_right = max(0, int(allowed_length_diff * 0.8))
-
-    if zcs[s_zc_id].index < offset_index + window_right and zcs[s_zc_id].extremum_sign is ExtremumSign.negative:
+    if s_zc_id < len(zcs) and zcs[s_zc_id].extremum_sign is ExtremumSign.negative:
 
         s_index = zcs[s_zc_id].index
         s_value = ecg_lead.filtrated[s_index]
@@ -435,29 +258,22 @@ def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
         s_point = Point(PointName.s, s_index, s_value, s_sign)
         points.append(s_point)
 
-        shift = int(allowed_length_diff * 0.8)
-        window_offset = max(0, shift)
-
         mm_curr = find_right_mm(s_index, wdc)
         mm_next = mm_curr
         mms = []
         # While mms have the same sign and take place in allowed interval
-        while mm_curr.value * mm_next.value > 0 and mm_curr.index < offset_index + window_offset:
+        while mm_curr.value * mm_next.value > 0 and mm_curr.index < end_index:
             mm_curr = mm_next
             mms.append(mm_curr)
             mm_next = find_right_mm(mm_curr.index + 1, wdc)
 
-        qrs_offset_index = offset_index + window_offset
+        qrs_offset_index = end_index
 
         if mms:
             mm_offset = mms[0]
             if len(mms) > 1:
-                if mms[1].index > offset_index + shift:
-                    # If current morphology is wide, then shift is negative
-                    mm_offset = mms[0]
-                else:
-                    # Simple way: the second mm in mms is incorrect
-                    mm_offset = mms[1]
+                # Simple way: the second mm in mms is incorrect
+                mm_offset = mms[1]
 
             if mm_offset.index < qrs_offset_index:
                 qrs_offset_index = mm_offset.index
@@ -465,7 +281,10 @@ def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
         qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
         qrs_offset_sign = WaveSign.none
         qrs_offset_point = Point(PointName.qrs_offset, qrs_offset_index, qrs_offset_value, qrs_offset_sign)
-        points.append(qrs_offset_point)
+        if direction < 0:
+            points.insert(0, qrs_offset_point)
+        else:
+            points.append(qrs_offset_point)
 
         delineation.offset_index = qrs_offset_index
 
@@ -475,127 +294,129 @@ def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points):
         qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
         qrs_offset_sign = WaveSign.none
         qrs_offset_point = Point(PointName.qrs_offset, qrs_offset_index, qrs_offset_value, qrs_offset_sign)
-        points.append(qrs_offset_point)
+        if direction < 0:
+            points.insert(0, qrs_offset_point)
+        else:
+            points.append(qrs_offset_point)
 
 
-def processing_qrs_from_r_morphology(ecg_lead, delineation, qrs_morphology_data, points):
-
+def r_pos_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points):
     scale_id = qrs_morphology_data.scale_id
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-
-    r_zc_id = dels_zcs_ids[0]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
     q_zc_id = r_zc_id - 1
     s_zc_id = r_zc_id + 1
 
-    q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-
-
-def processing_qrs_from_rs_morphology(ecg_lead, delineation, qrs_morphology_data, points):
+    q_neg_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, -1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
 
     scale_id = qrs_morphology_data.scale_id
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-
-    r_zc_id = dels_zcs_ids[0]
-    s_zc_id = dels_zcs_ids[1]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
     q_zc_id = r_zc_id - 1
-
-    q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-
-
-def processing_qrs_from_qr_morphology(ecg_lead, delineation, qrs_morphology_data, points):
-
-    scale_id = qrs_morphology_data.scale_id
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-
-    q_zc_id = dels_zcs_ids[0]
-    r_zc_id = dels_zcs_ids[1]
     s_zc_id = r_zc_id + 1
 
-    q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-
-
-def processing_qrs_from_qrs_morphology(ecg_lead, delineation, qrs_morphology_data, points):
+    r_pos_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points, 1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
 
     scale_id = qrs_morphology_data.scale_id
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-
-    q_zc_id = dels_zcs_ids[0]
-    r_zc_id = dels_zcs_ids[1]
-    s_zc_id = dels_zcs_ids[2]
-
-    q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-
-
-def correction_wide_rs_morphology(ecg_lead, delineation, qrs_morphology_data, points):
-
-    scale_id = qrs_morphology_data.scale_id
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-
-    onset_index = delineation.onset_index
-
-    qrs_onset_index = onset_index
-    qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]
-    qrs_onset_sign = WaveSign.none
-    qrs_onset_point = Point(PointName.qrs_onset, qrs_onset_index, qrs_onset_value, qrs_onset_sign)
-    points.insert(0, qrs_onset_point)
-
-    r_zc_id = dels_zcs_ids[0]
-    s_zc_id = dels_zcs_ids[1]
-
-    r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-
-
-def correction_wide_q_morphology(ecg_lead, delineation, qrs_morphology_data, points):
-
-    scale_id = qrs_morphology_data.scale_id
-
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    q_zc_id = peak_zc_id - 1
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
 
-    q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
+    s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, 1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
 
 
-def correction_wide_qr_morphology(ecg_lead, delineation, qrs_morphology_data, points):
-
+def q_neg_r_pos_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points):
     scale_id = qrs_morphology_data.scale_id
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
-
-    offset_index = delineation.offset_index
-
-    q_zc_id = dels_zcs_ids[0]
-    r_zc_id = dels_zcs_ids[1]
-
-    q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-    r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
-
-    qrs_offset_index = offset_index
-    qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
-    qrs_offset_sign = WaveSign.none
-    qrs_offset_point = Point(PointName.qrs_offset, qrs_offset_index, qrs_offset_value, qrs_offset_sign)
-    points.append(qrs_offset_point)
-
-
-def correction_wide_s_morphology(ecg_lead, delineation, qrs_morphology_data, points):
-
-    scale_id = qrs_morphology_data.scale_id
-
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    s_zc_id = peak_zc_id + 1
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
 
-    s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points)
+    q_neg_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, -1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
+
+    scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
+
+    r_pos_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points, 1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
+
+    scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
+
+    s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, 1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
+
+
+def r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points):
+    scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
+
+    s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, 1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
+
+    scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
+
+    r_pos_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points, -1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
+
+    scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
+
+    q_neg_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, -1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
+
+
+def q_neg_r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points):
+    scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
+
+    q_neg_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, -1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
+
+    scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
+
+    r_pos_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points, 1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
+
+    scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    r_zc_id = peak_zc_id
+    q_zc_id = r_zc_id - 1
+    s_zc_id = r_zc_id + 1
+
+    s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, 1)
+    qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
 
 
 def processing_default_morphology(ecg_lead, delineation, qrs_morphology_data, points):
-
     scale_id = qrs_morphology_data.scale_id
     zcs = qrs_morphology_data.zcs[scale_id]
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
