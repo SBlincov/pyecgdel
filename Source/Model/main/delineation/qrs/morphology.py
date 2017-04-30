@@ -246,7 +246,10 @@ def s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
     end_index = qrs_morphology_data.end_index
+
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
 
     offset_index = delineation.offset_index
 
@@ -262,7 +265,7 @@ def s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points
         mm_next = mm_curr
         mms = []
         # While mms have the same sign and take place in allowed interval
-        while mm_curr.value * mm_next.value > 0 and mm_curr.index < end_index:
+        while mm_curr.index < end_index:
             mm_curr = mm_next
             mms.append(mm_curr)
             mm_next = find_right_mm(mm_curr.index + 1, wdc)
@@ -271,11 +274,20 @@ def s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points
 
         if mms:
             mm_offset = mms[0]
-            if len(mms) > 1:
-                # Simple way: the second mm in mms is incorrect
-                mm_offset = mms[1]
+            is_offset_on_mm = True
 
-            if mm_offset.index < qrs_offset_index:
+            if len(mms) > 1:
+                if not mms[1].correctness:
+                    # Simple way: the second mm in mms is incorrect
+                    mm_offset = mms[1]
+                    is_offset_on_mm = True
+                else:
+                    # The second correct mm in mms with very small value
+                    if abs(mms[1].value) < mm_small_right:
+                        qrs_offset_index = find_right_thc_index(wdc, mms[0].index, mms[1].index, 0.0)
+                        is_offset_on_mm = False
+
+            if is_offset_on_mm and mm_offset.index < qrs_offset_index:
                 qrs_offset_index = mm_offset.index
 
         qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
