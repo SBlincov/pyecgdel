@@ -72,7 +72,7 @@ class ECG:
 
         for lead_id in range(0, len(self.leads)):
             column_name = self.leads[lead_id].name + "_filtrated"
-            data_dict[column_name] = [(id_file, self.leads[lead_id].filtrated)]
+            data_dict[column_name] = [(id_file, self.leads[lead_id].filtrated.tolist())]
             columns_names.append(column_name)
 
     def common_filtration(self):
@@ -227,16 +227,17 @@ class ECG:
                     p_dels_data.append(np.asarray([int(delineation.onset_index),
                                                    int(delineation.peak_index),
                                                    int(delineation.offset_index),
-                                                   int(delineation.specification.value)], dtype=np.int32))
+                                                   int(delineation.specification.value)], dtype=np.int32).tolist())
 
             if len(p_dels_data) is 0:
-                data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32))]
+                data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
             elif len(p_dels_data) is 1:
                 p_dels_data = np.asarray(p_dels_data, dtype=np.int32)
                 np.reshape(p_dels_data, (1, 4))
+                p_dels_data = p_dels_data.tolist()
                 data_dict[column_name] = [(id_file, p_dels_data)]
             else:
-                data_dict[column_name] = [(id_file, np.asarray(p_dels_data, dtype=np.int32))]
+                data_dict[column_name] = [(id_file, np.asarray(p_dels_data, dtype=np.int32).tolist())]
             columns_names.append(column_name)
 
             column_name = self.leads[lead_id].name + "_qrs_delineation"
@@ -246,16 +247,17 @@ class ECG:
                     qrs_dels_data.append(np.asarray([int(delineation.onset_index),
                                                      int(delineation.peak_index),
                                                      int(delineation.offset_index),
-                                                     int(delineation.specification.value)], dtype=np.int32))
+                                                     int(delineation.specification.value)], dtype=np.int32).tolist())
 
             if len(qrs_dels_data) is 0:
-                data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32))]
+                data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
             elif len(qrs_dels_data) is 1:
                 qrs_dels_data = np.asarray(qrs_dels_data, dtype=np.int32)
                 np.reshape(qrs_dels_data, (1, 4))
+                qrs_dels_data = qrs_dels_data.tolist()
                 data_dict[column_name] = [(id_file, qrs_dels_data)]
             else:
-                data_dict[column_name] = [(id_file, np.asarray(qrs_dels_data, dtype=np.int32))]
+                data_dict[column_name] = [(id_file, np.asarray(qrs_dels_data, dtype=np.int32).tolist())]
             columns_names.append(column_name)
 
             column_name = self.leads[lead_id].name + "_t_delineation"
@@ -265,16 +267,17 @@ class ECG:
                     t_dels_data.append(np.asarray([int(delineation.onset_index),
                                                    int(delineation.peak_index),
                                                    int(delineation.offset_index),
-                                                   int(delineation.specification.value)], dtype=np.int32))
+                                                   int(delineation.specification.value)], dtype=np.int32).tolist())
 
             if len(t_dels_data) is 0:
-                data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32))]
+                data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
             elif len(t_dels_data) is 1:
                 t_dels_data = np.asarray(t_dels_data, dtype=np.int32)
                 np.reshape(t_dels_data, (1, 4))
+                t_dels_data = t_dels_data.tolist()
                 data_dict[column_name] = [(id_file, t_dels_data)]
             else:
-                data_dict[column_name] = [(id_file, np.asarray(t_dels_data, dtype=np.int32))]
+                data_dict[column_name] = [(id_file, np.asarray(t_dels_data, dtype=np.int32).tolist())]
             columns_names.append(column_name)
 
     def characteristics(self):
