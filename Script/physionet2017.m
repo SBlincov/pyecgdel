@@ -62,13 +62,13 @@ for i = 1:size(lead_ids, 2)
     vals_offset     = zeros(size(qrs_del, 1), 1);
     
     for i = 1:size(qrs_del, 1)
-        times_onset(i)  = times(qrs_del(i, 1) + 1);
-        times_peak(i)   = times(qrs_del(i, 2) + 1);
-        times_offset(i) = times(qrs_del(i, 3) + 1);
+        times_onset(i)  = times(qrs_del(i, 1) + 2);
+        times_peak(i)   = times(qrs_del(i, 2) + 2);
+        times_offset(i) = times(qrs_del(i, 3) + 2);
         
-        vals_onset(i)   = ecg_lead(qrs_del(i, 1) + 1);
-        vals_peak(i)    = ecg_lead(qrs_del(i, 2) + 1);
-        vals_offset(i)  = ecg_lead(qrs_del(i, 3) + 1);
+        vals_onset(i)   = ecg_lead(qrs_del(i, 1) + 2);
+        vals_peak(i)    = ecg_lead(qrs_del(i, 2) + 2);
+        vals_offset(i)  = ecg_lead(qrs_del(i, 3) + 2);
     end
     
     hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', 'r');
@@ -98,13 +98,13 @@ for i = 1:size(lead_ids, 2)
     vals_offset     = zeros(size(p_del, 1), 1);
     
     for i = 1:size(p_del, 1)
-        times_onset(i)  = times(p_del(i, 1) + 1);
-        times_peak(i)   = times(p_del(i, 2) + 1);
-        times_offset(i) = times(p_del(i, 3) + 1);
+        times_onset(i)  = times(p_del(i, 1) + 2);
+        times_peak(i)   = times(p_del(i, 2) + 2);
+        times_offset(i) = times(p_del(i, 3) + 2);
         
-        vals_onset(i)   = ecg_lead(p_del(i, 1) + 1);
-        vals_peak(i)    = ecg_lead(p_del(i, 2) + 1);
-        vals_offset(i)  = ecg_lead(p_del(i, 3) + 1);
+        vals_onset(i)   = ecg_lead(p_del(i, 1) + 2);
+        vals_peak(i)    = ecg_lead(p_del(i, 2) + 2);
+        vals_offset(i)  = ecg_lead(p_del(i, 3) + 2);
     end
     
     hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', 'green');
@@ -134,13 +134,13 @@ for i = 1:size(lead_ids, 2)
     vals_offset     = zeros(size(t_del, 1), 1);
     
     for i = 1:size(t_del, 1)
-        times_onset(i)      = times(t_del(i, 1) + 1);
-        times_peak(i)       = times(t_del(i, 2) + 1);
-        times_offset(i)     = times(t_del(i, 3) + 1);
+        times_onset(i)      = times(t_del(i, 1) + 2);
+        times_peak(i)       = times(t_del(i, 2) + 2);
+        times_offset(i)     = times(t_del(i, 3) + 2);
         
-        vals_onset(i)       = ecg_lead(t_del(i, 1) + 1);
-        vals_peak(i)        = ecg_lead(t_del(i, 2) + 1);
-        vals_offset(i)      = ecg_lead(t_del(i, 3) + 1);
+        vals_onset(i)       = ecg_lead(t_del(i, 1) + 2);
+        vals_peak(i)        = ecg_lead(t_del(i, 2) + 2);
+        vals_offset(i)      = ecg_lead(t_del(i, 3) + 2);
     end
     
     hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', markerWidth, 'Color',  'k', 'LineWidth', 1, 'MarkerFaceColor', 'cyan');

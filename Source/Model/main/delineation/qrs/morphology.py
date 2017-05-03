@@ -78,28 +78,35 @@ def get_qrs_morphology(ecg_lead, del_id, delineation):
     qrs_morphology_data = QRSMorphologyData(ecg_lead, delineation, scale_id)
 
     if is_r_pos_in_del(qrs_morphology_data):
-        # Branch #1:
         branch_id = 1
         r_pos_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
     elif is_q_neg_r_pos_in_del(qrs_morphology_data):
-        # Branch #2:
         branch_id = 2
         q_neg_r_pos_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
     elif is_r_pos_s_neg_in_del(qrs_morphology_data):
-        # Branch #3:
         branch_id = 3
         r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
     elif is_q_neg_r_pos_s_neg_in_del(qrs_morphology_data):
-        # Branch #4:
         branch_id = 4
+        q_neg_r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
+
+    elif is_q_neg_r_pos_and_extra_zcs_in_del(qrs_morphology_data):
+        branch_id = 5
+        q_neg_r_pos_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
+
+    elif is_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
+        branch_id = 6
+        r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
+
+    elif is_q_neg_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
+        branch_id = 7
         q_neg_r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
     else:
         # Default:
-        # Branch #0
         branch_id = 0
         processing_default_morphology(ecg_lead, delineation, qrs_morphology_data, points)
 
@@ -159,7 +166,7 @@ def is_q_neg_r_pos_s_neg_in_del(qrs_morphology_data):
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
 
     if len(dels_zcs_ids) is 3 \
-            and peak_zc_id == dels_zcs_ids[0] \
+            and peak_zc_id == dels_zcs_ids[1] \
             and zcs[dels_zcs_ids[0]].extremum_sign is ExtremumSign.negative \
             and zcs[dels_zcs_ids[1]].extremum_sign is ExtremumSign.positive \
             and zcs[dels_zcs_ids[2]].extremum_sign is ExtremumSign.negative:
@@ -168,11 +175,90 @@ def is_q_neg_r_pos_s_neg_in_del(qrs_morphology_data):
         return False
 
 
+def is_q_neg_r_pos_and_extra_zcs_in_del(qrs_morphology_data):
+    scale_id = qrs_morphology_data.scale_id
+    wdc = qrs_morphology_data.wdc[scale_id]
+    zcs = qrs_morphology_data.zcs[scale_id]
+    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
+
+    if len(dels_zcs_ids) > 2 \
+            and 1 <= peak_zc_id \
+            and zcs[peak_zc_id - 1].extremum_sign is ExtremumSign.negative \
+            and zcs[peak_zc_id].extremum_sign is ExtremumSign.positive:
+
+        if peak_zc_id - 2 >= 0:
+            mm_left = find_left_mm(zcs[peak_zc_id - 2].index, wdc)
+            if abs(mm_left.value) < mm_small_left:
+                return True
+
+    else:
+        return False
+
+
+def is_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
+    scale_id = qrs_morphology_data.scale_id
+    wdc = qrs_morphology_data.wdc[scale_id]
+    zcs = qrs_morphology_data.zcs[scale_id]
+    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+
+    if len(dels_zcs_ids) > 2 \
+            and peak_zc_id < len(dels_zcs_ids) - 1 \
+            and zcs[peak_zc_id].extremum_sign is ExtremumSign.positive \
+            and zcs[peak_zc_id + 1].extremum_sign is ExtremumSign.negative:
+
+        if peak_zc_id + 2 < len(zcs):
+            mm_right = find_right_mm(zcs[peak_zc_id + 2].index, wdc)
+            if abs(mm_right.value) < mm_small_right:
+                return True
+
+    else:
+        return False
+
+
+def is_q_neg_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
+    scale_id = qrs_morphology_data.scale_id
+    wdc = qrs_morphology_data.wdc[scale_id]
+    zcs = qrs_morphology_data.zcs[scale_id]
+    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+
+    if len(dels_zcs_ids) > 3 \
+            and 1 <= peak_zc_id < len(dels_zcs_ids) - 1 \
+            and zcs[peak_zc_id - 1].extremum_sign is ExtremumSign.negative \
+            and zcs[peak_zc_id].extremum_sign is ExtremumSign.positive \
+            and zcs[peak_zc_id + 1].extremum_sign is ExtremumSign.negative:
+
+        if peak_zc_id - 2 >= 0:
+            mm_left = find_left_mm(zcs[peak_zc_id - 2].index, wdc)
+            if abs(mm_left.value) < mm_small_left:
+                return True
+
+        if peak_zc_id + 2 < len(zcs):
+            mm_right = find_right_mm(zcs[peak_zc_id + 2].index, wdc)
+            if abs(mm_right.value) < mm_small_right:
+                return True
+
+    else:
+        return False
+
+
 def q_neg_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
     begin_index = qrs_morphology_data.begin_index
+
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
 
     onset_index = delineation.onset_index
 
@@ -182,7 +268,6 @@ def q_neg_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points
         q_value = ecg_lead.filtrated[q_index]
         q_sign = WaveSign.negative
         q_point = Point(PointName.q, q_index, q_value, q_sign)
-        points.insert(0, q_point)
 
         mm_curr = find_left_mm(q_index, wdc)
         mm_next = mm_curr
@@ -197,16 +282,29 @@ def q_neg_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points
 
         if mms:
             mm_onset = mms[0]
-            if len(mms) > 1:
-                # Simple way: the second mm in mms is incorrect
-                mm_onset = mms[1]
+            is_onset_on_mm = True
 
-            if mm_onset.index > qrs_onset_index:
+            if len(mms) > 1:
+                if not mms[1].correctness:
+                    # Simple way: the second mm in mms is incorrect
+                    mm_onset = mms[1]
+                    is_onset_on_mm = True
+                else:
+                    # The second correct mm in mms with very small value
+                    if abs(mms[1].value) < mm_small_left:
+                        qrs_onset_index = find_left_thc_index(wdc, mms[0].index, mms[1].index, 0.0)
+                        is_onset_on_mm = False
+
+            if is_onset_on_mm and mm_onset.index > qrs_onset_index:
                 qrs_onset_index = mm_onset.index
 
         qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]
         qrs_onset_sign = WaveSign.none
         qrs_onset_point = Point(PointName.qrs_onset, qrs_onset_index, qrs_onset_value, qrs_onset_sign)
+
+        if q_index > qrs_onset_index:
+            points.insert(0, q_point)
+
         if direction < 0:
             points.insert(0, qrs_onset_point)
         else:
@@ -259,7 +357,6 @@ def s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points
         s_value = ecg_lead.filtrated[s_index]
         s_sign = WaveSign.negative
         s_point = Point(PointName.s, s_index, s_value, s_sign)
-        points.append(s_point)
 
         mm_curr = find_right_mm(s_index, wdc)
         mm_next = mm_curr
@@ -293,6 +390,10 @@ def s_neg_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points
         qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
         qrs_offset_sign = WaveSign.none
         qrs_offset_point = Point(PointName.qrs_offset, qrs_offset_index, qrs_offset_value, qrs_offset_sign)
+
+        if s_index < qrs_offset_index:
+            points.append(s_point)
+
         if direction < 0:
             points.insert(0, qrs_offset_point)
         else:

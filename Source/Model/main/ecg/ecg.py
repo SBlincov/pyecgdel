@@ -95,6 +95,8 @@ class ECG:
             self.leads[lead_id].delineation()
             print("Delineation " + str(self.leads[lead_id].name) + " complete")
 
+        # self.all_leads_correction()
+
         print("ECG delineation complete")
 
         for lead_id in range(0, len(self.leads)):
