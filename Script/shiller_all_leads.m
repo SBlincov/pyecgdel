@@ -3,7 +3,7 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 2318;
+record = 2319;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 lead_ids = 1:12;
@@ -22,7 +22,8 @@ for i = 1:size(lead_ids, 2)
     propertyeditor(fig_ecg)
     
     lead = leads{lead_id};
-    title(lead, 'Interpreter', 'latex');
+    lead_name = lead(6:end);
+   
     
     db_path = sprintf('../Data/%s/', base_name);
     record_path = sprintf('record_%d/', record);
@@ -243,6 +244,6 @@ for i = 1:size(lead_ids, 2)
     legend('-DynamicLegend');
     propertyeditor(fig_ecg)
     
-    title(lead, 'Interpreter', 'latex');
+    title(lead_name, 'Interpreter', 'latex');
     
 end
