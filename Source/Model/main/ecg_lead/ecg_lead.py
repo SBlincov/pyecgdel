@@ -22,6 +22,8 @@ class ECGLead:
 
     def __init__(self, name, signal, sampling_rate):
 
+        signal = np.asarray(signal)
+
         if signal is np.empty:
             raise InvalidECGLead('Error! Empty ecg lead signal')
 

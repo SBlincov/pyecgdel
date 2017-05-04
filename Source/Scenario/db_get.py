@@ -18,25 +18,28 @@ cb.connect()
 
 max_id_file = 0
 
-columns = ["lead_i_original",
-           "lead_ii_original",
-           "lead_iii_original",
-           "lead_avr_original",
-           "lead_avl_original",
-           "lead_avf_original",
-           "lead_v1_original",
-           "lead_v2_original",
-           "lead_v3_original",
-           "lead_v4_original",
-           "lead_v5_original",
-           "lead_v6_original"]
+all_columns = cb.get_columns()
+
+patients = cb.get_patient_list()
+
+columns = ["json_lead_i_original",
+           "json_lead_ii_original",
+           "json_lead_iii_original",
+           "json_lead_avr_original",
+           "json_lead_avl_original",
+           "json_lead_avf_original",
+           "json_lead_v1_original",
+           "json_lead_v2_original",
+           "json_lead_v3_original",
+           "json_lead_v4_original",
+           "json_lead_v5_original",
+           "json_lead_v6_original"]
 
 for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    #data = cb.bulk_data_get([column], "device_model='AT-101' AND id_file>" + str(max_id_file))
-    data = cb.bulk_data_get([column], "device_model='AT-101'")
+    data = cb.bulk_data_get([column], "device_model='AT-101' AND cardio_file.id<=3064")
     records_ids = data['id']
     ecg_data = data['data']
 
@@ -45,7 +48,7 @@ for column_id in range(0, len(columns)):
         record_id = records_ids[i]
 
         record_name = "record_" + str(record_id)
-        lead_name = column[:-9]
+        lead_name = column[5:-9]
 
         print("lead: ", lead_name, " record: ", record_name)
 

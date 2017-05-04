@@ -1,11 +1,12 @@
 import sys
 
-sys.path.append('..\\..\\libs\\cardiobase')
-from cardiobase import Cardiobase
+from Source.CardioBase.cardiobase import Cardiobase
 from Source.Model.main.ecg.ecg import *
 
 cb = Cardiobase()
 cb.connect()
+
+id_file = 2318
 
 params_hash = cb.get_hash(24)
 
@@ -47,9 +48,11 @@ ecg.add_delineation_data_to_dict(result_data_dict, result_columns_names, id_file
 ecg.characteristics()
 ecg.add_characteristics_data_to_dict(result_data_dict, result_columns_names, id_file)
 
-cb.bulk_data_set(result_data_dict)
-cb.commit()
+a = 1
 
-cb.cardio_event("FEATURES", "DELINEATION_DONE", id_file)
+# cb.bulk_data_set(result_data_dict)
+# cb.commit()
 
-cb.disconnect()
+# cb.cardio_event("FEATURES", "DELINEATION_DONE", id_file)
+
+# cb.disconnect()
