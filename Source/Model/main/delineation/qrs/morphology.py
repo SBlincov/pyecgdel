@@ -93,15 +93,15 @@ def get_qrs_morphology(ecg_lead, del_id, delineation):
         branch_id = 4
         q_neg_r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
-    elif is_q_neg_r_pos_and_extra_zcs_in_del(qrs_morphology_data):
+    elif is_extra_zcs_q_neg_r_pos_in_del(qrs_morphology_data):
         branch_id = 5
         q_neg_r_pos_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
-    elif is_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
+    elif is_r_pos_s_neg_extra_zcs_in_del(qrs_morphology_data):
         branch_id = 6
         r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
-    elif is_q_neg_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
+    elif is_extra_zcs_q_neg_r_pos_s_neg_extra_zcs_in_del(qrs_morphology_data):
         branch_id = 7
         q_neg_r_pos_s_neg_in_del_processing(ecg_lead, delineation, qrs_morphology_data, points)
 
@@ -175,7 +175,7 @@ def is_q_neg_r_pos_s_neg_in_del(qrs_morphology_data):
         return False
 
 
-def is_q_neg_r_pos_and_extra_zcs_in_del(qrs_morphology_data):
+def is_extra_zcs_q_neg_r_pos_in_del(qrs_morphology_data):
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
@@ -184,8 +184,8 @@ def is_q_neg_r_pos_and_extra_zcs_in_del(qrs_morphology_data):
 
     mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
 
-    if len(dels_zcs_ids) > 2 \
-            and 1 <= peak_zc_id \
+    if len(dels_zcs_ids) > 3 \
+            and 1 < peak_zc_id == len(dels_zcs_ids) - 1 \
             and zcs[peak_zc_id - 1].extremum_sign is ExtremumSign.negative \
             and zcs[peak_zc_id].extremum_sign is ExtremumSign.positive:
 
@@ -198,7 +198,7 @@ def is_q_neg_r_pos_and_extra_zcs_in_del(qrs_morphology_data):
         return False
 
 
-def is_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
+def is_r_pos_s_neg_extra_zcs_in_del(qrs_morphology_data):
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
@@ -207,8 +207,8 @@ def is_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
 
     mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
 
-    if len(dels_zcs_ids) > 2 \
-            and peak_zc_id < len(dels_zcs_ids) - 1 \
+    if len(dels_zcs_ids) > 3 \
+            and 0 == peak_zc_id < len(dels_zcs_ids) - 2 \
             and zcs[peak_zc_id].extremum_sign is ExtremumSign.positive \
             and zcs[peak_zc_id + 1].extremum_sign is ExtremumSign.negative:
 
@@ -221,7 +221,7 @@ def is_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
         return False
 
 
-def is_q_neg_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
+def is_extra_zcs_q_neg_r_pos_s_neg_extra_zcs_in_del(qrs_morphology_data):
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
@@ -231,7 +231,7 @@ def is_q_neg_r_pos_s_neg_and_extra_zcs_in_del(qrs_morphology_data):
     mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
     mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
 
-    if len(dels_zcs_ids) > 3 \
+    if len(dels_zcs_ids) > 4 \
             and 1 <= peak_zc_id < len(dels_zcs_ids) - 1 \
             and zcs[peak_zc_id - 1].extremum_sign is ExtremumSign.negative \
             and zcs[peak_zc_id].extremum_sign is ExtremumSign.positive \
