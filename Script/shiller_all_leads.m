@@ -3,13 +3,13 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 2321;
+record = 2320;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 lead_ids = 1:12;
 
 is_filtered = 1;
-wdc_scales = [3 4];
+wdc_scales = [1 2 3 4];
 x_axis_type = 0;
 
 markerWidth = 10;
@@ -22,7 +22,8 @@ for i = 1:size(lead_ids, 2)
     propertyeditor(fig_ecg)
     
     lead = leads{lead_id};
-    title(lead, 'Interpreter', 'latex');
+    lead_name = lead(6:end);
+   
     
     db_path = sprintf('../Data/%s/', base_name);
     record_path = sprintf('record_%d/', record);
@@ -62,13 +63,13 @@ for i = 1:size(lead_ids, 2)
     vals_offset     = zeros(size(qrs_del, 1), 1);
     
     for i = 1:size(qrs_del, 1)
-        times_onset(i)  = times(qrs_del(i, 1) + 1);
-        times_peak(i)   = times(qrs_del(i, 2) + 1);
-        times_offset(i) = times(qrs_del(i, 3) + 1);
+        times_onset(i)  = times(qrs_del(i, 1) + 2);
+        times_peak(i)   = times(qrs_del(i, 2) + 2);
+        times_offset(i) = times(qrs_del(i, 3) + 2);
         
-        vals_onset(i)   = ecg_lead(qrs_del(i, 1) + 1);
-        vals_peak(i)    = ecg_lead(qrs_del(i, 2) + 1);
-        vals_offset(i)  = ecg_lead(qrs_del(i, 3) + 1);
+        vals_onset(i)   = ecg_lead(qrs_del(i, 1) + 2);
+        vals_peak(i)    = ecg_lead(qrs_del(i, 2) + 2);
+        vals_offset(i)  = ecg_lead(qrs_del(i, 3) + 2);
     end
     
     hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', 'r');
@@ -98,13 +99,13 @@ for i = 1:size(lead_ids, 2)
     vals_offset     = zeros(size(p_del, 1), 1);
     
     for i = 1:size(p_del, 1)
-        times_onset(i)  = times(p_del(i, 1) + 1);
-        times_peak(i)   = times(p_del(i, 2) + 1);
-        times_offset(i) = times(p_del(i, 3) + 1);
+        times_onset(i)  = times(p_del(i, 1) + 2);
+        times_peak(i)   = times(p_del(i, 2) + 2);
+        times_offset(i) = times(p_del(i, 3) + 2);
         
-        vals_onset(i)   = ecg_lead(p_del(i, 1) + 1);
-        vals_peak(i)    = ecg_lead(p_del(i, 2) + 1);
-        vals_offset(i)  = ecg_lead(p_del(i, 3) + 1);
+        vals_onset(i)   = ecg_lead(p_del(i, 1) + 2);
+        vals_peak(i)    = ecg_lead(p_del(i, 2) + 2);
+        vals_offset(i)  = ecg_lead(p_del(i, 3) + 2);
     end
     
     hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', 'green');
@@ -134,13 +135,13 @@ for i = 1:size(lead_ids, 2)
     vals_offset     = zeros(size(t_del, 1), 1);
     
     for i = 1:size(t_del, 1)
-        times_onset(i)      = times(t_del(i, 1) + 1);
-        times_peak(i)       = times(t_del(i, 2) + 1);
-        times_offset(i)     = times(t_del(i, 3) + 1);
+        times_onset(i)      = times(t_del(i, 1) + 2);
+        times_peak(i)       = times(t_del(i, 2) + 2);
+        times_offset(i)     = times(t_del(i, 3) + 2);
         
-        vals_onset(i)       = ecg_lead(t_del(i, 1) + 1);
-        vals_peak(i)        = ecg_lead(t_del(i, 2) + 1);
-        vals_offset(i)      = ecg_lead(t_del(i, 3) + 1);
+        vals_onset(i)       = ecg_lead(t_del(i, 1) + 2);
+        vals_peak(i)        = ecg_lead(t_del(i, 2) + 2);
+        vals_offset(i)      = ecg_lead(t_del(i, 3) + 2);
     end
     
     hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', markerWidth, 'Color',  'k', 'LineWidth', 1, 'MarkerFaceColor', 'cyan');
@@ -197,8 +198,8 @@ for i = 1:size(lead_ids, 2)
     json_r_qrs_on_vals = zeros(size(data,1), 1);
     for dump_id = 1:size(data,1)
         json_r_qrs_on_indexes(dump_id) = floor(data(dump_id) * freq);
-        json_r_qrs_on_times(dump_id) = times(json_r_qrs_on_indexes(dump_id) + 1);
-        json_r_qrs_on_vals(dump_id) = ecg_lead(json_r_qrs_on_indexes(dump_id) + 1);
+        json_r_qrs_on_times(dump_id) = times(json_r_qrs_on_indexes(dump_id) + 2);
+        json_r_qrs_on_vals(dump_id) = ecg_lead(json_r_qrs_on_indexes(dump_id) + 2);
     end
     
     hLine = plot(json_r_qrs_on_times, json_r_qrs_on_vals, '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [0.85 0.7 1]);
@@ -243,6 +244,6 @@ for i = 1:size(lead_ids, 2)
     legend('-DynamicLegend');
     propertyeditor(fig_ecg)
     
-    title(lead, 'Interpreter', 'latex');
+    title(lead_name, 'Interpreter', 'latex');
     
 end

@@ -27,8 +27,7 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    #data = cb.bulk_data_get([column], "device_model='AT-101' AND id_file>" + str(max_id_file))
-    data = cb.bulk_data_get([column], "device_model='AT-101'")
+    data = cb.bulk_data_get([column], "device_model='AT-101' AND cardio_file.id<=3064")
     records_ids = data['id']
     ecg_data = data['data']
 

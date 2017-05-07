@@ -21,6 +21,7 @@ class PointName(Enum):
     s = "s"
     r_hatch = "r'"
     qrs_offset = "qrs_offset"
+    xtd_point = "xtd_point"
 
     def __str__(self):
         return str(self.value)

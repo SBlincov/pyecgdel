@@ -50,7 +50,8 @@ def save_ecg_data_local(ecg, details):
             indexes = []
             values = []
             signs = []
-            branch_ids = []
+            branch_ids_0 = []
+            branch_ids_1 = []
 
             for morph_seq in ecg.leads[lead_id].qrs_morphs:
                 for morph in morph_seq:
@@ -70,17 +71,19 @@ def save_ecg_data_local(ecg, details):
                         indexes.append(index)
                         values.append(value)
                         signs.append(sign)
-                        branch_ids.append(branch_id)
+                        branch_ids_0.append(branch_id[0])
+                        branch_ids_1.append(branch_id[1])
 
-            morphology_info = np.zeros(len(del_ids), dtype=[('var1', int), ('var2', 'U50'), ('var3', int), ('var4', float), ('var5', int), ('var6', int)])
-            fmt = "%d %s %d %8e %d %d"
+            morphology_info = np.zeros(len(del_ids), dtype=[('var1', int), ('var2', 'U50'), ('var3', int), ('var4', float), ('var5', int), ('var6', int), ('var7', int)])
+            fmt = "%d %s %d %8e %d %d %d"
 
             morphology_info['var1'] = del_ids
             morphology_info['var2'] = names
             morphology_info['var3'] = indexes
             morphology_info['var4'] = values
             morphology_info['var5'] = signs
-            morphology_info['var6'] = branch_ids
+            morphology_info['var6'] = branch_ids_0
+            morphology_info['var7'] = branch_ids_1
 
             np.savetxt(data_file_name, morphology_info, fmt=fmt)
 
