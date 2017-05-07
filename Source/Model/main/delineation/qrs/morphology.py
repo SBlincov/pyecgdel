@@ -894,7 +894,7 @@ def is_right_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
         xtd_zcs_ids = []
         xtd_zc_id = peak_zc_id + 1
 
-        while xtd_zc_id <= len(zcs) and zcs[xtd_zc_id].index <= index_original_certified:
+        while xtd_zc_id < len(zcs) and zcs[xtd_zc_id].index <= index_original_certified:
             xtd_zcs_ids.append(xtd_zc_id)
             xtd_zc_id += 1
 
