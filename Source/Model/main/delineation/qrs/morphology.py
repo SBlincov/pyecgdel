@@ -68,14 +68,15 @@ class QRSMorphologyData:
             dels_zcs_ids.append(current_dels_zcs_ids)
             peak_zcs_ids.append(peak_zc_id)
 
-            if zcs_on_scale[peak_zc_id].extremum_sign is ExtremumSign.positive:
-                q_signs.append(ExtremumSign.negative)
-                r_signs.append(ExtremumSign.positive)
-                s_signs.append(ExtremumSign.negative)
-            else:
-                q_signs.append(ExtremumSign.positive)
-                r_signs.append(ExtremumSign.negative)
-                s_signs.append(ExtremumSign.positive)
+            if len(zcs_on_scale) > 0:
+                if zcs_on_scale[peak_zc_id].extremum_sign is ExtremumSign.positive:
+                    q_signs.append(ExtremumSign.negative)
+                    r_signs.append(ExtremumSign.positive)
+                    s_signs.append(ExtremumSign.negative)
+                else:
+                    q_signs.append(ExtremumSign.positive)
+                    r_signs.append(ExtremumSign.negative)
+                    s_signs.append(ExtremumSign.positive)
 
         self.window_left = window_left
         self.window_right = window_right
