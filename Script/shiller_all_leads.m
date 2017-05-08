@@ -9,7 +9,7 @@ leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'l
 lead_ids = 1:12;
 
 is_filtered = 1;
-wdc_scales = [1 2 3 4];
+wdc_scales = [1 4 5];
 x_axis_type = 0;
 
 markerWidth = 10;
