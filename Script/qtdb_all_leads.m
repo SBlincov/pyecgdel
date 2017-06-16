@@ -3,13 +3,14 @@ clear all;
 base_name = 'qtdb';
 freq = 250.0;
 
-record = 8;
+record = 1;
 
 leads = {'lead_ii', 'lead_v5'};
 
 for lead_id = 1:2
     
-    figure;
+    fig_ecg = figure;
+    propertyeditor(fig_ecg)
     lead = leads{lead_id};
     
     wdc_scale = 1;
@@ -466,5 +467,7 @@ for lead_id = 1:2
     end
     
     grid on;
+    
+    propertyeditor(fig_ecg)
     
 end
