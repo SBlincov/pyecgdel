@@ -3,7 +3,7 @@ clear all;
 base_name = 'qtdb';
 freq = 250.0;
 
-record = 1;
+record = 2;
 
 leads = {'lead_ii', 'lead_v5'};
 

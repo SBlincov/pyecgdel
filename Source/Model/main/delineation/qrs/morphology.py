@@ -849,10 +849,12 @@ def is_p_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff)
 
 def q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
     scale_id = qrs_morphology_data.scale_id
+    bord_scale_id = int(QRSParams['MORPHOLOGY_BORD_SCALE'])
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
     begin_index = qrs_morphology_data.begin_index
+    sampling_rate = ecg_lead.sampling_rate
 
     q_zc_sign = qrs_morphology_data.q_signs[scale_id]
 
@@ -873,12 +875,14 @@ def q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, di
         mm_curr = find_left_mm(q_index, wdc)
         mm_next = mm_curr
         mms = []
-        mms_zc = []
+        mms_before_zc = []
+        mms_after_zc = []
         # While mms have the same sign and take place in allowed interval
         while mm_curr.index > begin_index:
 
             if mm_curr.value * mm_next.value < 0:
-                mms_zc.append(mm_next)
+                mms_before_zc.append(mm_curr)
+                mms_after_zc.append(mm_next)
 
             mm_curr = mm_next
             mms.append(mm_curr)
@@ -886,26 +890,34 @@ def q_processing(q_zc_id, ecg_lead, delineation, qrs_morphology_data, points, di
 
         qrs_onset_index = begin_index
 
+        win_inc = float(QRSParams['MORPHOLOGY_WINDOW_INCREASE']) * sampling_rate
+
         if mms:
             # Default way for offset
-            mm_onset = mms[0]
             is_onset_on_mm = True
 
             if len(mms) > 1:
 
-                if len(mms_zc) > 1 and mms_zc[0].index > qrs_onset_index and abs(mms_zc[0].value) < mm_small_left:
-                    # Firstly locking for zc with small right mm. This zc corresponds to offset
-                    qrs_onset_index = find_right_thc_index(wdc, mms_zc[0].index, mms[0].index, 0.0)
-                    is_onset_on_mm = False
-
+                # The second mm in mms is incorrect, which corresponds to offset
+                if not mms[1].correctness:
+                    is_onset_on_mm = True
                 else:
-                    # The second mm in mms is incorrect, which corresponds to offset
-                    if not mms[1].correctness:
-                        mm_onset = mms[1]
-                        is_onset_on_mm = True
 
-            if is_onset_on_mm and mm_onset.index > qrs_onset_index:
-                qrs_onset_index = mm_onset.index
+                    if len(mms_after_zc) > 0 and mms_after_zc[0].index > qrs_onset_index - win_inc and abs(mms_after_zc[0].value) < mm_small_left:
+                        # Locking for zc with small right mm. This zc corresponds to offset
+                        th = mms_before_zc[0].value * float(QRSParams['MORPHOLOGY_ONSET_TH'])
+                        qrs_onset_index = find_left_thc_index(wdc, mms_before_zc[0].index, mms_after_zc[0].index, th)
+                        is_onset_on_mm = False
+
+            if is_onset_on_mm:
+                # 1. The first mm on low scale is too close to Q
+                # 2. The second incorrect mm can ve too far away from Q
+                # Because of that we use the first mm but on high scale
+
+                wdc_bord = qrs_morphology_data.wdc[bord_scale_id]
+                mm_bord = find_left_mm(q_index, wdc_bord)
+
+                qrs_onset_index = mm_bord.index
 
         qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]
         qrs_onset_sign = WaveSign.none
@@ -956,10 +968,12 @@ def r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points, di
 
 def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
     scale_id = qrs_morphology_data.scale_id
+    bord_scale_id = int(QRSParams['MORPHOLOGY_BORD_SCALE'])
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
     end_index = qrs_morphology_data.end_index
+    sampling_rate = ecg_lead.sampling_rate
 
     s_zc_sign = qrs_morphology_data.q_signs[scale_id]
 
@@ -980,12 +994,14 @@ def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, di
         mm_curr = find_right_mm(s_index, wdc)
         mm_next = mm_curr
         mms = []
-        mms_zc = []
+        mms_before_zc = []
+        mms_after_zc = []
         # While mms have the same sign and take place in allowed interval
         while mm_curr.index < end_index:
 
             if mm_curr.value * mm_next.value < 0:
-                mms_zc.append(mm_next)
+                mms_before_zc.append(mm_curr)
+                mms_after_zc.append(mm_next)
 
             mm_curr = mm_next
             mms.append(mm_curr)
@@ -993,26 +1009,42 @@ def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, di
 
         qrs_offset_index = end_index
 
+        win_inc = float(QRSParams['MORPHOLOGY_WINDOW_INCREASE']) * sampling_rate
+
         if mms:
             # Default way for offset
-            mm_offset = mms[0]
             is_offset_on_mm = True
+            is_offset_on_incorrect_mm = False
 
             if len(mms) > 1:
 
-                if len(mms_zc) > 1 and mms_zc[0].index < qrs_offset_index and abs(mms_zc[0].value) < mm_small_right:
-                    # Firstly locking for zc with small right mm. This zc corresponds to offset
-                    qrs_offset_index = find_left_thc_index(wdc, mms_zc[0].index, mms[0].index, 0.0)
-                    is_offset_on_mm = False
+                # The second mm in mms is incorrect, which corresponds to offset
+                if not mms[1].correctness:
+                    is_offset_on_mm = True
+
+                    if abs(mms[0].value) > float(QRSParams['MORPHOLOGY_OFFSET_INCORRECT_COEFF']) * abs(mms[1].value):
+                        is_offset_on_incorrect_mm = True
 
                 else:
-                    # The second mm in mms is incorrect, which corresponds to offset
-                    if not mms[1].correctness:
-                        mm_offset = mms[1]
-                        is_offset_on_mm = True
 
-            if is_offset_on_mm and mm_offset.index < qrs_offset_index:
-                qrs_offset_index = mm_offset.index
+                    if len(mms_after_zc) > 0 and mms_after_zc[0].index < qrs_offset_index + win_inc and abs(mms_after_zc[0].value) < mm_small_right:
+                        # Locking for zc with small right mm. This zc corresponds to offset
+                        th = mms_before_zc[0].value * float(QRSParams['MORPHOLOGY_OFFSET_TH'])
+                        qrs_offset_index = find_right_thc_index(wdc, mms_before_zc[0].index, mms_after_zc[0].index, th)
+                        is_offset_on_mm = False
+
+            if is_offset_on_mm and not is_offset_on_incorrect_mm:
+                # 1. The first mm on low scale is too close to Q
+                # 2. The second incorrect mm can ve too far away from Q
+                # Because of that we use the first mm but on high scale
+
+                wdc_bord = qrs_morphology_data.wdc[bord_scale_id]
+                mm_bord = find_right_mm(s_index, wdc_bord)
+
+                qrs_offset_index = mm_bord.index
+
+            if is_offset_on_mm and is_offset_on_incorrect_mm:
+                qrs_offset_index = mms[1].index
 
         qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
         qrs_offset_sign = WaveSign.none
@@ -1143,30 +1175,75 @@ def processing_default_morphology(ecg_lead, delineation, qrs_morphology_data):
     return points
 
 
-def is_left_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
-    scale_id = qrs_morphology_data.scale_id
-    zcs = qrs_morphology_data.zcs[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+def origin_scale_analysis(ecg_lead, qrs_morphology_data):
 
     scale_id_origin = int(QRSParams['WDC_SCALE_ID'])
+    wdc_origin = qrs_morphology_data.wdc[scale_id_origin]
     zcs_origin = qrs_morphology_data.zcs[scale_id_origin]
     peak_zc_id_origin = qrs_morphology_data.peak_zcs_ids[scale_id_origin]
     dels_zcs_ids_origin = qrs_morphology_data.dels_zcs_ids[scale_id_origin]
 
-    peak_zc_id_origin_index = dels_zcs_ids_origin.index(peak_zc_id_origin)
+    peak_zc_ampltd = zcs_origin[peak_zc_id_origin].mm_amplitude
 
-    if 0 < peak_zc_id_origin_index < len(dels_zcs_ids_origin) - 1:
-        dels_zcs_ids_origin = dels_zcs_ids_origin[peak_zc_id_origin_index-1:peak_zc_id_origin_index+2]
-    elif 0 < peak_zc_id_origin_index == len(dels_zcs_ids_origin) - 1:
-        dels_zcs_ids_origin = dels_zcs_ids_origin[peak_zc_id_origin_index-1:len(dels_zcs_ids_origin)]
-    elif 0 == peak_zc_id_origin_index < len(dels_zcs_ids_origin) - 1:
-        dels_zcs_ids_origin = dels_zcs_ids_origin[peak_zc_id_origin_index:peak_zc_id_origin_index+2]
-    else:
-        dels_zcs_ids_origin = dels_zcs_ids_origin
+    del_begin_zc_id_origin = dels_zcs_ids_origin[0]
+    del_end_zc_id_origin = dels_zcs_ids_origin[-1]
+
+    big_zc_id = [peak_zc_id_origin]
+
+    if del_begin_zc_id_origin <= peak_zc_id_origin <= del_end_zc_id_origin:
+
+        begin_zc_id = peak_zc_id_origin
+
+        if begin_zc_id > del_begin_zc_id_origin:
+            begin_zc_id = begin_zc_id - 1
+
+        end_zc_id = peak_zc_id_origin
+
+        if end_zc_id < del_end_zc_id_origin:
+            end_zc_id = end_zc_id + 1
+
+        begin_zc_id = begin_zc_id - del_begin_zc_id_origin
+        end_zc_id = end_zc_id - del_begin_zc_id_origin
+
+        dels_zcs_ids_origin = dels_zcs_ids_origin[begin_zc_id:end_zc_id + 1]
+
+    return dels_zcs_ids_origin
+
+
+def is_left_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
+    scale_id = qrs_morphology_data.scale_id
+    wdc = qrs_morphology_data.wdc[scale_id]
+    zcs = qrs_morphology_data.zcs[scale_id]
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
+
+    scale_id_origin = int(QRSParams['WDC_SCALE_ID'])
+    wdc_origin = qrs_morphology_data.wdc[scale_id_origin]
+    zcs_origin = qrs_morphology_data.zcs[scale_id_origin]
+    peak_zc_id_origin = qrs_morphology_data.peak_zcs_ids[scale_id_origin]
+    dels_zcs_ids_origin = qrs_morphology_data.dels_zcs_ids[scale_id_origin]
+
+    dels_zcs_ids_origin = origin_scale_analysis(ecg_lead, qrs_morphology_data)
 
     original_certified_id = dels_zcs_ids_origin[0]
+
     if original_certified_id == peak_zc_id_origin:
-        return False, None, None
+
+        right_index = zcs_origin[original_certified_id].index
+        left_index = find_left_thc_index(wdc_origin, right_index - 1, qrs_morphology_data.begin_index, 0.0)
+
+        index_original_certified = left_index + np.argmax(np.abs(wdc_origin[left_index:right_index]))
+
+        xtd_zcs_ids = []
+        xtd_zc_id = peak_zc_id - 1
+
+        while xtd_zc_id >= 0 and zcs[xtd_zc_id].index >= index_original_certified:
+            xtd_zcs_ids.append(xtd_zc_id)
+            xtd_zc_id -= 1
+
+        if xtd_zc_id >= 0 and len(xtd_zcs_ids) % 2 == 0:
+            xtd_zcs_ids.append(xtd_zc_id)
+
     else:
 
         index_original_certified = zcs_origin[original_certified_id].index
@@ -1187,50 +1264,60 @@ def is_left_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
                 if len(xtd_zcs_ids) > 0:
                     xtd_zcs_ids.pop()
 
-        if len(xtd_zcs_ids) <= 1:
-            return False, None, None
+    if len(xtd_zcs_ids) <= 1:
+        return False, None, None
 
-        else:
-            q_zc_id = xtd_zcs_ids[-1]
-            points = []
-            for xtd_point_zc_id in xtd_zcs_ids[0:-1]:
-                p_index = zcs[xtd_point_zc_id].index
-                p_value = ecg_lead.filtrated[p_index]
-                if zcs[xtd_point_zc_id].extremum_sign is ExtremumSign.negative:
-                    p_sign = WaveSign.negative
-                else:
-                    p_sign = WaveSign.positive
-                p = Point(PointName.xtd_point, p_index, p_value, p_sign)
+    else:
+        q_zc_id = xtd_zcs_ids[-1]
+        points = []
+        for xtd_point_zc_id in xtd_zcs_ids[0:-1]:
+            p_index = zcs[xtd_point_zc_id].index
+            p_value = ecg_lead.filtrated[p_index]
+            if zcs[xtd_point_zc_id].extremum_sign is ExtremumSign.negative:
+                p_sign = WaveSign.negative
+            else:
+                p_sign = WaveSign.positive
+            p = Point(PointName.xtd_point, p_index, p_value, p_sign)
 
-                points.insert(0, p)
+            points.insert(0, p)
 
-            return True, q_zc_id, points
+        return True, q_zc_id, points
 
 
 def is_right_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
     scale_id = qrs_morphology_data.scale_id
+    wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
     peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
 
     scale_id_origin = int(QRSParams['WDC_SCALE_ID'])
+    wdc_origin = qrs_morphology_data.wdc[scale_id_origin]
     zcs_origin = qrs_morphology_data.zcs[scale_id_origin]
     peak_zc_id_origin = qrs_morphology_data.peak_zcs_ids[scale_id_origin]
     dels_zcs_ids_origin = qrs_morphology_data.dels_zcs_ids[scale_id_origin]
 
-    peak_zc_id_origin_index = dels_zcs_ids_origin.index(peak_zc_id_origin)
-
-    if 0 < peak_zc_id_origin_index < len(dels_zcs_ids_origin) - 1:
-        dels_zcs_ids_origin = dels_zcs_ids_origin[peak_zc_id_origin_index-1:peak_zc_id_origin_index+2]
-    elif 0 < peak_zc_id_origin_index == len(dels_zcs_ids_origin) - 1:
-        dels_zcs_ids_origin = dels_zcs_ids_origin[peak_zc_id_origin_index-1:len(dels_zcs_ids_origin)]
-    elif 0 == peak_zc_id_origin_index < len(dels_zcs_ids_origin) - 1:
-        dels_zcs_ids_origin = dels_zcs_ids_origin[peak_zc_id_origin_index:peak_zc_id_origin_index+2]
-    else:
-        dels_zcs_ids_origin = dels_zcs_ids_origin
+    dels_zcs_ids_origin = origin_scale_analysis(ecg_lead, qrs_morphology_data)
 
     original_certified_id = dels_zcs_ids_origin[-1]
+
     if original_certified_id == peak_zc_id_origin:
-        return False, None, None
+
+        left_index = zcs_origin[original_certified_id].index
+        right_index = find_right_thc_index(wdc_origin, left_index + 1, qrs_morphology_data.end_index, 0.0)
+
+        index_original_certified = left_index + np.argmax(np.abs(wdc_origin[left_index:right_index]))
+
+        xtd_zcs_ids = []
+        xtd_zc_id = peak_zc_id + 1
+
+        while xtd_zc_id < len(zcs) and zcs[xtd_zc_id].index <= index_original_certified:
+            xtd_zcs_ids.append(xtd_zc_id)
+            xtd_zc_id += 1
+
+        if xtd_zc_id < len(zcs) and len(xtd_zcs_ids) % 2 == 0:
+            xtd_zcs_ids.append(xtd_zc_id)
+
     else:
 
         index_original_certified = zcs_origin[original_certified_id].index
@@ -1251,20 +1338,20 @@ def is_right_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
                 if len(xtd_zcs_ids) > 0:
                     xtd_zcs_ids.pop()
 
-        if len(xtd_zcs_ids) <= 1:
-            return False, None, None
-        else:
-            s_zc_id = xtd_zcs_ids[-1]
-            points = []
-            for xtd_point_zc_id in xtd_zcs_ids[0:-1]:
-                p_index = zcs[xtd_point_zc_id].index
-                p_value = ecg_lead.filtrated[p_index]
-                if zcs[xtd_point_zc_id].extremum_sign is ExtremumSign.negative:
-                    p_sign = WaveSign.negative
-                else:
-                    p_sign = WaveSign.positive
-                p = Point(PointName.xtd_point, p_index, p_value, p_sign)
+    if len(xtd_zcs_ids) <= 1:
+        return False, None, None
+    else:
+        s_zc_id = xtd_zcs_ids[-1]
+        points = []
+        for xtd_point_zc_id in xtd_zcs_ids[0:-1]:
+            p_index = zcs[xtd_point_zc_id].index
+            p_value = ecg_lead.filtrated[p_index]
+            if zcs[xtd_point_zc_id].extremum_sign is ExtremumSign.negative:
+                p_sign = WaveSign.negative
+            else:
+                p_sign = WaveSign.positive
+            p = Point(PointName.xtd_point, p_index, p_value, p_sign)
 
-                points.append(p)
+            points.append(p)
 
-            return True, s_zc_id, points
+        return True, s_zc_id, points
