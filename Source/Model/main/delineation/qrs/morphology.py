@@ -967,22 +967,19 @@ def r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points, di
 
 
 def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
+
+    # Init necessary data
     scale_id = qrs_morphology_data.scale_id
-    bord_scale_id = int(QRSParams['MORPHOLOGY_BORD_SCALE'])
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
     end_index = qrs_morphology_data.end_index
-    sampling_rate = ecg_lead.sampling_rate
-
     s_zc_sign = qrs_morphology_data.q_signs[scale_id]
+    offset_index_beta = delineation.offset_index
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    # Checking, that S exist
+    if s_zc_id < len(zcs) and zcs[s_zc_id].extremum_sign is s_zc_sign:
 
-    offset_index = delineation.offset_index
-
-    if s_zc_id < len(zcs) and zcs[s_zc_id].extremum_sign is ExtremumSign.negative:
-
+        # Including S to morphology
         s_index = zcs[s_zc_id].index
         s_value = ecg_lead.filtrated[s_index]
         if s_zc_sign is ExtremumSign.positive:
@@ -991,78 +988,73 @@ def s_processing(s_zc_id, ecg_lead, delineation, qrs_morphology_data, points, di
             s_sign = WaveSign.negative
         s_point = Point(PointName.s, s_index, s_value, s_sign)
 
-        mm_curr = find_right_mm(s_index, wdc)
-        mm_next = mm_curr
-        mms = []
-        mms_before_zc = []
-        mms_after_zc = []
-        # While mms have the same sign and take place in allowed interval
-        while mm_curr.index < end_index:
+        # Offset searching
+        is_offset_found = False
+        qrs_offset_index = offset_index_beta
 
-            if mm_curr.value * mm_next.value < 0:
-                mms_before_zc.append(mm_curr)
-                mms_after_zc.append(mm_next)
+        # 1.  First check:
+        #     If exist zc before offset, defined at the step beta,
+        #     index of that zc defined as new offset.
+        #     If count of that zcs is more than 1, choose first
+        if not is_offset_found:
 
-            mm_curr = mm_next
-            mms.append(mm_curr)
-            mm_next = find_right_mm(mm_curr.index + 1, wdc)
+            offset_zcs_ids = []
+            for zc_id in range(0, len(zcs)):
+                if  s_index < zcs[zc_id].index <= offset_index_beta:
+                    offset_zcs_ids.append(zc_id)
 
-        qrs_offset_index = end_index
+            if len(offset_zcs_ids) > 0:
+                offset_zc_id = offset_zcs_ids[0]
+                qrs_offset_index = zcs[offset_zc_id].index
+                is_offset_found = True
 
-        win_inc = float(QRSParams['MORPHOLOGY_WINDOW_INCREASE']) * sampling_rate
+        # 2.  Second check:
+        #     Form mms list and search last incorrect mm,
+        #     which index defines as new offset
+        if not is_offset_found:
 
-        if mms:
-            # Default way for offset
-            is_offset_on_mm = True
-            is_offset_on_incorrect_mm = False
+            mms = []
+            mm_curr = find_right_mm(s_index, wdc)
+            mm_next = mm_curr
+            while mm_curr.index < end_index:
+                mm_curr = mm_next
+                mms.append(mm_curr)
+                mm_next = find_right_mm(mm_curr.index + 1, wdc)
 
-            if len(mms) > 1:
+            mms_ids_incorrect = []
+            for mm_id in range(0, len(mms)):
+                if not mms[mm_id].correctness:
+                    mms_ids_incorrect.append(mm_id)
 
-                # The second mm in mms is incorrect, which corresponds to offset
-                if not mms[1].correctness:
-                    is_offset_on_mm = True
+            if len(mms) > 0:
+                if len(mms_ids_incorrect) > 0:
+                    mm_id_incorrect = mms_ids_incorrect[-1]
+                    qrs_offset_index = mms[mm_id_incorrect].index
+                    is_offset_found = True
 
-                    if abs(mms[0].value) > float(QRSParams['MORPHOLOGY_OFFSET_INCORRECT_COEFF']) * abs(mms[1].value):
-                        is_offset_on_incorrect_mm = True
+        # 3.  Last scenario:
+        #     Init offset with offset from beta step
+        if not is_offset_found:
 
-                else:
+            qrs_offset_index = offset_index_beta
 
-                    if len(mms_after_zc) > 0 and mms_after_zc[0].index < qrs_offset_index + win_inc and abs(mms_after_zc[0].value) < mm_small_right:
-                        # Locking for zc with small right mm. This zc corresponds to offset
-                        th = mms_before_zc[0].value * float(QRSParams['MORPHOLOGY_OFFSET_TH'])
-                        qrs_offset_index = find_right_thc_index(wdc, mms_before_zc[0].index, mms_after_zc[0].index, th)
-                        is_offset_on_mm = False
-
-            if is_offset_on_mm and not is_offset_on_incorrect_mm:
-                # 1. The first mm on low scale is too close to Q
-                # 2. The second incorrect mm can ve too far away from Q
-                # Because of that we use the first mm but on high scale
-
-                wdc_bord = qrs_morphology_data.wdc[bord_scale_id]
-                mm_bord = find_right_mm(s_index, wdc_bord)
-
-                qrs_offset_index = mm_bord.index
-
-            if is_offset_on_mm and is_offset_on_incorrect_mm:
-                qrs_offset_index = mms[1].index
-
+        # Including offset to morphology
         qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
         qrs_offset_sign = WaveSign.none
         qrs_offset_point = Point(PointName.qrs_offset, qrs_offset_index, qrs_offset_value, qrs_offset_sign)
-
         if s_index < qrs_offset_index:
             points.append(s_point)
-
         if direction < 0:
             points.insert(0, qrs_offset_point)
         else:
             points.append(qrs_offset_point)
-
         delineation.offset_index = qrs_offset_index
 
+    # S does not exist
     else:
 
-        qrs_offset_index = offset_index
+        # Including offset to morphology
+        qrs_offset_index = offset_index_beta
         qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
         qrs_offset_sign = WaveSign.none
         qrs_offset_point = Point(PointName.qrs_offset, qrs_offset_index, qrs_offset_value, qrs_offset_sign)
@@ -1241,7 +1233,7 @@ def is_left_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
             xtd_zcs_ids.append(xtd_zc_id)
             xtd_zc_id -= 1
 
-        if xtd_zc_id >= 0 and len(xtd_zcs_ids) % 2 == 0:
+        if xtd_zc_id >= 0 and len(xtd_zcs_ids) > 0 and len(xtd_zcs_ids) % 2 == 0:
             xtd_zcs_ids.append(xtd_zc_id)
 
     else:
@@ -1255,7 +1247,7 @@ def is_left_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
             xtd_zcs_ids.append(xtd_zc_id)
             xtd_zc_id -= 1
 
-        if xtd_zc_id >= 0 and len(xtd_zcs_ids) % 2 == 0:
+        if xtd_zc_id >= 0 and len(xtd_zcs_ids) > 0 and len(xtd_zcs_ids) % 2 == 0:
             dist_1 = abs(zcs[xtd_zc_id + 1].index - index_original_certified)
             dist_2 = abs(zcs[xtd_zc_id].index - index_original_certified)
             if float(dist_2) < float(QRSParams['MORPHOLOGY_SCALES_DIFF']) * float(dist_1):
@@ -1315,7 +1307,7 @@ def is_right_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
             xtd_zcs_ids.append(xtd_zc_id)
             xtd_zc_id += 1
 
-        if xtd_zc_id < len(zcs) and len(xtd_zcs_ids) % 2 == 0:
+        if xtd_zc_id < len(zcs) and len(xtd_zcs_ids) > 0 and len(xtd_zcs_ids) % 2 == 0:
             xtd_zcs_ids.append(xtd_zc_id)
 
     else:
@@ -1329,7 +1321,7 @@ def is_right_qrs_morphology_complex(ecg_lead, qrs_morphology_data):
             xtd_zcs_ids.append(xtd_zc_id)
             xtd_zc_id += 1
 
-        if xtd_zc_id < len(zcs) and len(xtd_zcs_ids) % 2 == 0:
+        if xtd_zc_id < len(zcs) and len(xtd_zcs_ids) > 0 and len(xtd_zcs_ids) % 2 == 0:
             dist_1 = abs(zcs[xtd_zc_id - 1].index - index_original_certified)
             dist_2 = abs(zcs[xtd_zc_id].index - index_original_certified)
             if float(dist_2) < float(QRSParams['MORPHOLOGY_SCALES_DIFF']) * float(dist_1):
