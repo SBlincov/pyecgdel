@@ -49,7 +49,7 @@ def get_zcs_only_indexes(wdc, begin_index, end_index):
         next_wdc = wdc[signal_index + 1]
 
         if current_wdc * next_wdc < 0:
-            zc = ZeroCrossing(signal_index, wdc)
+            zc = ZeroCrossing(signal_index + 1, wdc)
             zcs.append(zc)
             signal_index += 1
 

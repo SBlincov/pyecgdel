@@ -15,7 +15,7 @@ from Source.Model.main.delineation.qrs.peak import *
 from Source.Model.main.delineation.qrs.zcs import *
 from Source.Model.main.delineation.qrs.routines import *
 from Source.Model.main.params.qrs import *
-from Source.Model.main.delineation.qrs.morphology import *
+from Source.Model.main.delineation.qrs.gamma.morphology import *
 
 
 class InvalidQRSDelineation(Exception):

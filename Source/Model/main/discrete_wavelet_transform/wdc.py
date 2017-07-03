@@ -21,7 +21,7 @@ def get_wdc(signal):
 
     max_decomposition_level = pywt.swt_max_level(len(signal))
     custom_wavelet = CustomWavelet
-    # custom_wavelet = pywt.Wavelet('bior1.5')
+    # custom_wavelet = pywt.Wavelet('coif1')
     coeffs = pywt.swt(signal, custom_wavelet, level=num_dwt_scales, start_level=0)
 
     wdc = []
