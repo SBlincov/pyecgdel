@@ -14,12 +14,12 @@ def get_qrs_morphology(ecg_lead, del_id, delineation):
     is_left_complex, first_zc_id, left_points = left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data)
     is_right_complex, last_zc_id, right_points = right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data)
 
-    if first_zc_id > 0:
+    if is_left_complex:
         q_zc_id_diff = first_zc_id - r_zc_id
     else:
         q_zc_id_diff = -1
 
-    if last_zc_id > 0:
+    if is_right_complex:
         s_zc_id_diff = last_zc_id - r_zc_id
     else:
         s_zc_id_diff = 1
