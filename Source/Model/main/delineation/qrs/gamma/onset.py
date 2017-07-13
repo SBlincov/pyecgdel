@@ -73,7 +73,7 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
     # Including onset to morphology
     qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]
     qrs_onset_sign = WaveSign.none
-    qrs_onset_point = Point(PointName.qrs_offset, qrs_onset_index, qrs_onset_value, qrs_onset_sign)
+    qrs_onset_point = Point(PointName.qrs_onset, qrs_onset_index, qrs_onset_value, qrs_onset_sign)
     if direction < 0:
         points.insert(0, qrs_onset_point)
     else:
