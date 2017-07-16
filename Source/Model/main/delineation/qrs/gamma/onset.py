@@ -1,11 +1,15 @@
 from Source.Model.main.delineation.morfology_point import *
 from Source.Model.main.modulus_maxima.routines import *
+from Source.Model.main.params.qrs import *
 
 
 def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
 
+    sampling_rate = ecg_lead.sampling_rate
+
     # Init necessary data
     scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
     begin_index = qrs_morphology_data.begin_index
@@ -18,12 +22,17 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
 
         first_zc_index = zcs[first_zc_id].index
 
+        # Begin of allowed interval
+        left_lim = first_zc_index - int(float(QRSParams['GAMMA_LEFT_WINDOW']) * sampling_rate)
+
         # Onset searching
         is_onset_found = False
 
+        # Threshold for M-morphology
+        mm_ampl = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_LEFT_XTD_ZCS_MM_PART'])
+
         # 1.  First check:
-        #     If exist zc before onset (move from right to left),
-        #     defined at the step beta,
+        #     If exist zc before onset (move from right to left), defined at the step beta,
         #     index of that zc defined as new onset.
         #     If count of that zcs is more than 1, choose last
         if not is_onset_found:
@@ -33,13 +42,22 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
                 if onset_index_beta <= zcs[zc_id].index < first_zc_index:
                     onset_zcs_ids.append(zc_id)
 
+            # We check 2 options:
+            # * zc in small window
+            # * zc left mm is big
+            # If at least one is passed, offset defines here
+
             if len(onset_zcs_ids) > 0:
                 onset_zc_id = onset_zcs_ids[-1]
-                qrs_onset_index = zcs[onset_zc_id].index
-                is_onset_found = True
+                if zcs[onset_zc_id].index >= left_lim:
+                    qrs_onset_index = zcs[onset_zc_id].index
+                    is_onset_found = True
+                if abs(zcs[onset_zc_id].right_mm.value) > mm_ampl:
+                    qrs_onset_index = zcs[onset_zc_id].index
+                    is_onset_found = True
 
         # 2.  Second check:
-        #     Form mms list and search last incorrect mm,
+        #     Form mms list and search incorrect mm,
         #     which index defines as new onset
         if not is_onset_found:
 
@@ -58,17 +76,31 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
 
             if len(mms) > 0:
                 if len(mms_ids_incorrect) > 0:
-                    mm_id_incorrect = mms_ids_incorrect[0]
-                    qrs_onset_index = mms[mm_id_incorrect].index
-                    is_onset_found = True
+                    if abs(zcs[first_zc_id].left_mm.value) > mm_ampl:
+                        mm_id_incorrect = mms_ids_incorrect[0]
+                        qrs_onset_index = mms[mm_id_incorrect].index
+                        is_onset_found = True
+                    else:
+                        for mm_id in mms_ids_incorrect:
+                            if mms[mm_id].index >= left_lim:
+                                qrs_onset_index = mms[mm_id].index
+                                is_onset_found = True
 
-        # 3.  Last scenario:
+        # 3.  Third check:
+        #     In allowed window exist only correct mms,
+        #     then we looking for correct mm on special scale in allowed interval
+        #     and define its index as onset
+        if not is_onset_found:
+            scale_id_bord = int(QRSParams['GAMMA_BORD_SCALE'])
+            wdc_bord = qrs_morphology_data.wdc[scale_id_bord]
+            mm_bord = find_left_mm(first_zc_index, wdc_bord)
+            qrs_onset_index = mm_bord.index
+            is_onset_found = True
+
+        # 4.  Last scenario:
         #     Init onset with onset from beta step
         if not is_onset_found:
             qrs_onset_index = onset_index_beta
-
-        # Incrementation for separation
-        qrs_onset_index -= 1
 
     # Including onset to morphology
     qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]

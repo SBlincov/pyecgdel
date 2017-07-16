@@ -1,11 +1,15 @@
 from Source.Model.main.delineation.morfology_point import *
 from Source.Model.main.modulus_maxima.routines import *
+from Source.Model.main.params.qrs import *
 
 
 def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
 
+    sampling_rate = ecg_lead.sampling_rate
+
     # Init necessary data
     scale_id = qrs_morphology_data.scale_id
+    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
     wdc = qrs_morphology_data.wdc[scale_id]
     zcs = qrs_morphology_data.zcs[scale_id]
     end_index = qrs_morphology_data.end_index
@@ -18,8 +22,14 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
 
         last_zc_index = zcs[last_zc_id].index
 
+        # Begin of allowed interval
+        right_lim = last_zc_index + int(float(QRSParams['GAMMA_RIGHT_WINDOW']) * sampling_rate)
+
         # Offset searching
         is_offset_found = False
+
+        # Threshold for M-morphology
+        mm_ampl = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_RIGHT_XTD_ZCS_MM_PART'])
 
         # 1.  First check:
         #     If exist zc before offset, defined at the step beta,
@@ -32,13 +42,22 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
                 if last_zc_index < zcs[zc_id].index <= offset_index_beta:
                     offset_zcs_ids.append(zc_id)
 
+            # We check 2 options:
+            # * zc in small window
+            # * zc left mm is big
+            # If at least one is passed, offset defines here
+
             if len(offset_zcs_ids) > 0:
                 offset_zc_id = offset_zcs_ids[0]
-                qrs_offset_index = zcs[offset_zc_id].index
-                is_offset_found = True
+                if zcs[offset_zc_id].index <= right_lim:
+                    qrs_offset_index = zcs[offset_zc_id].index
+                    is_offset_found = True
+                if abs(zcs[offset_zc_id].left_mm.value) > mm_ampl:
+                    qrs_offset_index = zcs[offset_zc_id].index
+                    is_offset_found = True
 
         # 2.  Second check:
-        #     Form mms list and search last incorrect mm,
+        #     Form mms list and search incorrect mm,
         #     which index defines as new offset
         if not is_offset_found:
 
@@ -57,17 +76,31 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
 
             if len(mms) > 0:
                 if len(mms_ids_incorrect) > 0:
-                    mm_id_incorrect = mms_ids_incorrect[-1]
-                    qrs_offset_index = mms[mm_id_incorrect].index
-                    is_offset_found = True
+                    if abs(zcs[last_zc_id].right_mm.value) > mm_ampl:
+                        mm_id_incorrect = mms_ids_incorrect[-1]
+                        qrs_offset_index = mms[mm_id_incorrect].index
+                        is_offset_found = True
+                    else:
+                        for mm_id in mms_ids_incorrect:
+                            if mms[mm_id].index <= right_lim:
+                                qrs_offset_index = mms[mm_id].index
+                                is_offset_found = True
 
-        # 3.  Last scenario:
+        # 3.  Third check:
+        #     In allowed window exist only correct mms,
+        #     then we looking for correct mm on special scale in allowed interval
+        #     and define its index as onset
+        if not is_offset_found:
+            scale_id_bord = int(QRSParams['GAMMA_BORD_SCALE'])
+            wdc_bord = qrs_morphology_data.wdc[scale_id_bord]
+            mm_bord = find_right_mm(last_zc_index, wdc_bord)
+            qrs_offset_index = mm_bord.index
+            is_offset_found = True
+
+        # 4.  Last scenario:
         #     Init offset with offset from beta step
         if not is_offset_found:
             qrs_offset_index = offset_index_beta
-
-        # Incrementation for separation
-        qrs_offset_index += 1
 
     # Including offset to morphology
     qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
