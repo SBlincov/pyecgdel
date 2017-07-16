@@ -8,6 +8,8 @@ from Source.Model.main.delineation.morfology_point import *
 
 def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
 
+    sampling_rate = ecg_lead.sampling_rate
+
     # Init data for target wdc scale
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
@@ -132,6 +134,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                     xtd_zcs_ids.pop()
 
             # If S exist, it corresponds to odd zc with bigger amplitude
+            # If there is zcs after S-zc we should check them
             if is_s_exist:
                 s_zc_id = xtd_zcs_ids[0]
                 s_zc_amplitude = zcs[s_zc_id].mm_amplitude
@@ -139,6 +142,24 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                     if zcs[zc_id].mm_amplitude > s_zc_amplitude:
                         s_zc_id = zc_id
                         s_zc_amplitude = zcs[s_zc_id].mm_amplitude
+
+                # Check zcs after S-zc
+                if xtd_zcs_ids[-1] > s_zc_id:
+                    after_s_zcs_ids = xtd_zcs_ids[xtd_zcs_ids.index(s_zc_id) + 1:]
+                    if len(after_s_zcs_ids) % 2 == 1:
+                        after_s_zcs_ids.pop()
+
+                    is_zcs_valid = True
+                    zc_shift = int(float(QRSParams['GAMMA_XTD_ZCS_SHIFT']) * sampling_rate)
+                    for zc_id in after_s_zcs_ids[0:-1:2]:
+                        if abs(zcs[zc_id].index - zcs[zc_id - 1].index) > zc_shift:
+                            is_zcs_valid = False
+
+                    if is_zcs_valid:
+                        if len(after_s_zcs_ids) > 0:
+                            xtd_zcs_ids = xtd_zcs_ids[0:xtd_zcs_ids.index(s_zc_id) + 1] + after_s_zcs_ids
+                    else:
+                        xtd_zcs_ids = xtd_zcs_ids[0:xtd_zcs_ids.index(s_zc_id) + 1]
 
     # Adding xtd points (including S)
     for xtd_point_zc_id in xtd_zcs_ids:
