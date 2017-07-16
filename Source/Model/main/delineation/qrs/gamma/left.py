@@ -7,6 +7,8 @@ from Source.Model.main.delineation.morfology_point import *
 
 def left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
 
+    sampling_rate = ecg_lead.sampling_rate
+
     # Init data for target wdc scale
     scale_id = qrs_morphology_data.scale_id
     wdc = qrs_morphology_data.wdc[scale_id]
@@ -140,11 +142,23 @@ def left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                         q_zc_id = zc_id
                         q_zc_amplitude = zcs[q_zc_id].mm_amplitude
 
-                if xtd_zcs_ids[-1] > q_zc_id:
-                    olol = 1
+                # Check zcs after Q-zc
+                if xtd_zcs_ids[-1] < q_zc_id:
+                    after_q_zcs_ids = xtd_zcs_ids[xtd_zcs_ids.index(q_zc_id) + 1:]
+                    if len(after_q_zcs_ids) % 2 == 1:
+                        after_q_zcs_ids.pop()
 
+                    is_zcs_valid = True
+                    zc_shift = int(float(QRSParams['GAMMA_XTD_ZCS_SHIFT']) * sampling_rate)
+                    for zc_id in after_q_zcs_ids[0:-1:2]:
+                        if abs(zcs[zc_id].index - zcs[zc_id + 1].index) > zc_shift:
+                            is_zcs_valid = False
 
-
+                    if is_zcs_valid:
+                        if len(after_q_zcs_ids) > 0:
+                            xtd_zcs_ids = xtd_zcs_ids[0:xtd_zcs_ids.index(q_zc_id) + 1] + after_q_zcs_ids
+                    else:
+                        xtd_zcs_ids = xtd_zcs_ids[0:xtd_zcs_ids.index(q_zc_id) + 1]
 
     # Adding xtd points (including Q)
     for xtd_point_zc_id in xtd_zcs_ids:
