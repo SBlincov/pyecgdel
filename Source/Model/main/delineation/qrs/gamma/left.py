@@ -1,3 +1,4 @@
+from Source.Model.main.zero_crossings.zero_crossing import *
 from Source.Model.main.delineation.qrs.onset import *
 from Source.Model.main.delineation.qrs.offset import *
 from Source.Model.main.delineation.qrs.gamma.beta_legacy import *
@@ -148,10 +149,23 @@ def left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                     if len(after_q_zcs_ids) % 2 == 1:
                         after_q_zcs_ids.pop()
 
+                    # We check:
+                    # * Difference between Q-zc and previous zc must be in allowed window - odd shift
+                    # * Difference between zcs in M-morphology before Q must be small - even shift
+                    # * Amplitude of mm in M-morphology must be larger than some threshold
+                    # If one of the conditions is passed then we should exclude xtd zcs
                     is_zcs_valid = True
-                    zc_shift = int(float(QRSParams['GAMMA_XTD_ZCS_SHIFT']) * sampling_rate)
+                    odd_shift = int(float(QRSParams['GAMMA_LEFT_ODD_XTD_ZCS_SHIFT']) * sampling_rate)
+                    even_shift = int(float(QRSParams['GAMMA_LEFT_EVEN_XTD_ZCS_SHIFT']) * sampling_rate)
+                    mm_ampl = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_LEFT_XTD_ZCS_MM_PART'])
+
                     for zc_id in after_q_zcs_ids[0:-1:2]:
-                        if abs(zcs[zc_id].index - zcs[zc_id + 1].index) > zc_shift:
+
+                        if abs(zcs[zc_id].index - zcs[zc_id + 1].index) > odd_shift:
+                            is_zcs_valid = False
+                        if abs(zcs[zc_id - 1].index - zcs[zc_id].index) > even_shift:
+                            is_zcs_valid = False
+                        if abs(zcs[zc_id - 1].left_mm.value) < mm_ampl:
                             is_zcs_valid = False
 
                     if is_zcs_valid:

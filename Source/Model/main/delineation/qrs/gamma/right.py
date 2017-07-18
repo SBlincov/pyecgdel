@@ -149,10 +149,23 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                     if len(after_s_zcs_ids) % 2 == 1:
                         after_s_zcs_ids.pop()
 
+                    # We check:
+                    # * Difference between S-zc and next zc must be in allowed window - odd shift
+                    # * Difference between zcs in M-morphology after S must be small - even shift
+                    # * Amplitude of mm in M-morphology must be larger than some threshold
+                    # If one of the conditions is passed then we should exclude xtd zcs
                     is_zcs_valid = True
-                    zc_shift = int(float(QRSParams['GAMMA_XTD_ZCS_SHIFT']) * sampling_rate)
+                    odd_shift = int(float(QRSParams['GAMMA_RIGHT_ODD_XTD_ZCS_SHIFT']) * sampling_rate)
+                    even_shift = int(float(QRSParams['GAMMA_RIGHT_EVEN_XTD_ZCS_SHIFT']) * sampling_rate)
+                    mm_ampl = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_RIGHT_XTD_ZCS_MM_PART'])
+
                     for zc_id in after_s_zcs_ids[0:-1:2]:
-                        if abs(zcs[zc_id].index - zcs[zc_id - 1].index) > zc_shift:
+
+                        if abs(zcs[zc_id].index - zcs[zc_id - 1].index) > odd_shift:
+                            is_zcs_valid = False
+                        if abs(zcs[zc_id + 1].index - zcs[zc_id].index) > even_shift:
+                            is_zcs_valid = False
+                        if abs(zcs[zc_id + 1].right_mm.value) < mm_ampl:
                             is_zcs_valid = False
 
                     if is_zcs_valid:
