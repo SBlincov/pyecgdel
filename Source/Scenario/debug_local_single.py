@@ -21,7 +21,7 @@ init_params(params_type=ParamsType.filter_params)
 
 ConfigParams['LEADS_NAMES'] = ['lead_v5']
 
-record_id = 2
+record_id = 1
 
 record_name = "record_" + str(record_id)
 

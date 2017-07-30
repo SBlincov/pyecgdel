@@ -124,7 +124,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                 if last_xtd_zc_id < len(zcs) - 1:
                     dist_1 = abs(zcs[last_xtd_zc_id].index - right_index)
                     dist_2 = abs(zcs[last_xtd_zc_id + 1].index - right_index)
-                    if float(dist_2) < float(QRSParams['MORPHOLOGY_SCALES_DIFF']) * float(dist_1):
+                    if float(dist_2) < float(QRSParams['GAMMA_SCALES_DIFF']) * float(dist_1):
                         xtd_zcs_ids.append(last_xtd_zc_id + 1)
                     else:
                         xtd_zcs_ids.pop()
@@ -136,7 +136,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
             if is_s_exist:
 
                 max_zc_id = xtd_zcs_ids[0]
-                max_zc_amplitude = zcs[s_zc_id].mm_amplitude
+                max_zc_amplitude = zcs[max_zc_id].mm_amplitude
                 for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] + len(xtd_zcs_ids), 2):
                     if zcs[zc_id].mm_amplitude > max_zc_amplitude:
                         max_zc_id = zc_id
