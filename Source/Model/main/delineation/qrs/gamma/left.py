@@ -133,13 +133,21 @@ def left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                 else:
                     xtd_zcs_ids.pop()
 
-            # If Q exist, it corresponds to odd zc with bigger amplitude
+            # If Q exist, it corresponds to odd zc with some big amplitude
             # If there is zcs after Q-zc we should check them
             if is_q_exist:
+
+                max_zc_id = xtd_zcs_ids[0]
+                max_zc_amplitude = zcs[q_zc_id].mm_amplitude
+                for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] - len(xtd_zcs_ids), -2):
+                    if zcs[zc_id].mm_amplitude > max_zc_amplitude:
+                        max_zc_id = zc_id
+                        max_zc_amplitude = zcs[q_zc_id].mm_amplitude
+
                 q_zc_id = xtd_zcs_ids[0]
                 q_zc_amplitude = zcs[q_zc_id].mm_amplitude
                 for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] - len(xtd_zcs_ids), -2):
-                    if zcs[zc_id].mm_amplitude > q_zc_amplitude:
+                    if zcs[zc_id].mm_amplitude > max_zc_amplitude * float(QRSParams['GAMMA_LEFT_Q_PART']):
                         q_zc_id = zc_id
                         q_zc_amplitude = zcs[q_zc_id].mm_amplitude
 

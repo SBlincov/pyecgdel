@@ -41,25 +41,26 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
     # which explicit corresponds to S
     if right_zc_id_origin == peak_zc_id_origin:
 
-        # Init left (aux) and right borders
+        # Init left border
         left_index = zcs_origin[right_zc_id_origin].index
-        right_index = find_right_thc_index(wdc_origin, left_index + 1, qrs_morphology_data.end_index, 0.0)
-        right_index = min(right_index, offset_index_beta)
+
+        # Init right border
+        r_ind_1 = find_right_thc_index(wdc_origin, left_index + 1, qrs_morphology_data.end_index, 0.0)
+        mms_origin = get_lr_mms_in(left_index, offset_index_beta, wdc_origin)
+        incorrect_mms_ids_origin = get_incorrect_mms_ids(mms_origin)
+        incorrect_mm_limit = zcs_origin[peak_zc_id_origin].mm_amplitude * float(QRSParams['GAMMA_RIGHT_ORIGIN_INCORRECT'])
+        r_ind_2 = r_ind_1
+        for mm_id in incorrect_mms_ids_origin:
+            if mms_origin[mm_id].value < incorrect_mm_limit:
+                r_ind_2 = mms_origin[mm_id].index
+                break
+        right_index = min(r_ind_1, r_ind_2, offset_index_beta)
 
         # Form mms array in searching interval
-        mms = []
-        mm_curr = find_right_mm(left_index, wdc)
-        mm_next = mm_curr
-        while mm_next.index < right_index:
-            mm_curr = mm_next
-            mms.append(mm_curr)
-            mm_next = find_right_mm(mm_curr.index + 1, wdc)
+        mms = get_lr_mms_in(left_index, right_index, wdc)
 
         # Define list, which contains correct mms ids
-        correct_mms_ids = []
-        for mm_id in range(0, len(mms)):
-            if mms[mm_id].correctness:
-                correct_mms_ids.append(mm_id)
+        correct_mms_ids = get_correct_mms_ids(mms)
 
         # Choose last correct mm index (if exist)
         # as new right border
@@ -79,22 +80,19 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
         # If some additional points is found
         if len(xtd_zcs_ids) > 0:
 
-            # If that list contains even count
-            # (more than 0) of zcs, then there is no S
-            if len(xtd_zcs_ids) % 2 == 0:
-                is_s_exist = False
-            # Else, there is somewhere S
-            else:
-                is_s_exist = True
+            is_s_exist = True
 
-            # If S exist, it corresponds to odd zc with bigger amplitude
-            if is_s_exist:
-                s_zc_id = xtd_zcs_ids[0]
-                s_zc_amplitude = zcs[s_zc_id].mm_amplitude
-                for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] + len(xtd_zcs_ids), 2):
-                    if zcs[zc_id].mm_amplitude > s_zc_amplitude:
-                        s_zc_id = zc_id
-                        s_zc_amplitude = zcs[s_zc_id].mm_amplitude
+            # If that list contains even count
+            # (more than 0) of zcs, then delete one of them
+            if len(xtd_zcs_ids) % 2 == 0:
+                xtd_zcs_ids.pop()
+
+            s_zc_id = xtd_zcs_ids[0]
+            s_zc_amplitude = zcs[s_zc_id].mm_amplitude
+            for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] + len(xtd_zcs_ids), 2):
+                if zcs[zc_id].mm_amplitude > s_zc_amplitude:
+                    s_zc_id = zc_id
+                    s_zc_amplitude = zcs[s_zc_id].mm_amplitude
 
     # There is zc on original scale,
     # which explicit corresponds to S
@@ -133,13 +131,21 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                 else:
                     xtd_zcs_ids.pop()
 
-            # If S exist, it corresponds to odd zc with bigger amplitude
+            # If S exist, it corresponds to odd zc with some big amplitude
             # If there is zcs after S-zc we should check them
             if is_s_exist:
+
+                max_zc_id = xtd_zcs_ids[0]
+                max_zc_amplitude = zcs[s_zc_id].mm_amplitude
+                for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] + len(xtd_zcs_ids), 2):
+                    if zcs[zc_id].mm_amplitude > max_zc_amplitude:
+                        max_zc_id = zc_id
+                        max_zc_amplitude = zcs[s_zc_id].mm_amplitude
+
                 s_zc_id = xtd_zcs_ids[0]
                 s_zc_amplitude = zcs[s_zc_id].mm_amplitude
                 for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] + len(xtd_zcs_ids), 2):
-                    if zcs[zc_id].mm_amplitude > s_zc_amplitude:
+                    if zcs[zc_id].mm_amplitude > max_zc_amplitude * float(QRSParams['GAMMA_RIGHT_S_PART']):
                         s_zc_id = zc_id
                         s_zc_amplitude = zcs[s_zc_id].mm_amplitude
 
