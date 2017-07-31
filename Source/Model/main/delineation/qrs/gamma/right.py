@@ -1,9 +1,8 @@
-from Source.Model.main.zero_crossings.zero_crossing import *
-from Source.Model.main.delineation.qrs.onset import *
-from Source.Model.main.delineation.qrs.offset import *
+from Source.Model.main.delineation.morfology_point import *
+from Source.Model.main.delineation.qrs.beta.offset import *
 from Source.Model.main.delineation.qrs.gamma.beta_legacy import *
 from Source.Model.main.params.qrs import *
-from Source.Model.main.delineation.morfology_point import *
+from Source.Model.main.zero_crossings.zero_crossing import *
 
 
 def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):

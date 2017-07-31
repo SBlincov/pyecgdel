@@ -11,7 +11,7 @@
     offset_mm_id - индекс экстремума, с которого начинается поиск окончания QRS.
 """
 
-from Source.Model.main.delineation.qrs.alpha.zcs import *
+from Source.Model.main.delineation.qrs.alpha.alpha import *
 from Source.Model.main.delineation.qrs.routines import *
 from Source.Model.main.delineation.wave_delineation import *
 from Source.Model.main.threshold_crossings.routines import *
