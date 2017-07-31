@@ -16,13 +16,13 @@ class QRSMorphologyData:
         peak_index = delineation.peak_index
         offset_index = delineation.offset_index
 
-        normal_length = int(QRSParams['MORPHOLOGY_NORMAL'] * sampling_rate)
+        normal_length = int(QRSParams['GAMMA_NORMAL_LENGTH'] * sampling_rate)
         current_length = offset_index - onset_index
         allowed_length_diff = normal_length - current_length
 
         if allowed_length_diff > 0:
-            window_left = int(allowed_length_diff * QRSParams['MORPHOLOGY_ALLOWED_DIFF_PART_LEFT'])
-            window_right = int(allowed_length_diff * QRSParams['MORPHOLOGY_ALLOWED_DIFF_PART_RIGHT'])
+            window_left = int(allowed_length_diff * QRSParams['GAMMA_ALLOWED_DIFF_PART_LEFT'])
+            window_right = int(allowed_length_diff * QRSParams['GAMMA_ALLOWED_DIFF_PART_RIGHT'])
             begin_index = onset_index - window_left
             end_index = offset_index + window_right
         else:
@@ -58,7 +58,7 @@ class QRSMorphologyData:
 
             if len(current_dels_zcs_ids) > 0 \
                     and peak_zc_id > current_dels_zcs_ids[0] \
-                    and zcs_on_scale[peak_zc_id - 1].mm_amplitude >= zcs_on_scale[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_R_NEG_PART']) \
+                    and zcs_on_scale[peak_zc_id - 1].mm_amplitude >= zcs_on_scale[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_R_NEG_PART']) \
                     and zcs_on_scale[peak_zc_id].extremum_sign is ExtremumSign.negative:
                 peak_zc_id -= 1
 

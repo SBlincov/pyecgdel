@@ -1,9 +1,8 @@
-from Source.Model.main.zero_crossings.zero_crossing import *
-from Source.Model.main.delineation.qrs.onset import *
-from Source.Model.main.delineation.qrs.offset import *
+from Source.Model.main.delineation.morfology_point import *
+from Source.Model.main.delineation.qrs.beta.offset import *
 from Source.Model.main.delineation.qrs.gamma.beta_legacy import *
 from Source.Model.main.params.qrs import *
-from Source.Model.main.delineation.morfology_point import *
+from Source.Model.main.zero_crossings.zero_crossing import *
 
 
 def left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
@@ -41,25 +40,18 @@ def left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
     # which explicit corresponds to Q
     if left_zc_id_origin == peak_zc_id_origin:
 
-        # Init left and right (aux) borders
+        # Init right border
         right_index = zcs_origin[left_zc_id_origin].index
+
+        # Init left border
         left_index = find_left_thc_index(wdc_origin, right_index - 1, qrs_morphology_data.begin_index, 0.0)
         left_index = max(left_index, onset_index_beta)
 
         # Form mms array in searching interval
-        mms = []
-        mm_curr = find_left_mm(right_index, wdc)
-        mm_next = mm_curr
-        while mm_next.index > left_index:
-            mm_curr = mm_next
-            mms.append(mm_curr)
-            mm_next = find_left_mm(mm_curr.index - 1, wdc)
+        mms = get_rl_mms_in(right_index, left_index, wdc)
 
         # Define list, which contains correct mms ids
-        correct_mms_ids = []
-        for mm_id in range(0, len(mms)):
-            if mms[mm_id].correctness:
-                correct_mms_ids.append(mm_id)
+        correct_mms_ids = get_correct_mms_ids(mms)
 
         # Choose last correct mm index (if exist)
         # as new right border
@@ -126,20 +118,28 @@ def left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                 if first_xtd_zc_id > 0:
                     dist_1 = abs(zcs[first_xtd_zc_id].index - right_index)
                     dist_2 = abs(zcs[first_xtd_zc_id - 1].index - right_index)
-                    if float(dist_2) < float(QRSParams['MORPHOLOGY_SCALES_DIFF']) * float(dist_1):
+                    if float(dist_2) < float(QRSParams['GAMMA_SCALES_DIFF']) * float(dist_1):
                         xtd_zcs_ids.append(first_xtd_zc_id - 1)
                     else:
                         xtd_zcs_ids.pop()
                 else:
                     xtd_zcs_ids.pop()
 
-            # If Q exist, it corresponds to odd zc with bigger amplitude
+            # If Q exist, it corresponds to odd zc with some big amplitude
             # If there is zcs after Q-zc we should check them
             if is_q_exist:
+
+                max_zc_id = xtd_zcs_ids[0]
+                max_zc_amplitude = zcs[max_zc_id].mm_amplitude
+                for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] - len(xtd_zcs_ids), -2):
+                    if zcs[zc_id].mm_amplitude > max_zc_amplitude:
+                        max_zc_id = zc_id
+                        max_zc_amplitude = zcs[q_zc_id].mm_amplitude
+
                 q_zc_id = xtd_zcs_ids[0]
                 q_zc_amplitude = zcs[q_zc_id].mm_amplitude
                 for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] - len(xtd_zcs_ids), -2):
-                    if zcs[zc_id].mm_amplitude > q_zc_amplitude:
+                    if zcs[zc_id].mm_amplitude > max_zc_amplitude * float(QRSParams['GAMMA_LEFT_Q_PART']):
                         q_zc_id = zc_id
                         q_zc_amplitude = zcs[q_zc_id].mm_amplitude
 

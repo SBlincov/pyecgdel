@@ -8,14 +8,8 @@
     qrs_zc_id - индекс пересечения нуля детализирующими вейвлет-коэффициентами для текущего комплекса QRS.
     qrs_zcs - список пересечений нуля детализирующими вейвлет-коэффициентами.
 """
-
-from Source.Model.main.delineation.qrs.onset import *
-from Source.Model.main.delineation.qrs.offset import *
-from Source.Model.main.delineation.qrs.peak import *
-from Source.Model.main.delineation.qrs.zcs import *
-from Source.Model.main.delineation.qrs.routines import *
-from Source.Model.main.params.qrs import *
-from Source.Model.main.delineation.qrs.gamma.morphology import *
+from Source.Model.main.delineation.qrs.beta.beta import get_qrs_delineation
+from Source.Model.main.delineation.qrs.gamma.gamma import *
 
 
 class InvalidQRSDelineation(Exception):
@@ -56,21 +50,5 @@ def get_qrs_delineations(ecg_lead, start_index, end_index):
             delineations[qrs_delineation_id].specification = WaveSpecification.extra
 
     return delineations, morphologies
-
-
-def get_qrs_delineation(ecg_lead, qrs_zc_id, qrs_zcs):
-
-    delineation = WaveDelineation()
-
-    # define qrs peak index for WaveDelineation instance
-    define_qrs_peak_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs)
-
-    # define qrs onset index for WaveDelineation instance
-    define_qrs_onset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs)
-
-    # define qrs offset index for WaveDelineation instance
-    define_qrs_offset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs)
-
-    return delineation
 
 

@@ -229,7 +229,7 @@ def is_extra_zcs_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
 
     if len(real_dels_zcs_ids) > 2 \
             and real_r_zc_id_index == len(real_dels_zcs_ids) - 1 \
@@ -269,7 +269,7 @@ def is_p_zcs_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
 
     if len(real_dels_zcs_ids) > 2 \
             and real_r_zc_id_index == len(real_dels_zcs_ids) - 1 \
@@ -309,7 +309,7 @@ def is_extra_zcs_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
 
     if len(real_dels_zcs_ids) > 3 \
             and real_r_zc_id_index == len(real_dels_zcs_ids) - 2 \
@@ -350,7 +350,7 @@ def is_p_zcs_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
 
     if len(real_dels_zcs_ids) > 3 \
             and real_r_zc_id_index == len(real_dels_zcs_ids) - 2 \
@@ -391,7 +391,7 @@ def is_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 2 \
             and real_r_zc_id_index == 0 \
@@ -431,7 +431,7 @@ def is_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 2 \
             and real_r_zc_id_index == 0 \
@@ -471,7 +471,7 @@ def is_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 3 \
             and real_r_zc_id_index == 1 \
@@ -512,7 +512,7 @@ def is_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 3 \
             and real_r_zc_id_index == 1 \
@@ -553,8 +553,8 @@ def is_extra_zcs_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 4 \
             and 2 <= real_r_zc_id_index < len(real_dels_zcs_ids) - 2 \
@@ -596,8 +596,8 @@ def is_p_zcs_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_d
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 4 \
             and 2 <= real_r_zc_id_index < len(real_dels_zcs_ids) - 2 \
@@ -639,8 +639,8 @@ def is_extra_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_d
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 4 \
             and 2 <= real_r_zc_id_index < len(real_dels_zcs_ids) - 2 \
@@ -682,8 +682,8 @@ def is_p_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff)
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_LEFT'])
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['MORPHOLOGY_MM_SMALL_PART_RIGHT'])
+    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 4 \
             and 2 <= real_r_zc_id_index < len(real_dels_zcs_ids) - 2 \
