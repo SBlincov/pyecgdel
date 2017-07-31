@@ -8,10 +8,7 @@
     qrs_zcs - список пересечений нуля детализирующими вейвлет-коэффициентами.
 """
 
-
-from Source.Model.main.delineation.qrs.zcs import *
 from Source.Model.main.delineation.wave_delineation import *
-from Source.Model.main.ecg_lead.ecg_lead import *
 
 
 def define_qrs_peak_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):

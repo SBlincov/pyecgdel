@@ -11,10 +11,11 @@
     onset_mm_id - индекс экстремума, с которого начинается поиск начала QRS.
 """
 
-from Source.Model.main.delineation.qrs.zcs import *
+from Source.Model.main.delineation.qrs.alpha.zcs import *
+from Source.Model.main.delineation.qrs.routines import *
 from Source.Model.main.delineation.wave_delineation import *
 from Source.Model.main.threshold_crossings.routines import *
-from Source.Model.main.delineation.qrs.routines import *
+from Source.Model.main.modulus_maxima.routines import *
 
 
 def define_qrs_onset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):

@@ -41,25 +41,18 @@ def left_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
     # which explicit corresponds to Q
     if left_zc_id_origin == peak_zc_id_origin:
 
-        # Init left and right (aux) borders
+        # Init right border
         right_index = zcs_origin[left_zc_id_origin].index
+
+        # Init left border
         left_index = find_left_thc_index(wdc_origin, right_index - 1, qrs_morphology_data.begin_index, 0.0)
         left_index = max(left_index, onset_index_beta)
 
         # Form mms array in searching interval
-        mms = []
-        mm_curr = find_left_mm(right_index, wdc)
-        mm_next = mm_curr
-        while mm_next.index > left_index:
-            mm_curr = mm_next
-            mms.append(mm_curr)
-            mm_next = find_left_mm(mm_curr.index - 1, wdc)
+        mms = get_rl_mms_in(right_index, left_index, wdc)
 
         # Define list, which contains correct mms ids
-        correct_mms_ids = []
-        for mm_id in range(0, len(mms)):
-            if mms[mm_id].correctness:
-                correct_mms_ids.append(mm_id)
+        correct_mms_ids = get_correct_mms_ids(mms)
 
         # Choose last correct mm index (if exist)
         # as new right border
