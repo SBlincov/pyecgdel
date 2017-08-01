@@ -59,8 +59,10 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
     left_zc_index = find_left_thc_index(wdc, first_mm.index, next_mm.index, 0.0)
 
     # Compromise
-    if (right_zc_index - left_zc_index) > int(float(QRSParams['BETA_ONSET_COMPROMISE_WINDOW']) * sampling_rate) \
-            and abs(first_mm.value) < float(QRSParams['BETA_ONSET_COMPROMISE_MM_LIM']) * min(abs(zc.left_mm.value), abs(zc.right_mm.value)):
+    compromise_window = int(float(QRSParams['BETA_ONSET_COMPROMISE_WINDOW']) * sampling_rate)
+    compromis_mm_lim = float(QRSParams['BETA_ONSET_COMPROMISE_MM_LIM']) * min(abs(zc.left_mm.value), abs(zc.right_mm.value))
+    if (right_zc_index - left_zc_index) > compromise_window \
+            and abs(first_mm.value) < compromis_mm_lim:
         onset_index = first_mm.index
     else:
         onset_index = find_left_thc_index(wdc, first_mm.index, next_mm.index, threshold)
