@@ -16,15 +16,12 @@ class InvalidQRSDelineation(Exception):
     pass
 
 
-def get_qrs_delineations(ecg_lead, start_index, end_index):
-
-    wdc = ecg_lead.wdc
+def get_qrs_delineations(ecg_lead, begin_index, end_index):
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
-    aux_wdc_scale_id = get_qrs_aux_wdc_scale_id(ecg_lead)
+    wdc = ecg_lead.wdc[wdc_scale_id]
 
-    qrs_zcs = get_zcs_with_global_mms(wdc[wdc_scale_id], start_index, end_index)
-
-    qrs_zcs_ids = get_qrs_zcs_ids(ecg_lead, wdc_scale_id, aux_wdc_scale_id, qrs_zcs)
+    qrs_zcs = get_zcs_with_global_mms(wdc, begin_index, end_index)
+    qrs_zcs_ids = alpha_processing(ecg_lead, begin_index, end_index)
 
     delineations = []
     morphologies = []
