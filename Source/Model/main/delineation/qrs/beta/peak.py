@@ -11,9 +11,9 @@
 from Source.Model.main.delineation.wave_delineation import *
 
 
-def define_qrs_peak_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
+def define_qrs_peak_index(ecg_lead, delineation, qrs_zc):
 
-    qrs_peak_index = qrs_zcs[qrs_zc_id].index
+    qrs_peak_index = qrs_zc.index
     delineation.peak_index = qrs_peak_index
     delineation.specification = WaveSpecification.normal
 

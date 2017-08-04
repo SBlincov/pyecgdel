@@ -8,7 +8,7 @@
     qrs_zc_id - индекс пересечения нуля детализирующими вейвлет-коэффициентами для текущего комплекса QRS.
     qrs_zcs - список пересечений нуля детализирующими вейвлет-коэффициентами.
 """
-from Source.Model.main.delineation.qrs.beta.beta import get_qrs_delineation
+from Source.Model.main.delineation.qrs.beta.beta import beta_processing
 from Source.Model.main.delineation.qrs.gamma.gamma import *
 
 
@@ -17,17 +17,14 @@ class InvalidQRSDelineation(Exception):
 
 
 def get_qrs_delineations(ecg_lead, begin_index, end_index):
-    wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
-    wdc = ecg_lead.wdc[wdc_scale_id]
 
-    qrs_zcs = get_zcs_with_global_mms(wdc, begin_index, end_index)
-    qrs_zcs_ids = alpha_processing(ecg_lead, begin_index, end_index)
+    qrs_zcs = alpha_processing(ecg_lead, begin_index, end_index)
 
     delineations = []
     morphologies = []
     num_dels = 0
-    for qrs_zc_id in qrs_zcs_ids:
-        delineation = get_qrs_delineation(ecg_lead, qrs_zc_id, qrs_zcs)
+    for qrs_zc in qrs_zcs:
+        delineation = beta_processing(ecg_lead, qrs_zc)
         morphology = get_qrs_morphology(ecg_lead, num_dels, delineation)
         delineations.append(delineation)
         morphologies.append(morphology)
