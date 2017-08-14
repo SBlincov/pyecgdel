@@ -18,14 +18,14 @@ from Source.Model.main.threshold_crossings.routines import *
 from Source.Model.main.modulus_maxima.routines import *
 
 
-def define_qrs_offset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
+def define_qrs_offset_index(ecg_lead, delineation, qrs_zc):
 
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
     sampling_rate = ecg_lead.sampling_rate
     window = int(float(QRSParams['BETA_OFFSET_WINDOW']) * sampling_rate)
 
-    zc = qrs_zcs[qrs_zc_id]
+    zc = qrs_zc
     mms = get_qrs_offset_mms(ecg_lead, zc)
 
     offset_mm_id = get_qrs_offset_mm_id(ecg_lead, zc, mms, 0)

@@ -18,14 +18,14 @@ from Source.Model.main.threshold_crossings.routines import *
 from Source.Model.main.modulus_maxima.routines import *
 
 
-def define_qrs_onset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
+def define_qrs_onset_index(ecg_lead, delineation, qrs_zc):
 
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
     sampling_rate = ecg_lead.sampling_rate
     window = int(float(QRSParams['BETA_ONSET_WINDOW']) * sampling_rate)
 
-    zc = qrs_zcs[qrs_zc_id]
+    zc = qrs_zc
     mms = get_qrs_onset_mms(ecg_lead, zc)
 
     onset_mm_id = get_qrs_onset_mm_id(ecg_lead, zc, mms, 0)
@@ -59,8 +59,10 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc_id, qrs_zcs):
     left_zc_index = find_left_thc_index(wdc, first_mm.index, next_mm.index, 0.0)
 
     # Compromise
-    if (right_zc_index - left_zc_index) > int(float(QRSParams['BETA_ONSET_COMPROMISE_WINDOW']) * sampling_rate) \
-            and abs(first_mm.value) < float(QRSParams['BETA_ONSET_COMPROMISE_MM_LIM']) * min(abs(zc.left_mm.value), abs(zc.right_mm.value)):
+    compromise_window = int(float(QRSParams['BETA_ONSET_COMPROMISE_WINDOW']) * sampling_rate)
+    compromis_mm_lim = float(QRSParams['BETA_ONSET_COMPROMISE_MM_LIM']) * min(abs(zc.left_mm.value), abs(zc.right_mm.value))
+    if (right_zc_index - left_zc_index) > compromise_window \
+            and abs(first_mm.value) < compromis_mm_lim:
         onset_index = first_mm.index
     else:
         onset_index = find_left_thc_index(wdc, first_mm.index, next_mm.index, threshold)

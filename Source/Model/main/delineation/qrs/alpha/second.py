@@ -3,10 +3,9 @@ import numpy as np
 from Source.Model.main.params.qrs import QRSParams
 
 
-def get_confirmed_qrs_zcs_ids(ecg_lead, wdc_scale_id, candidates_zcs_ids, qrs_zcs):
+def get_confirmed_qrs_zcs_ids(ecg_lead, qrs_zcs, candidates_zcs_ids, wdc):
 
     sampling_rate = ecg_lead.sampling_rate
-    wdc = ecg_lead.wdc[wdc_scale_id]
 
     if len(wdc) * sampling_rate <= 2.0 * float(QRSParams['ALPHA_TRAINING_WINDOW']):
         training_window = len(wdc) * sampling_rate * 0.5

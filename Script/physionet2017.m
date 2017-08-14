@@ -3,14 +3,14 @@ clear all;
 base_name = 'physionet2017';
 freq = 300.0;
 
-record = 2;
+record = 105;
 
 leads = {'lead'};
 lead_ids = 1;
 
 is_filtered = 1;
 wdc_scales = [1 2 3 4];
-x_axis_type = 0;
+x_axis_type = 1;
 
 markerWidth = 10;
 
@@ -163,21 +163,21 @@ for i = 1:size(lead_ids, 2)
     
     wdc_num = size(wdc, 2);
     
-    for wdc_scale_id = 1:size(wdc_scales, 2)
-        
-        wdc_scale = wdc_scales(wdc_scale_id);
-        
-        curr_wdc = wdc(:,wdc_scale);
-        hLine = plot(times(1:size(wdc, 1)), curr_wdc, 'LineWidth', 0.5);
-        legend(hLine, sprintf('wdc #%d', wdc_scale));
-        set(gca, 'FontSize', 18);
-        hold all;
-    end
-    
+%     for wdc_scale_id = 1:size(wdc_scales, 2)
+%         
+%         wdc_scale = wdc_scales(wdc_scale_id);
+%         
+%         curr_wdc = wdc(:,wdc_scale);
+%         hLine = plot(times(1:size(wdc, 1)), curr_wdc, 'LineWidth', 0.5);
+%         legend(hLine, sprintf('wdc #%d', wdc_scale));
+%         set(gca, 'FontSize', 18);
+%         hold all;
+%     end
+%     
     grid on;
     legend('-DynamicLegend');
     propertyeditor(fig_ecg)
     
-    title(lead, 'Interpreter', 'latex');
+    title(record, 'Interpreter', 'latex');
     
 end
