@@ -23,7 +23,10 @@ class QRSMorphologyData:
         if allowed_length_diff > 0:
             window_left = int(allowed_length_diff * QRSParams['GAMMA_ALLOWED_DIFF_PART_LEFT'])
             window_right = int(allowed_length_diff * QRSParams['GAMMA_ALLOWED_DIFF_PART_RIGHT'])
-            begin_index = onset_index - window_left
+            if (onset_index - window_left) >= 0:
+                begin_index = onset_index - window_left
+            else:
+                begin_index = 0
             end_index = offset_index + window_right
         else:
             window_left = 0

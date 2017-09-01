@@ -55,11 +55,11 @@ class Cardiobase():
 
     
     #   Создаем файл
-    def create_file(self, id_patient, fname, type_id_str="default", user_id=1):
+    def create_file(self, id_patient, fname, type_id_str="default"):
         list_keys = list(self.dict_types.keys())
         if type_id_str in list_keys:
             type_id = self.dict_types[type_id_str]
-            return self._cardiobase.create_file(id_patient, fname, type_id, user_id)
+            return self._cardiobase.create_file(id_patient, fname, type_id)
         else:
             CardioError = CardiobaseError("Нет типа данных '" + type_id_str + "'. Используйте " + str(list_keys))
             raise CardioError   
@@ -107,13 +107,13 @@ class Cardiobase():
 
 
     #   Возвращаем список файлов с заданным type_id
-    def get_files(self, type_id, begin_date="01.01.1000, 00:00:00", end_date="01.01.3000, 00:00:00", user_id=602669172):
-        return self._cardiobase.get_files(type_id, begin_date, end_date, user_id)
+    def get_files(self, type_id, begin_date="01.01.1000, 00:00:00", end_date="01.01.3000, 00:00:00"):
+        return self._cardiobase.get_files(type_id, begin_date, end_date)
         
     
     #   Возвращает id файла по его имени
-    def get_file_id(self, fname, user_id=602669172):
-        return self._cardiobase.get_file_id(fname, user_id)
+    def get_file_id(self, fname):
+        return self._cardiobase.get_file_id(fname)
 
 
     #   Создаем пациента
