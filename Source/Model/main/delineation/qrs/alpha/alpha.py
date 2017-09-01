@@ -1,5 +1,4 @@
-from Source.Model.main.delineation.qrs.alpha.first import *
-from Source.Model.main.delineation.qrs.alpha.second import *
+from Source.Model.main.delineation.qrs.alpha.third import *
 from Source.Model.main.delineation.qrs.routines import *
 from Source.Model.main.zero_crossings.routines import *
 
@@ -18,6 +17,9 @@ def alpha_processing(ecg_lead, begin_index, end_index):
 
     # Aux scale
     zcs_ids = get_confirmed_qrs_zcs_ids(ecg_lead, zcs, zcs_ids, wdc_aux)
+
+    # Restore missed qrs
+    zcs_ids = get_additional_qrs_zcs_ids(ecg_lead, zcs, zcs_ids, wdc, wdc_aux)
 
     # Exclude borders
     zcs_ids = zcs_ids[1:-1]
