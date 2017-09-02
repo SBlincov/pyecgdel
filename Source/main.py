@@ -44,6 +44,7 @@ ecg.add_filtrated_data_to_dict(result_data_dict, result_columns_names, id_file)
 ecg.dwt()
 ecg.delineation()
 ecg.add_delineation_data_to_dict(result_data_dict, result_columns_names, id_file)
+ecg.add_morphology_data_to_dict(result_data_dict, result_columns_names, id_file)
 ecg.characteristics()
 ecg.add_characteristics_data_to_dict(result_data_dict, result_columns_names, id_file)
 
