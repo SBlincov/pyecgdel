@@ -3,7 +3,7 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 2334;
+record = 3176;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 lead_ids = 1:12;
@@ -159,69 +159,72 @@ for i = 1:size(lead_ids, 2)
     set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
     hold all;
     
-    file_name = sprintf('%s%s/original_del/json_R_P_ON.txt', db_path, record_path);
-    data = importdata(file_name);
-    json_r_p_on_indexes = zeros(size(data,1), 1);
-    json_r_p_on_times = zeros(size(data,1), 1);
-    json_r_p_on_vals = zeros(size(data,1), 1);
-    for dump_id = 1:size(data,1)
-        json_r_p_on_indexes(dump_id) = floor(data(dump_id) * freq);
-        json_r_p_on_times(dump_id) = times(json_r_p_on_indexes(dump_id) + 1);
-        json_r_p_on_vals(dump_id) = ecg_lead(json_r_p_on_indexes(dump_id) + 1);
+    if exist(sprintf('%s%s/original_del/', db_path, record_path), 'dir')
+    
+        file_name = sprintf('%s%s/original_del/json_R_P_ON.txt', db_path, record_path);
+        data = importdata(file_name);
+        json_r_p_on_indexes = zeros(size(data,1), 1);
+        json_r_p_on_times = zeros(size(data,1), 1);
+        json_r_p_on_vals = zeros(size(data,1), 1);
+        for dump_id = 1:size(data,1)
+            json_r_p_on_indexes(dump_id) = floor(data(dump_id) * freq);
+            json_r_p_on_times(dump_id) = times(json_r_p_on_indexes(dump_id) + 1);
+            json_r_p_on_vals(dump_id) = ecg_lead(json_r_p_on_indexes(dump_id) + 1);
+        end
+
+        hLine = plot(json_r_p_on_times, json_r_p_on_vals, '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [1 0.84 0]);
+        set(gca, 'FontSize', 18);
+        set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+        hold all;
+
+        file_name = sprintf('%s%s/original_del/json_R_T_OFF.txt', db_path, record_path);
+        data = importdata(file_name);
+        json_r_t_off_indexes = zeros(size(data,1), 1);
+        json_r_t_off_times = zeros(size(data,1), 1);
+        json_r_t_off_vals = zeros(size(data,1), 1);
+        for dump_id = 1:size(data,1)
+            json_r_t_off_indexes(dump_id) = floor(data(dump_id) * freq);
+            json_r_t_off_times(dump_id) = times(json_r_t_off_indexes(dump_id) + 1);
+            json_r_t_off_vals(dump_id) = ecg_lead(json_r_t_off_indexes(dump_id) + 1);
+        end
+
+        hLine = plot(json_r_t_off_times, json_r_t_off_vals, '<', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [1 0.84 0]);
+        set(gca, 'FontSize', 18);
+        set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+        hold all;
+
+        file_name = sprintf('%s%s/original_del/json_R_QRS_ON.txt', db_path, record_path);
+        data = importdata(file_name);
+        json_r_qrs_on_indexes = zeros(size(data,1), 1);
+        json_r_qrs_on_times = zeros(size(data,1), 1);
+        json_r_qrs_on_vals = zeros(size(data,1), 1);
+        for dump_id = 1:size(data,1)
+            json_r_qrs_on_indexes(dump_id) = floor(data(dump_id) * freq);
+            json_r_qrs_on_times(dump_id) = times(json_r_qrs_on_indexes(dump_id) + 2);
+            json_r_qrs_on_vals(dump_id) = ecg_lead(json_r_qrs_on_indexes(dump_id) + 2);
+        end
+
+        hLine = plot(json_r_qrs_on_times, json_r_qrs_on_vals, '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [0.85 0.7 1]);
+        set(gca, 'FontSize', 18);
+        set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+        hold all;
+
+        file_name = sprintf('%s%s/original_del/json_R_QRS_OFF.txt', db_path, record_path);
+        data = importdata(file_name);
+        json_r_qrs_off_indexes = zeros(size(data,1), 1);
+        json_r_qrs_off_times = zeros(size(data,1), 1);
+        json_r_qrs_off_vals = zeros(size(data,1), 1);
+        for dump_id = 1:size(data,1)
+            json_r_qrs_off_indexes(dump_id) = floor(data(dump_id) * freq);
+            json_r_qrs_off_times(dump_id) = times(json_r_qrs_off_indexes(dump_id) + 1);
+            json_r_qrs_off_vals(dump_id) = ecg_lead(json_r_qrs_off_indexes(dump_id) + 1);
+        end
+
+        hLine = plot(json_r_qrs_off_times, json_r_qrs_off_vals, '<', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [0.85 0.7 1]);
+        set(gca, 'FontSize', 18);
+        set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+        hold all; 
     end
-    
-    hLine = plot(json_r_p_on_times, json_r_p_on_vals, '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [1 0.84 0]);
-    set(gca, 'FontSize', 18);
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    file_name = sprintf('%s%s/original_del/json_R_T_OFF.txt', db_path, record_path);
-    data = importdata(file_name);
-    json_r_t_off_indexes = zeros(size(data,1), 1);
-    json_r_t_off_times = zeros(size(data,1), 1);
-    json_r_t_off_vals = zeros(size(data,1), 1);
-    for dump_id = 1:size(data,1)
-        json_r_t_off_indexes(dump_id) = floor(data(dump_id) * freq);
-        json_r_t_off_times(dump_id) = times(json_r_t_off_indexes(dump_id) + 1);
-        json_r_t_off_vals(dump_id) = ecg_lead(json_r_t_off_indexes(dump_id) + 1);
-    end
-    
-    hLine = plot(json_r_t_off_times, json_r_t_off_vals, '<', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [1 0.84 0]);
-    set(gca, 'FontSize', 18);
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    file_name = sprintf('%s%s/original_del/json_R_QRS_ON.txt', db_path, record_path);
-    data = importdata(file_name);
-    json_r_qrs_on_indexes = zeros(size(data,1), 1);
-    json_r_qrs_on_times = zeros(size(data,1), 1);
-    json_r_qrs_on_vals = zeros(size(data,1), 1);
-    for dump_id = 1:size(data,1)
-        json_r_qrs_on_indexes(dump_id) = floor(data(dump_id) * freq);
-        json_r_qrs_on_times(dump_id) = times(json_r_qrs_on_indexes(dump_id) + 2);
-        json_r_qrs_on_vals(dump_id) = ecg_lead(json_r_qrs_on_indexes(dump_id) + 2);
-    end
-    
-    hLine = plot(json_r_qrs_on_times, json_r_qrs_on_vals, '>', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [0.85 0.7 1]);
-    set(gca, 'FontSize', 18);
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    file_name = sprintf('%s%s/original_del/json_R_QRS_OFF.txt', db_path, record_path);
-    data = importdata(file_name);
-    json_r_qrs_off_indexes = zeros(size(data,1), 1);
-    json_r_qrs_off_times = zeros(size(data,1), 1);
-    json_r_qrs_off_vals = zeros(size(data,1), 1);
-    for dump_id = 1:size(data,1)
-        json_r_qrs_off_indexes(dump_id) = floor(data(dump_id) * freq);
-        json_r_qrs_off_times(dump_id) = times(json_r_qrs_off_indexes(dump_id) + 1);
-        json_r_qrs_off_vals(dump_id) = ecg_lead(json_r_qrs_off_indexes(dump_id) + 1);
-    end
-    
-    hLine = plot(json_r_qrs_off_times, json_r_qrs_off_vals, '<', 'MarkerSize', markerWidth, 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', [0.85 0.7 1]);
-    set(gca, 'FontSize', 18);
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all; 
     
     
     file_name_wdc = sprintf('%s%s%swdc.txt', db_path, record_path, lead_path);
