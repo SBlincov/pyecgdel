@@ -79,6 +79,9 @@ for record_name in records_names:
             if len(p_delineation) is 0:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, [])]
                 d["json_lead_" + lead + "_p_delineation_doc"] = [(file_id, [])]
+            elif len(p_delineation) is 1:
+                d["json_lead_" + lead + "_p_delineation"] = [(file_id, [p_delineation.tolist()])]
+                d["json_lead_" + lead + "_p_delineation_doc"] = [(file_id, [p_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, p_delineation.tolist())]
                 d["json_lead_" + lead + "_p_delineation_doc"] = [(file_id, p_delineation.tolist())]
@@ -88,6 +91,9 @@ for record_name in records_names:
             if len(qrs_delineation) is 0:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [])]
                 d["json_lead_" + lead + "_qrs_delineation_doc"] = [(file_id, [])]
+            elif len(qrs_delineation) is 1:
+                d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [qrs_delineation.tolist()])]
+                d["json_lead_" + lead + "_qrs_delineation_doc"] = [(file_id, [qrs_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, qrs_delineation.tolist())]
                 d["json_lead_" + lead + "_qrs_delineation_doc"] = [(file_id, qrs_delineation.tolist())]
@@ -97,6 +103,9 @@ for record_name in records_names:
             if len(t_delineation) is 0:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, [])]
                 d["json_lead_" + lead + "_t_delineation_doc"] = [(file_id, [])]
+            elif len(t_delineation) is 1:
+                d["json_lead_" + lead + "_t_delineation"] = [(file_id, [t_delineation.tolist()])]
+                d["json_lead_" + lead + "_t_delineation_doc"] = [(file_id, [t_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, t_delineation.tolist())]
                 d["json_lead_" + lead + "_t_delineation_doc"] = [(file_id, t_delineation.tolist())]

@@ -305,7 +305,7 @@ class ECG:
 
         for lead_id in range(0, len(self.leads)):
 
-            column_name = "json_" + self.leads[lead_id].name + "_qrs_delineation"
+            column_name = "json_" + self.leads[lead_id].name + "_qrs_morphology"
             column_name_doc = column_name + "_doc"
             qrs_morphs_data = []
             for morph_seq in self.leads[lead_id].qrs_morphs:
