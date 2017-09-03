@@ -60,7 +60,11 @@ if file_id is not -1:
         qrs_records = []
         for line in lines:
             qrs_m = line.split()
-            qrs_records.append(qrs_m[0:5])
+            qrs_records.append([int(qrs_m[0]),
+                                str(qrs_m[1]),
+                                int(qrs_m[2]),
+                                float(qrs_m[3]),
+                                int(qrs_m[4])])
 
         d["json_lead_" + lead + "_qrs_morphology"] = [(file_id, qrs_records)]
         d["json_lead_" + lead + "_qrs_morphology_doc"] = [(file_id, qrs_records)]
