@@ -7,9 +7,11 @@ def get_confirmed_qrs_zcs_ids(ecg_lead, qrs_zcs, candidates_zcs_ids, wdc):
 
     sampling_rate = ecg_lead.sampling_rate
 
-    if len(wdc) * sampling_rate <= 2.0 * float(QRSParams['ALPHA_TRAINING_WINDOW']):
-        training_window = len(wdc) * sampling_rate * 0.5
-        training_deltas_count = int(training_window * 0.5)
+    qrs_len = qrs_zcs[candidates_zcs_ids[-1]].index - qrs_zcs[candidates_zcs_ids[0]].index
+
+    if qrs_len <= int(2.0 * float(QRSParams['ALPHA_TRAINING_WINDOW']) * sampling_rate):
+        training_window = qrs_len / sampling_rate * 0.5
+        training_deltas_count = max(int(training_window * 0.5), 1)
     else:
         training_window = float(QRSParams['ALPHA_TRAINING_WINDOW'])
         training_deltas_count = int(QRSParams['ALPHA_BEATS_IN_TRAINING_WINDOW'])
@@ -24,7 +26,7 @@ def get_confirmed_qrs_zcs_ids(ecg_lead, qrs_zcs, candidates_zcs_ids, wdc):
     for candidate_zc_id in candidates_zcs_ids:
         delta = get_delta(wdc, qrs_zcs[candidate_zc_id], window)
         deltas.append(delta)
-        if qrs_zcs[candidate_zc_id].index <= sampling_rate * training_window:
+        if qrs_zcs[candidate_zc_id].index <= sampling_rate * training_window + qrs_zcs[candidates_zcs_ids[0]].index:
             training_deltas.append(delta)
 
     correct_training_deltas = np.sort(training_deltas)[:-(training_deltas_count + 1):-1]
