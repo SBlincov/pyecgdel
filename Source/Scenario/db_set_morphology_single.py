@@ -28,11 +28,8 @@ columns_names = []
 
 for lead_name in leads_names:
     columns_names.append("json_" + lead_name + "_p_morphology")
-    columns_names.append("json_" + lead_name + "_p_morphology_doc")
     columns_names.append("json_" + lead_name + "_qrs_morphology")
-    columns_names.append("json_" + lead_name + "_qrs_morphology_doc")
     columns_names.append("json_" + lead_name + "_t_morphology")
-    columns_names.append("json_" + lead_name + "_t_morphology_doc")
 
 record_name = 'record_2843'
 
@@ -53,7 +50,6 @@ if file_id is not -1:
         print(lead)
 
         d["json_lead_" + lead + "_p_morphology"] = [(file_id, [])]
-        d["json_lead_" + lead + "_p_morphology_doc"] = [(file_id, [])]
 
         qrs_morphs_path = local_path + '/lead_' + lead + '/qrs_morphology.txt'
         lines = [line.rstrip('\n') for line in open(qrs_morphs_path)]
@@ -67,10 +63,8 @@ if file_id is not -1:
                                 int(qrs_m[4])])
 
         d["json_lead_" + lead + "_qrs_morphology"] = [(file_id, qrs_records)]
-        d["json_lead_" + lead + "_qrs_morphology_doc"] = [(file_id, qrs_records)]
 
         d["json_lead_" + lead + "_t_morphology"] = [(file_id, [])]
-        d["json_lead_" + lead + "_t_morphology_doc"] = [(file_id, [])]
 
         print("\n")
 

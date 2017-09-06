@@ -221,7 +221,6 @@ class ECG:
 
         for lead_id in range(0, len(self.leads)):
             column_name = "json_" + self.leads[lead_id].name + "_p_delineation"
-            column_name_doc = column_name + "_doc"
             p_dels_data = []
             for del_seq in self.leads[lead_id].p_dels:
                 for delineation in del_seq:
@@ -232,21 +231,16 @@ class ECG:
 
             if len(p_dels_data) is 0:
                 data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
-                data_dict[column_name_doc] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
             elif len(p_dels_data) is 1:
                 p_dels_data = np.asarray(p_dels_data, dtype=np.int32)
                 np.reshape(p_dels_data, (1, 4))
                 p_dels_data = p_dels_data.tolist()
                 data_dict[column_name] = [(id_file, p_dels_data)]
-                data_dict[column_name_doc] = [(id_file, p_dels_data)]
             else:
                 data_dict[column_name] = [(id_file, np.asarray(p_dels_data, dtype=np.int32).tolist())]
-                data_dict[column_name_doc] = [(id_file, np.asarray(p_dels_data, dtype=np.int32).tolist())]
             columns_names.append(column_name)
-            columns_names.append(column_name_doc)
 
             column_name = "json_" + self.leads[lead_id].name + "_qrs_delineation"
-            column_name_doc = column_name + "_doc"
             qrs_dels_data = []
             for del_seq in self.leads[lead_id].qrs_dels:
                 for delineation in del_seq:
@@ -257,21 +251,16 @@ class ECG:
 
             if len(qrs_dels_data) is 0:
                 data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
-                data_dict[column_name_doc] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
             elif len(qrs_dels_data) is 1:
                 qrs_dels_data = np.asarray(qrs_dels_data, dtype=np.int32)
                 np.reshape(qrs_dels_data, (1, 4))
                 qrs_dels_data = qrs_dels_data.tolist()
                 data_dict[column_name] = [(id_file, qrs_dels_data)]
-                data_dict[column_name_doc] = [(id_file, qrs_dels_data)]
             else:
                 data_dict[column_name] = [(id_file, np.asarray(qrs_dels_data, dtype=np.int32).tolist())]
-                data_dict[column_name_doc] = [(id_file, np.asarray(qrs_dels_data, dtype=np.int32).tolist())]
             columns_names.append(column_name)
-            columns_names.append(column_name_doc)
 
             column_name = "json_" + self.leads[lead_id].name + "_t_delineation"
-            column_name_doc = column_name + "_doc"
             t_dels_data = []
             for del_seq in self.leads[lead_id].t_dels:
                 for delineation in del_seq:
@@ -282,18 +271,14 @@ class ECG:
 
             if len(t_dels_data) is 0:
                 data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
-                data_dict[column_name_doc] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
             elif len(t_dels_data) is 1:
                 t_dels_data = np.asarray(t_dels_data, dtype=np.int32)
                 np.reshape(t_dels_data, (1, 4))
                 t_dels_data = t_dels_data.tolist()
                 data_dict[column_name] = [(id_file, t_dels_data)]
-                data_dict[column_name_doc] = [(id_file, t_dels_data)]
             else:
                 data_dict[column_name] = [(id_file, np.asarray(t_dels_data, dtype=np.int32).tolist())]
-                data_dict[column_name_doc] = [(id_file, np.asarray(t_dels_data, dtype=np.int32).tolist())]
             columns_names.append(column_name)
-            columns_names.append(column_name_doc)
 
     def add_morphology_data_to_dict(self, data_dict, columns_names, id_file):
 
@@ -306,7 +291,6 @@ class ECG:
         for lead_id in range(0, len(self.leads)):
 
             column_name = "json_" + self.leads[lead_id].name + "_qrs_morphology"
-            column_name_doc = column_name + "_doc"
             qrs_morphs_data = []
             for morph_seq in self.leads[lead_id].qrs_morphs:
                 for morphology in morph_seq:
@@ -318,9 +302,7 @@ class ECG:
                                                 int(morphology_point.sign)])
 
             data_dict[column_name] = [(id_file, qrs_morphs_data)]
-            data_dict[column_name_doc] = [(id_file, qrs_morphs_data)]
             columns_names.append(column_name)
-            columns_names.append(column_name_doc)
 
     def characteristics(self):
         print("ECG calc characteristics...")

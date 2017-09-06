@@ -30,18 +30,12 @@ for lead_name in leads_names:
     columns_names.append("json_" + lead_name + "_filtrated")
 
     columns_names.append("json_" + lead_name + "_p_delineation")
-    columns_names.append("json_" + lead_name + "_p_delineation_doc")
     columns_names.append("json_" + lead_name + "_qrs_delineation")
-    columns_names.append("json_" + lead_name + "_qrs_delineation_doc")
     columns_names.append("json_" + lead_name + "_t_delineation")
-    columns_names.append("json_" + lead_name + "_t_delineation_doc")
 
     columns_names.append("json_" + lead_name + "_p_morphology")
-    columns_names.append("json_" + lead_name + "_p_morphology_doc")
     columns_names.append("json_" + lead_name + "_qrs_morphology")
-    columns_names.append("json_" + lead_name + "_qrs_morphology_doc")
     columns_names.append("json_" + lead_name + "_t_morphology")
-    columns_names.append("json_" + lead_name + "_t_morphology_doc")
 
     columns_names.append("json_" + lead_name + "_characteristics")
 
@@ -78,37 +72,28 @@ for record_name in records_names:
             print("p_del shape: ", p_delineation.shape)
             if len(p_delineation) is 0:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, [])]
-                d["json_lead_" + lead + "_p_delineation_doc"] = [(file_id, [])]
             elif len(p_delineation) is 1:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, [p_delineation.tolist()])]
-                d["json_lead_" + lead + "_p_delineation_doc"] = [(file_id, [p_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, p_delineation.tolist())]
-                d["json_lead_" + lead + "_p_delineation_doc"] = [(file_id, p_delineation.tolist())]
 
             qrs_delineation = np.loadtxt(local_path + '/lead_' + lead + '/qrs_delineation.txt', dtype=np.int)
             print("qrs_del shape: ", qrs_delineation.shape)
             if len(qrs_delineation) is 0:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [])]
-                d["json_lead_" + lead + "_qrs_delineation_doc"] = [(file_id, [])]
             elif len(qrs_delineation) is 1:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [qrs_delineation.tolist()])]
-                d["json_lead_" + lead + "_qrs_delineation_doc"] = [(file_id, [qrs_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, qrs_delineation.tolist())]
-                d["json_lead_" + lead + "_qrs_delineation_doc"] = [(file_id, qrs_delineation.tolist())]
 
             t_delineation = np.loadtxt(local_path + '/lead_' + lead + '/t_delineation.txt', dtype=np.int)
             print("t_del shape: ", t_delineation.shape)
             if len(t_delineation) is 0:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, [])]
-                d["json_lead_" + lead + "_t_delineation_doc"] = [(file_id, [])]
             elif len(t_delineation) is 1:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, [t_delineation.tolist()])]
-                d["json_lead_" + lead + "_t_delineation_doc"] = [(file_id, [t_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, t_delineation.tolist())]
-                d["json_lead_" + lead + "_t_delineation_doc"] = [(file_id, t_delineation.tolist())]
 
             print("\n")
 
@@ -126,7 +111,6 @@ for record_name in records_names:
             d["json_lead_" + lead + "_characteristics"] = [(file_id, [ch_names, ch_values])]
 
             d["json_lead_" + lead + "_p_morphology"] = [(file_id, [])]
-            d["json_lead_" + lead + "_p_morphology_doc"] = [(file_id, [])]
 
             qrs_morphs_path = local_path + '/lead_' + lead + '/qrs_morphology.txt'
             lines = [line.rstrip('\n') for line in open(qrs_morphs_path)]
@@ -136,10 +120,8 @@ for record_name in records_names:
                 qrs_records.append(qrs_m[0:5])
 
             d["json_lead_" + lead + "_qrs_morphology"] = [(file_id, qrs_records)]
-            d["json_lead_" + lead + "_qrs_morphology_doc"] = [(file_id, qrs_records)]
 
             d["json_lead_" + lead + "_t_morphology"] = [(file_id, [])]
-            d["json_lead_" + lead + "_t_morphology_doc"] = [(file_id, [])]
 
         cb.bulk_data_set(d)
         cb.commit()
