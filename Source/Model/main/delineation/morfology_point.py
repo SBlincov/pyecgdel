@@ -19,8 +19,12 @@ class PointName(Enum):
     q = "q"
     r = "r"
     s = "s"
-    r_hatch = "r'"
     qrs_offset = "qrs_offset"
+
+    t_onset = "t_onset"
+    t_peak = "t_peak"
+    t_offset = "t_offset"
+
     xtd_point = "xtd_point"
 
     def __str__(self):
@@ -34,3 +38,4 @@ class WaveSign(Enum):
 
     def __int__(self):
         return self.value
+

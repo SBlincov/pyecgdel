@@ -77,7 +77,7 @@ def get_p_characteristics(lead):
             p_characteristics.append([CharacteristicsNames.std_pq, 'n'])
 
         if spec_distribution:
-            normal_p = float(spec_distribution.count(WaveSpecification.normal)) / float(len(spec_distribution)) * 100.0
+            normal_p = float(spec_distribution.count(WaveSpecification.exist)) / float(len(spec_distribution)) * 100.0
             p_characteristics.append([CharacteristicsNames.normal_p, normal_p])
             flexure_p = float(spec_distribution.count(WaveSpecification.flexure)) / float(len(spec_distribution)) * 100.0
             p_characteristics.append([CharacteristicsNames.flexure_p, flexure_p])

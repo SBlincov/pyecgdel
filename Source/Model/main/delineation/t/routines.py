@@ -30,7 +30,7 @@ def get_window(ecg_lead, qrs_id):
 
     qrs_gap = cur_qrs_dels_seq[qrs_id].peak_index - cur_qrs_dels_seq[qrs_id - 1].peak_index
 
-    window = qrs_gap * float(TParams['END_QRS_GAP_PROPORTION'])
+    window = qrs_gap * float(TParams['ALPHA_QRS_GAP'])
 
     return window
 
@@ -40,7 +40,7 @@ def get_t_begin_index(ecg_lead, qrs_id):
     sampling_rate = ecg_lead.sampling_rate
     cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
 
-    shift = int(float(TParams['BEGIN_SHIFT']) * sampling_rate)
+    shift = int(float(TParams['ALPHA_BEGIN_SHIFT']) * sampling_rate)
 
     begin_index = cur_qrs_dels_seq[qrs_id - 1].offset_index + shift
 

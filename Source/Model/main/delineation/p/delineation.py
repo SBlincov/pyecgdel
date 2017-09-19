@@ -83,7 +83,7 @@ def get_p_delineation(ecg_lead, qrs_id):
     peak_zc = zcs[peak_zc_id]
     peak_index = peak_zc.index
     delineation.peak_index = peak_index
-    delineation.specification = WaveSpecification.normal
+    delineation.specification = WaveSpecification.exist
 
     peak_zcs_ids = PeakZCsIds(peak_zc_id, peak_zc_id, peak_zc_id)
 

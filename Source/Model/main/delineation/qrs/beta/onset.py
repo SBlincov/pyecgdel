@@ -32,7 +32,6 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc):
     complex_mm_id = get_complex_mm_id(ecg_lead, zc, mms, onset_mm_id)
 
     if onset_mm_id != complex_mm_id:
-        delineation.specification = WaveSpecification.flexure
         onset_mm_id = get_qrs_onset_mm_id(ecg_lead, zc, mms, complex_mm_id)
 
     threshold = mms[onset_mm_id].value * float(QRSParams['BETA_ONSET_THRESHOLD'])

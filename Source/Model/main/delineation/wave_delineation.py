@@ -11,7 +11,7 @@ class InvalidWaveletProcessing(Exception):
 
 class WaveSpecification(Enum):
     absence = 0
-    normal = 1
+    exist = 1
     biphasic = 2
     flexure = 3
     extra = 5

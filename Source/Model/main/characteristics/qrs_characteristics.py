@@ -60,7 +60,7 @@ def get_qrs_characteristics(lead):
             qrs_characteristics.append([CharacteristicsNames.std_qrs, 'n'])
 
         if spec_distribution:
-            normal_qrs = float(spec_distribution.count(WaveSpecification.normal)) / float(len(spec_distribution)) * 100.0
+            normal_qrs = float(spec_distribution.count(WaveSpecification.exist)) / float(len(spec_distribution)) * 100.0
             qrs_characteristics.append([CharacteristicsNames.normal_qrs, normal_qrs])
             flexure_qrs = float(spec_distribution.count(WaveSpecification.flexure)) / float(len(spec_distribution)) * 100.0
             qrs_characteristics.append([CharacteristicsNames.flexure_qrs, flexure_qrs])

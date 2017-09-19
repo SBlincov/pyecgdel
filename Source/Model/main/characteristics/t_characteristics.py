@@ -93,7 +93,7 @@ def get_t_characteristics(lead):
             t_characteristics.append([CharacteristicsNames.std_st, 'n'])
 
         if spec_distribution:
-            normal_t = float(spec_distribution.count(WaveSpecification.normal)) / float(len(spec_distribution)) * 100.0
+            normal_t = float(spec_distribution.count(WaveSpecification.exist)) / float(len(spec_distribution)) * 100.0
             t_characteristics.append([CharacteristicsNames.normal_t, normal_t])
             flexure_t = float(spec_distribution.count(WaveSpecification.flexure)) / float(len(spec_distribution)) * 100.0
             t_characteristics.append([CharacteristicsNames.flexure_t, flexure_t])

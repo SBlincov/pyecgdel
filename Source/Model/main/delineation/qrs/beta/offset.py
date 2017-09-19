@@ -32,7 +32,6 @@ def define_qrs_offset_index(ecg_lead, delineation, qrs_zc):
     offset_mm_id_wide_morphology = get_complex_mm_id(ecg_lead, zc, mms, offset_mm_id)
 
     if offset_mm_id != offset_mm_id_wide_morphology:
-        delineation.specification = WaveSpecification.flexure
         offset_mm_id = get_qrs_offset_mm_id(ecg_lead, zc, mms, offset_mm_id_wide_morphology)
 
     threshold = mms[offset_mm_id].value * float(QRSParams['BETA_OFFSET_THRESHOLD'])
