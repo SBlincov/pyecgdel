@@ -3,7 +3,6 @@
 """
 
 from Source.Model.main.delineation.p.peak import get_p_flexure_zc_id
-from Source.Model.main.delineation.t.alpha.peak import get_t_flexure_zc_id
 from Source.Model.main.delineation.wave_delineation import WaveSpecification
 from Source.Model.main.params.p import PParams
 from Source.Model.main.params.t import TParams

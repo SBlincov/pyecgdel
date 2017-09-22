@@ -46,31 +46,3 @@ def get_t_peak_zc_id(ecg_lead, qrs_id, zcs):
             peak_zc_mm_amplitude = zcs[candidate_zc_id].mm_amplitude * amplitude_part
 
     return peak_zc_id
-
-
-def get_t_flexure_zc_id(ecg_lead, qrs_id, zcs, peak_zc_id):
-
-    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
-
-    flexure_zc_id = -1
-
-    rr = cur_qrs_dels_seq[qrs_id].peak_index - cur_qrs_dels_seq[qrs_id - 1].peak_index
-
-    begin_index = get_t_begin_index(ecg_lead, qrs_id)
-    end_index = get_t_end_index(ecg_lead, qrs_id)
-
-    zcs_peaks_candidates_begin_index = begin_index
-    zcs_peaks_candidates_end_index = end_index
-    zcs_peaks_candidates_window = zcs_peaks_candidates_end_index - zcs_peaks_candidates_begin_index
-
-    for zc_id in range(1, len(zcs) - 1):
-        if zcs_peaks_candidates_begin_index + zcs_peaks_candidates_window * float(TParams['FLEXURE_BEGIN_PART']) < zcs[zc_id].index < zcs_peaks_candidates_begin_index + zcs_peaks_candidates_window * float(TParams['FLEXURE_END_PART']):
-            if abs(zcs[zc_id - 1].index - zcs[zc_id].index) < float(TParams['FLEXURE_SHIFT']) * rr \
-                    and abs(zcs[zc_id + 1].index - zcs[zc_id].index) < float(TParams['FLEXURE_SHIFT']) * rr \
-                    and zcs[zc_id].mm_amplitude < float(TParams['FLEXURE_AMPLITUDE_NEIGHBOUR']) * zcs[zc_id - 1].mm_amplitude \
-                    and zcs[zc_id].mm_amplitude < float(TParams['FLEXURE_AMPLITUDE_NEIGHBOUR']) * zcs[zc_id + 1].mm_amplitude\
-                    and zcs[zc_id - 1].mm_amplitude > float(TParams['FLEXURE_AMPLITUDE_OLD_ZC']) * zcs[peak_zc_id].mm_amplitude\
-                    and zcs[zc_id + 1].mm_amplitude > float(TParams['FLEXURE_AMPLITUDE_OLD_ZC']) * zcs[peak_zc_id].mm_amplitude:
-                flexure_zc_id = zc_id
-
-    return flexure_zc_id

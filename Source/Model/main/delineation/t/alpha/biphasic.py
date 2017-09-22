@@ -1,9 +1,6 @@
-from Source.Model.main.delineation.p.peak import get_p_flexure_zc_id
-from Source.Model.main.delineation.t.alpha.peak import get_t_flexure_zc_id
 from Source.Model.main.delineation.wave_delineation import WaveSpecification
-from Source.Model.main.params.p import PParams
 from Source.Model.main.params.t import TParams
-from Source.Model.main.delineation.t.zcs import *
+from Source.Model.main.delineation.t.zcs import is_next_zc_exist, is_prev_zc_exist, distance_between_zcs
 
 
 def check_left_biphasic_t(triplet, ecg_lead, qrs_id, zcs, delineation):
@@ -23,8 +20,8 @@ def check_left_biphasic_t(triplet, ecg_lead, qrs_id, zcs, delineation):
 
         amplitude = abs(left_peak_zc.left_mm.value) + abs(right_peak_zc.right_mm.value)
 
-        if prev_zc.mm_amplitude > amplitude * float(TParams['BIPHASIC_AMPLITUDE_LEFT']) \
-                and distance_between_zcs(zcs, prev_zc_id, left_peak_zc_id) < rr * float(TParams['BIPHASIC_LIMIT_SHIFT']):
+        if prev_zc.mm_amplitude > amplitude * float(TParams['ALPHA_BIPHASE_AMPL_LEFT']) \
+                and distance_between_zcs(zcs, prev_zc_id, left_peak_zc_id) < rr * float(TParams['ALPHA_BIPHASE_AMPL_SHIFT']):
             delineation.specification = WaveSpecification.biphasic
             delineation.special_points_indexes.append(prev_zc.index)
 
@@ -48,8 +45,8 @@ def check_right_biphasic_t(triplet, ecg_lead, qrs_id, zcs, delineation):
 
         amplitude = abs(left_peak_zc.left_mm.value) + abs(right_peak_zc.right_mm.value)
 
-        if next_zc.mm_amplitude > amplitude * float(TParams['BIPHASIC_AMPLITUDE_RIGHT']) \
-                and distance_between_zcs(zcs, right_peak_zc_id, next_zc_id) < rr * float(TParams['BIPHASIC_LIMIT_SHIFT']):
+        if next_zc.mm_amplitude > amplitude * float(TParams['ALPHA_BIPHASE_AMPL_RIGHT']) \
+                and distance_between_zcs(zcs, right_peak_zc_id, next_zc_id) < rr * float(TParams['ALPHA_BIPHASE_AMPL_SHIFT']):
             delineation.specification = WaveSpecification.biphasic
             delineation.special_points_indexes.append(next_zc.index)
 

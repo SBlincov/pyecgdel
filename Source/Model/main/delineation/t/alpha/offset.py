@@ -22,7 +22,7 @@ def define_t_offset_index(ecg_lead, delineation, zcs, right_peak_zc_id, end_inde
     wdc_scale_id = get_t_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
 
-    threshold = zcs[right_peak_zc_id].right_mm.value * float(TParams['ONSET_OFFSET_THRESHOLD_MM'])
+    threshold = zcs[right_peak_zc_id].right_mm.value * float(TParams['ALPHA_ONSET_OFFSET_MM'])
     start_searching_offset_index = zcs[right_peak_zc_id].right_mm.index
 
     if start_searching_offset_index > end_index:

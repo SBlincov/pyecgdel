@@ -66,7 +66,6 @@ class ECGLead:
 
         self.cur_t_dels_seq = get_t_delineations(self)
 
-
         self.cur_p_dels_seq = get_p_delineations(self)
 
         self.qrs_dels.append(self.cur_qrs_dels_seq)
