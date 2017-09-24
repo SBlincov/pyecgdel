@@ -54,7 +54,9 @@ def get_qrs_morphology(ecg_lead, del_id, delineation):
                                     s_zc_id_diff, right_points,
                                     branch_id)
 
-    morphology = Morphology(del_id, points, branch_id)
+    degree = Degree.satisfyingly
+
+    morphology = Morphology(del_id, points, degree, branch_id)
 
     return morphology
 

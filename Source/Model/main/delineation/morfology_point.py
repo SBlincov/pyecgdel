@@ -39,3 +39,11 @@ class WaveSign(Enum):
     def __int__(self):
         return self.value
 
+
+class Degree(Enum):
+    satisfyingly = 0
+    doubtfully = 1
+    unknown = 2
+
+    def __int__(self):
+        return self.value
