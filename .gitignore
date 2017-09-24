@@ -13,8 +13,7 @@ presentation/*
 
 Report/*
 
-Script/*
-!Script/**/*.m
+Script/**/*.asv
 
 
 Source/**/*.dll
