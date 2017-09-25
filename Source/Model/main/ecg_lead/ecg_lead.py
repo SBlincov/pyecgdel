@@ -39,14 +39,18 @@ class ECGLead:
         self.cur_qrs_dels_seq = []
         self.cur_qrs_morph_seq = []
 
-        self.cur_p_dels_seq = []
         self.cur_t_dels_seq = []
+        self.cur_t_morph_seq = []
+
+        self.cur_p_dels_seq = []
 
         self.qrs_dels = []
         self.qrs_morphs = []
 
-        self.p_dels = []
         self.t_dels = []
+        self.t_morphs = []
+
+        self.p_dels = []
 
         self.characteristics = []
 
@@ -64,7 +68,9 @@ class ECGLead:
         self.cur_qrs_dels_seq = cur_qrs_dels_seq
         self.cur_qrs_morph_seq = cur_qrs_morph_seq
 
-        self.cur_t_dels_seq = get_t_delineations(self)
+        cur_t_dels_seq, cur_t_morph_seq = get_t_delineations(self)
+        self.cur_t_dels_seq = cur_t_dels_seq
+        self.cur_t_morph_seq = cur_t_morph_seq
 
         self.cur_p_dels_seq = get_p_delineations(self)
 
@@ -72,6 +78,8 @@ class ECGLead:
         self.qrs_morphs.append(self.cur_qrs_morph_seq)
 
         self.t_dels.append(self.cur_t_dels_seq)
+        self.t_morphs.append(self.cur_t_morph_seq)
+
         self.p_dels.append(self.cur_p_dels_seq)
 
         if not self.cur_qrs_dels_seq:
@@ -83,6 +91,8 @@ class ECGLead:
         self.cur_qrs_morph_seq = []
 
         self.cur_t_dels_seq = []
+        self.cur_t_morph_seq = []
+
         self.cur_p_dels_seq = []
 
         while next_seq_start < int(len(self.wdc[0]) * 0.8):
@@ -91,7 +101,10 @@ class ECGLead:
             self.cur_qrs_dels_seq = cur_qrs_dels_seq
             self.cur_qrs_morph_seq = cur_qrs_morph_seq
 
-            self.cur_t_dels_seq = get_t_delineations(self)
+            cur_t_dels_seq, cur_t_morph_seq = get_t_delineations(self)
+            self.cur_t_dels_seq = cur_t_dels_seq
+            self.cur_t_morph_seq = cur_t_morph_seq
+
             self.cur_p_dels_seq = get_p_delineations(self)
 
             if self.cur_qrs_dels_seq:
@@ -99,6 +112,8 @@ class ECGLead:
                 self.qrs_morphs.append(self.cur_qrs_morph_seq)
 
                 self.t_dels.append(self.cur_t_dels_seq)
+                self.t_morphs.append(self.cur_t_morph_seq)
+
                 self.p_dels.append(self.cur_p_dels_seq)
 
                 next_seq_start = self.cur_qrs_dels_seq[-1].offset_index
@@ -109,6 +124,8 @@ class ECGLead:
             self.cur_qrs_morph_seq = []
 
             self.cur_t_dels_seq = []
+            self.cur_t_morph_seq = []
+
             self.cur_p_dels_seq = []
 
     def calc_characteristics(self):

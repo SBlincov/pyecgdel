@@ -31,6 +31,6 @@ def get_t_delineations(ecg_lead):
             morphologies.append(morphology)
             num_dels += 1
 
-    return delineations
+    return delineations, morphologies
 
 

@@ -12,8 +12,7 @@ def xtd_processing(ecg_lead, delineation, t_morphology_data, points):
     peak_zc_id = t_morphology_data.peak_zc_id
 
     if peak_zc_id > 0:
-        xtd_pre_points = []
-        for zc_id in range(0, peak_zc_id):
+        for zc_id in range(peak_zc_id - 1, -1, -1):
             p_index = zcs[zc_id].index
             p_value = ecg_lead.filtrated[p_index]
             if zcs[zc_id].extremum_sign is ExtremumSign.negative:
@@ -21,13 +20,10 @@ def xtd_processing(ecg_lead, delineation, t_morphology_data, points):
             else:
                 p_sign = WaveSign.positive
             p = Point(PointName.xtd_point, p_index, p_value, p_sign)
-            xtd_pre_points.append(p)
-
-        points = xtd_pre_points + points
+            points.insert(0, p)
 
     if peak_zc_id < len(zcs) - 1:
-        xtd_post_points = []
-        for zc_id in range(peak_zc_id, len(zcs)):
+        for zc_id in range(peak_zc_id + 1, len(zcs)):
             p_index = zcs[zc_id].index
             p_value = ecg_lead.filtrated[p_index]
             if zcs[zc_id].extremum_sign is ExtremumSign.negative:
@@ -35,6 +31,4 @@ def xtd_processing(ecg_lead, delineation, t_morphology_data, points):
             else:
                 p_sign = WaveSign.positive
             p = Point(PointName.xtd_point, p_index, p_value, p_sign)
-            xtd_post_points.append(p)
-
-        points = points + xtd_post_points
+            points.append(p)

@@ -34,8 +34,9 @@ for record_name in records_names:
     ecg.delineation()
     ecg.save_data_local(ECGDataDetails.qrs_delineation)
     ecg.save_data_local(ECGDataDetails.qrs_morphology)
-    ecg.save_data_local(ECGDataDetails.p_delineation)
     ecg.save_data_local(ECGDataDetails.t_delineation)
+    ecg.save_data_local(ECGDataDetails.t_morphology)
+    ecg.save_data_local(ECGDataDetails.p_delineation)
 
     ecg.characteristics()
     ecg.save_data_local(ECGDataDetails.characteristics)

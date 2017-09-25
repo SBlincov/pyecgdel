@@ -52,3 +52,5 @@ class TMorphologyData:
 
         else:
             self.correct = 0
+
+

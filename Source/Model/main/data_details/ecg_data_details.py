@@ -15,6 +15,7 @@ class ECGDataDetails(Enum):
     wdc = 'wdc'
     qrs_delineation = 'qrs_delineation'
     qrs_morphology = 'qrs_morphology'
+    t_morphology = 't_morphology'
     p_delineation = 'p_delineation'
     t_delineation = 't_delineation'
     characteristics = 'characteristics'

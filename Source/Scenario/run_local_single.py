@@ -17,7 +17,7 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
-record_id = 2508
+record_id = 3000
 
 record_name = "record_" + str(record_id)
 
@@ -31,6 +31,7 @@ ecg.delineation()
 ecg.save_data_local(ECGDataDetails.qrs_delineation)
 ecg.save_data_local(ECGDataDetails.qrs_morphology)
 ecg.save_data_local(ECGDataDetails.t_delineation)
+ecg.save_data_local(ECGDataDetails.t_morphology)
 ecg.save_data_local(ECGDataDetails.p_delineation)
 
 

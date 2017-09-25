@@ -19,6 +19,7 @@ def get_t_morphology(ecg_lead, del_id, delineation):
 
     degree = Degree.unknown
 
+    # In the case of adequate data
     if t_morphology_data_aux.correct == 1:
 
         zcs = t_morphology_data_aux.zcs
