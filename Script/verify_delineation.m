@@ -78,14 +78,11 @@ for lead_id = 2:num_leads
     
     for del_id = 1:num_qrs_ids(lead_id)
         
-        qrs_lefts_global_copy = qrs_lefts_global;
-        qrs_rights_global_copy = qrs_rights_global;
-        
         left_diffs = zeros(curr_num_global, 1);
         right_diffs = zeros(curr_num_global, 1);
         for g_del_id = 1:curr_num_global
-            left_diffs(g_del_id) = qrs_lefts_curr(del_id) - qrs_lefts_global_copy(g_del_id) / qrs_borders_counts(g_del_id);
-            right_diffs(g_del_id) = qrs_rights_curr(del_id) - qrs_rights_global_copy(g_del_id) / qrs_borders_counts(g_del_id);
+            left_diffs(g_del_id) = qrs_lefts_curr(del_id) - qrs_lefts_global(g_del_id) / qrs_borders_counts(g_del_id);
+            right_diffs(g_del_id) = qrs_rights_curr(del_id) - qrs_rights_global(g_del_id) / qrs_borders_counts(g_del_id);
         end
         
         [left_min_diff, left_argmin_diff] = min(abs(left_diffs));
@@ -93,19 +90,45 @@ for lead_id = 2:num_leads
         
         if (left_argmin_diff == right_argmin_diff)
             
+            argmin_diff = left_argmin_diff;
+            
             if ((left_min_diff < mean_qrs_global * mean_qrs_part) || (right_min_diff < mean_qrs_global * mean_qrs_part))
-                qrs_lefts_global_copy(left_argmin_diff) = qrs_lefts_global_copy(left_argmin_diff) + left_diffs(left_argmin_diff);
-                qrs_rights_global_copy(left_argmin_diff) = qrs_rights_global_copy(right_argmin_diff) + right_diffs(right_argmin_diff);
-                qrs_borders_counts(left_argmin_diff) = qrs_borders_counts(left_argmin_diff) + 1;
+                
+                qrs_lefts_global(argmin_diff) = qrs_lefts_global(argmin_diff) + left_diffs(argmin_diff);
+                qrs_rights_global(argmin_diff) = qrs_rights_global(argmin_diff) + right_diffs(argmin_diff);
+                qrs_borders_counts(argmin_diff) = qrs_borders_counts(argmin_diff) + 1;
                 
             else
-                if (left_diffs(left_argmin_diff) < 0 && right_diffs(left_argmin_diff) < 0)
+                if (left_diffs(argmin_diff) < 0 && right_diffs(argmin_diff) < 0)
+                    
+                    qrs_lefts_global = vertcat(qrs_lefts_global(1:argmin_diff-1), qrs_lefts_curr, qrs_lefts_global(argmin_diff:end));
+                    qrs_rights_global = vertcat(qrs_rights_global(1:argmin_diff-1), qrs_rights_curr, qrs_rights_global(argmin_diff:end));
+                    qrs_borders_counts(argmin_diff) = vertcat(qrs_borders_counts(1:argmin_diff - 1), 1, qrs_borders_counts(argmin_diff:end));
+                    
+                elseif ((left_diffs(argmin_diff) > 0 && right_diffs(argmin_diff) > 0))
+                        
+                    qrs_lefts_global = vertcat(qrs_lefts_global(1:argmin_diff), qrs_lefts_curr, qrs_lefts_global(argmin_diff+1:end));
+                    qrs_rights_global = vertcat(qrs_rights_global(1:argmin_diff), qrs_rights_curr, qrs_rights_global(argmin_diff+1:end));
+                    qrs_borders_counts(argmin_diff) = vertcat(qrs_borders_counts(1:argmin_diff), 1, qrs_borders_counts(argmin_diff+1:end));
+                    
+                else
+                    
+                    disp('wrong left and right diffs');
+                    lead_id = lead_id
+                    del_id = del_id
                     
                 end
             end
             
+            qrs_lefts_global = qrs_lefts_global;
+            qrs_rights_global = qrs_rights_global;
+            
         else
             
+            disp('onset and offset out of correspondence');
+            lead_id = lead_id
+            del_id = del_id
+        
         end
         
         
