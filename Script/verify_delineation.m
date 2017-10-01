@@ -34,6 +34,7 @@ mean_qrs = zeros(num_leads, 1);
 mean_qrs_global = 0;
 mean_qrs_part = 0.75;
 diff_qrs_part = 0.25;
+diff_qrs_corr = 0.20;
 
 %% Reading all leads and calc global avg QRS length
 for lead_id = 1:num_leads
@@ -169,9 +170,76 @@ for lead_id = 1:num_leads
     end
 end
 
+num_qrs_all = size(qrs_borders_counts, 1);
+qrs_lefts_all_avg = zeros(num_qrs_all, 1);
+qrs_rights_all_avg = zeros(num_qrs_all, 1);
+
+for cmplx_id = 1:num_qrs_all
+    qrs_lefts_all_avg(cmplx_id) = qrs_lefts_sum(cmplx_id) / qrs_borders_counts(cmplx_id);
+    qrs_rights_all_avg(cmplx_id) = qrs_rights_sum(cmplx_id) / qrs_borders_counts(cmplx_id);
+end
+
 %% Creating the corresponding matrix
 
+corr_matrix = zeros(num_qrs_all, num_leads);
 
+for lead_id = 1:num_leads
+    
+    qrs_lefts_curr = qrs_lefts{lead_id};
+    qrs_rights_curr = qrs_rights{lead_id};
+    
+    for del_id = 1:num_qrs_ids(lead_id)
+        
+        left_diffs = zeros(num_qrs_all, 1);
+        right_diffs = zeros(num_qrs_all, 1);
+        for cmplx_id = 1:num_qrs_all
+            left_diffs(cmplx_id) = qrs_lefts_curr(del_id) - qrs_lefts_all_avg(cmplx_id);
+            right_diffs(cmplx_id) = qrs_rights_curr(del_id) - qrs_rights_all_avg(cmplx_id);
+        end
+        
+        [left_min_diff_abs, left_argmin_diff] = min(abs(left_diffs));
+        [right_min_diff_abs, right_argmin_diff] = min(abs(right_diffs));
+        
+        % Additional checking of argmins
+        if (abs(left_argmin_diff - right_argmin_diff) == 1)
+            
+            left_diff_own = left_diffs(left_argmin_diff);
+            left_diff_der = left_diffs(right_argmin_diff);
+            
+            right_diff_own = right_diffs(right_argmin_diff);
+            right_diff_der = right_diffs(left_argmin_diff);
+            
+            left_diff_diff_abs = abs(abs(left_diff_own) - abs(left_diff_der));
+            right_diff_diff_abs = abs(abs(right_diff_own) - abs(right_diff_der));
+            
+            if ((left_diff_diff_abs < right_diff_diff_abs) && (left_diff_diff_abs < mean_qrs_global * diff_qrs_corr))
+                
+                left_argmin_diff = right_argmin_diff;
+                left_min_diff_abs = abs(left_diffs(left_argmin_diff));
+                
+            elseif ((right_diff_diff_abs < left_diff_diff_abs) && (right_diff_diff_abs < mean_qrs_global))
+                
+                right_argmin_diff = left_argmin_diff;
+                right_min_diff_abs = abs(right_diffs(right_argmin_diff));
+                
+            end
+            
+        end
+        
+        if (left_argmin_diff == right_argmin_diff)
+            
+            argmin_diff = left_argmin_diff;
+            corr_matrix(argmin_diff, lead_id) = del_id;
+            
+        else
+            
+            disp('onset and offset out of correspondence');
+            lead_id = lead_id
+            del_id = del_id
+            
+        end
+    end
+end
 
 
 
