@@ -3,8 +3,7 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-%record = 50005192;
-record = 2508;
+record = 50005192;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 lead_ids = 1:12;
@@ -240,6 +239,37 @@ for lead_id = 1:num_leads
         end
     end
 end
+
+%% Creating intervals
+db_path = sprintf('../Data/%s', base_name);
+record_path = sprintf('record_%d', record);
+mkdir(sprintf('%s/%s/intervals', db_path, record_path));
+file_name = sprintf('%s/%s/intervals/qrs_intervals.txt', db_path, record_path);
+file_id = fopen(file_name, 'w');
+
+for cmplx_id = 1:num_qrs_all
+    
+    lefts = [];
+    rights = [];
+    
+    for lead_id = 1:num_leads
+        if(corr_matrix(cmplx_id, lead_id) > 0)
+            
+            left_curr = qrs_lefts{lead_id}(corr_matrix(cmplx_id, lead_id));
+            lefts = vertcat(lefts, left_curr);
+            
+            right_curr = qrs_rights{lead_id}(corr_matrix(cmplx_id, lead_id));
+            rights = vertcat(rights, right_curr);
+
+        end
+    end
+    
+    fprintf(file_id, '%d %d %d %d %d\n', cmplx_id-1, min(lefts) - 1, max(lefts) + 1, min(rights) - 1, max(rights) + 1);
+    
+end
+
+fclose(file_id);
+
 
 
 

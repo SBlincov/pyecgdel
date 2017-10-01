@@ -4,7 +4,6 @@
 
 Data/*
 !Data/*/*.txt
-!Data/*/*.txt
 
 presentation/*
 !presentation/**/*.pptx
