@@ -17,10 +17,6 @@ num_qrs_ids = zeros(num_leads,1);
 num_t_ids = zeros(num_leads,1);
 num_p_ids = zeros(num_leads,1);
 
-least_qrs_ids = [];
-least_t_ids = [];
-least_p_ids = [];
-
 qrs_lefts = [];
 qrs_rights = [];
 
@@ -52,7 +48,6 @@ for lead_id = 1:num_leads
     
     num_qrs_ids_curr = size(qrs_del, 1);
     num_qrs_ids(lead_id) = num_qrs_ids_curr;
-    least_qrs_ids{lead_id} = linspace(1, num_qrs_ids_curr, num_qrs_ids_curr)';
     qrs_lefts_curr = qrs_del(:, 1);
     qrs_lefts{lead_id} = qrs_lefts_curr;
     qrs_rights_curr = qrs_del(:, 3);
@@ -114,7 +109,7 @@ for lead_id = 1:num_leads
                     left_argmin_diff = right_argmin_diff;
                     left_min_diff_abs = abs(left_diffs(left_argmin_diff));
                     
-                elseif ((right_diff_diff_abs < left_diff_diff_abs) && (right_diff_diff_abs < mean_qrs_global))
+                elseif ((right_diff_diff_abs < left_diff_diff_abs) && (right_diff_diff_abs < mean_qrs_global * diff_qrs_part))
                     
                     right_argmin_diff = left_argmin_diff;
                     right_min_diff_abs = abs(right_diffs(right_argmin_diff));
@@ -216,7 +211,7 @@ for lead_id = 1:num_leads
                 left_argmin_diff = right_argmin_diff;
                 left_min_diff_abs = abs(left_diffs(left_argmin_diff));
                 
-            elseif ((right_diff_diff_abs < left_diff_diff_abs) && (right_diff_diff_abs < mean_qrs_global))
+            elseif ((right_diff_diff_abs < left_diff_diff_abs) && (right_diff_diff_abs < mean_qrs_global * diff_qrs_corr))
                 
                 right_argmin_diff = left_argmin_diff;
                 right_min_diff_abs = abs(right_diffs(right_argmin_diff));

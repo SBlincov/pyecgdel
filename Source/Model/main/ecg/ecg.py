@@ -8,6 +8,8 @@ from Source.Model.main.data_details.ecg_data_details import *
 from Source.Infrastructure.main.load_ecg_data import *
 from Source.Infrastructure.main.save_ecg_data import *
 
+from Source.Model.main.delineation.qrs.delta.delta import multi_lead_processing
+
 
 class InvalidECG(Exception):
     pass
@@ -94,6 +96,39 @@ class ECG:
             print("Delineation " + str(self.leads[lead_id].name) + "...")
             self.leads[lead_id].delineation()
             print("Delineation " + str(self.leads[lead_id].name) + " complete")
+
+        # self.all_leads_correction()
+
+        print("ECG delineation complete")
+
+        for lead_id in range(0, len(self.leads)):
+
+            p_dels = self.leads[lead_id].p_dels
+            num_p_dels = 0
+            for p_dels_seq in p_dels:
+                num_p_dels += len(p_dels_seq)
+
+            qrs_dels = self.leads[lead_id].qrs_dels
+            num_qrs_dels = 0
+            for qrs_dels_seq in qrs_dels:
+                num_qrs_dels += len(qrs_dels_seq)
+
+            t_dels = self.leads[lead_id].t_dels
+            num_t_dels = 0
+            for t_dels_seq in t_dels:
+                num_t_dels += len(t_dels_seq)
+
+            print(str(self.leads[lead_id].name) + " num dels: p: " + str(num_p_dels) + " qrs: " + str(num_qrs_dels) + " t: " + str(num_t_dels))
+
+        print("")
+
+    def qrs_del(self):
+
+        for lead_id in range(0, len(self.leads)):
+            self.leads[lead_id].qrs_del()
+
+        multi_lead_processing(self.leads)
+
 
         # self.all_leads_correction()
 

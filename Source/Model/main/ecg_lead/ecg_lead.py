@@ -128,6 +128,26 @@ class ECGLead:
 
             self.cur_p_dels_seq = []
 
+    def qrs_del(self):
+        cur_qrs_dels_seq, cur_qrs_morph_seq = get_qrs_delineations(self, 0, len(self.wdc[0]))
+
+        self.qrs_dels = cur_qrs_dels_seq
+        self.qrs_morphs = cur_qrs_morph_seq
+
+        next_seq_start = cur_qrs_dels_seq[-1].offset_index
+
+        while next_seq_start < int(len(self.wdc[0]) * 0.8):
+
+            cur_qrs_dels_seq, cur_qrs_morph_seq = get_qrs_delineations(self, next_seq_start, len(self.wdc[0]))
+
+            if cur_qrs_dels_seq:
+                self.qrs_dels += cur_qrs_dels_seq
+                self.qrs_morphs += cur_qrs_morph_seq
+
+                next_seq_start = cur_qrs_dels_seq[-1].offset_index
+            else:
+                next_seq_start += int((len(self.wdc[0]) - next_seq_start) * 0.1)
+
     def calc_characteristics(self):
         qrs_characteristics = get_qrs_characteristics(self)
         p_characteristics = get_p_characteristics(self)

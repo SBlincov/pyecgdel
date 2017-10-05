@@ -27,7 +27,6 @@ class WaveDelineation:
         self.onset_index = 0
         self.peak_index = 0
         self.offset_index = 0
-        self.special_points_indexes = []
         self.specification = specification
 
 
