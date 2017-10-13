@@ -3,11 +3,11 @@ from Source.Model.main.params.qrs import QRSParams
 
 def get_candidates_qrs_zcs_ids(ecg_lead, qrs_zcs):
 
-    sampling_rate = ecg_lead.sampling_rate
+    rate = ecg_lead.rate
 
     candidates_zcs_ids = []
 
-    window = int(sampling_rate * float(QRSParams['ALPHA_MIN_BEAT']))
+    window = int(rate * float(QRSParams['ALPHA_MIN_BEAT']))
 
     current_zc_id = 0
 

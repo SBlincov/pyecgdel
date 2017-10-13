@@ -9,7 +9,7 @@ from Source.Model.main.characteristics.characteristics_names import *
 import numpy as np
 
 
-def get_t_characteristics(lead):
+def get_t_chars(lead):
 
     sampling_rate = lead.sampling_rate
     signal = lead.filtrated

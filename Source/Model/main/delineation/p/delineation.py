@@ -19,25 +19,22 @@ from Source.Model.main.delineation.p.routines import *
 import numpy as np
 
 
-class InvalidPDelineation(Exception):
-    pass
+def get_p_dels(ecg_lead):
 
-
-def get_p_delineations(ecg_lead):
-
-    delineations = []
+    dels = []
+    morphs = []
 
     for qrs_id in range(1, len(ecg_lead.cur_qrs_dels_seq)):
 
-        delineation = get_p_delineation(ecg_lead, qrs_id)
+        delineation = get_p_del(ecg_lead, qrs_id)
 
         if delineation.specification is not WaveSpecification.absence:
-            delineations.append(delineation)
+            dels.append(delineation)
 
-    return delineations
+    return dels, morphs
 
 
-def get_p_delineation(ecg_lead, qrs_id):
+def get_p_del(ecg_lead, qrs_id):
 
     delineation = WaveDelineation()
 

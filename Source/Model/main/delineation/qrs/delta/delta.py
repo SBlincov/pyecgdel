@@ -25,7 +25,7 @@ def multi_lead_processing(leads):
         ons_lead = []
         offs_lead = []
         mean_qrs_curr = 0.0
-        for del_id in range(0, dels):
+        for del_id in range(0, len_of_dels[lead_id]):
             on_index_curr = dels[del_id].onset_index
             off_index_curr = dels[del_id].offset_index
             ons_lead.append(on_index_curr)
@@ -44,7 +44,9 @@ def multi_lead_processing(leads):
     loc = mean_qrs_global * float(QRSParams['DELTA_MEAN_QRS_LOC'])
 
     # Computing lead id with maximum number of dels
-    max_dels_lead_id = np.argmax(np.asarray(len_of_dels))[0]
+    max_dels_lead_id = np.argmax(np.asarray(len_of_dels))
+    if max_dels_lead_id.size > 1:
+        max_dels_lead_id = max_dels_lead_id[0]
 
     # Creating array with all complexes:
     #   sum of values
@@ -52,7 +54,9 @@ def multi_lead_processing(leads):
 
     ons_sum = ons[max_dels_lead_id]
     offs_sum = offs[max_dels_lead_id]
-    borders_counts = [1] * len(len_of_dels[max_dels_lead_id])
+    borders_counts = []
+    for bord_id in range(0, len(ons_sum)):
+        borders_counts.append(1)
 
     for lead_id in range(0, num_leads):
 
@@ -72,11 +76,15 @@ def multi_lead_processing(leads):
                     on_diffs.append(ons_lead[del_id] - ons_sum[g_del_id] / borders_counts[g_del_id])
                     off_diffs.append(offs_lead[del_id] - offs_sum[g_del_id] / borders_counts[g_del_id])
 
-                on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))[0]
+                on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))
+                if on_argmin.size > 1:
+                    on_argmin = on_argmin[0]
                 on_min = on_diffs[on_argmin]
 
-                off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))[0]
-                off_min = on_diffs[off_argmin]
+                off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
+                if off_argmin.size > 1:
+                    off_argmin = off_argmin[0]
+                off_min = off_diffs[off_argmin]
 
                 # Additional checking of argmins
                 if abs(on_argmin - off_argmin) == 1:
@@ -156,10 +164,14 @@ def multi_lead_processing(leads):
                 on_diffs.append(ons_lead[del_id] - on_all_avg[complex_id])
                 off_diffs.append(offs_lead[del_id] - off_all_avg[complex_id])
 
-            on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))[0]
+            on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))
+            if on_argmin.size > 1:
+                on_argmin = on_argmin[0]
             on_min = on_diffs[on_argmin]
 
-            off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))[0]
+            off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
+            if off_argmin.size > 1:
+                off_argmin = off_argmin[0]
             off_min = on_diffs[off_argmin]
 
             # Additional checking of argmins

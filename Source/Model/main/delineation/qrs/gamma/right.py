@@ -7,7 +7,7 @@ from Source.Model.main.zero_crossings.zero_crossing import *
 
 def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
 
-    sampling_rate = ecg_lead.sampling_rate
+    rate = ecg_lead.rate
 
     # Init data for target wdc scale
     scale_id = qrs_morphology_data.scale_id
@@ -160,8 +160,8 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                     # * Amplitude of mm in M-morphology must be larger than some threshold
                     # If one of the conditions is passed then we should exclude xtd zcs
                     is_zcs_valid = True
-                    odd_shift = int(float(QRSParams['GAMMA_RIGHT_ODD_XTD_ZCS_SHIFT']) * sampling_rate)
-                    even_shift = int(float(QRSParams['GAMMA_RIGHT_EVEN_XTD_ZCS_SHIFT']) * sampling_rate)
+                    odd_shift = int(float(QRSParams['GAMMA_RIGHT_ODD_XTD_ZCS_SHIFT']) * rate)
+                    even_shift = int(float(QRSParams['GAMMA_RIGHT_EVEN_XTD_ZCS_SHIFT']) * rate)
                     mm_ampl = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_RIGHT_XTD_ZCS_MM_PART'])
 
                     for zc_id in after_s_zcs_ids[0:-1:2]:
@@ -185,7 +185,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
         if xtd_point_zc_id == s_zc_id and is_s_exist:
             s_zc_sign = qrs_morphology_data.s_signs[scale_id]
             s_index = zcs[s_zc_id].index
-            s_value = ecg_lead.filtrated[s_index]
+            s_value = ecg_lead.filter[s_index]
             if s_zc_sign is ExtremumSign.positive:
                 s_sign = WaveSign.positive
             else:
@@ -194,7 +194,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
             points.append(s_point)
         else:
             p_index = zcs[xtd_point_zc_id].index
-            p_value = ecg_lead.filtrated[p_index]
+            p_value = ecg_lead.filter[p_index]
             if zcs[xtd_point_zc_id].extremum_sign is ExtremumSign.negative:
                 p_sign = WaveSign.negative
             else:

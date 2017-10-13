@@ -20,29 +20,21 @@ class InvalidECGLead(Exception):
 
 class ECGLead:
 
-    def __init__(self, name, signal, sampling_rate):
+    def __init__(self, name, signal, rate):
 
         signal = np.asarray(signal)
 
         if signal is np.empty:
             raise InvalidECGLead('Error! Empty ecg lead signal')
 
-        if sampling_rate < 0.0:
+        if rate < 0.0:
             raise InvalidECGLead('Error! Negative sampling rate')
 
         self.name = name
-        self.original = signal
-        self.filtrated = signal
-        self.sampling_rate = sampling_rate
+        self.origin = signal
+        self.filter = signal
+        self.rate = rate
         self.wdc = []
-
-        self.cur_qrs_dels_seq = []
-        self.cur_qrs_morph_seq = []
-
-        self.cur_t_dels_seq = []
-        self.cur_t_morph_seq = []
-
-        self.cur_p_dels_seq = []
 
         self.qrs_dels = []
         self.qrs_morphs = []
@@ -51,106 +43,59 @@ class ECGLead:
         self.t_morphs = []
 
         self.p_dels = []
+        self.p_morphs = []
 
-        self.characteristics = []
+        self.chars = []
 
     def cwt_filtration(self):
-        self.filtrated = cwt_filtration(self.original)
+        self.filter = cwt_filtration(self.origin)
 
     def common_filtration(self):
-        self.filtrated = common_filtration(self)
+        self.filter = common_filtration(self)
 
     def dwt(self):
-        self.wdc = get_wdc(self.filtrated)
-
-    def delineation(self):
-        cur_qrs_dels_seq, cur_qrs_morph_seq = get_qrs_delineations(self, 0, len(self.wdc[0]))
-        self.cur_qrs_dels_seq = cur_qrs_dels_seq
-        self.cur_qrs_morph_seq = cur_qrs_morph_seq
-
-        cur_t_dels_seq, cur_t_morph_seq = get_t_delineations(self)
-        self.cur_t_dels_seq = cur_t_dels_seq
-        self.cur_t_morph_seq = cur_t_morph_seq
-
-        self.cur_p_dels_seq = get_p_delineations(self)
-
-        self.qrs_dels.append(self.cur_qrs_dels_seq)
-        self.qrs_morphs.append(self.cur_qrs_morph_seq)
-
-        self.t_dels.append(self.cur_t_dels_seq)
-        self.t_morphs.append(self.cur_t_morph_seq)
-
-        self.p_dels.append(self.cur_p_dels_seq)
-
-        if not self.cur_qrs_dels_seq:
-            return
-
-        next_seq_start = self.cur_qrs_dels_seq[-1].offset_index
-
-        self.cur_qrs_dels_seq = []
-        self.cur_qrs_morph_seq = []
-
-        self.cur_t_dels_seq = []
-        self.cur_t_morph_seq = []
-
-        self.cur_p_dels_seq = []
-
-        while next_seq_start < int(len(self.wdc[0]) * 0.8):
-
-            cur_qrs_dels_seq, cur_qrs_morph_seq = get_qrs_delineations(self, next_seq_start, len(self.wdc[0]))
-            self.cur_qrs_dels_seq = cur_qrs_dels_seq
-            self.cur_qrs_morph_seq = cur_qrs_morph_seq
-
-            cur_t_dels_seq, cur_t_morph_seq = get_t_delineations(self)
-            self.cur_t_dels_seq = cur_t_dels_seq
-            self.cur_t_morph_seq = cur_t_morph_seq
-
-            self.cur_p_dels_seq = get_p_delineations(self)
-
-            if self.cur_qrs_dels_seq:
-                self.qrs_dels.append(self.cur_qrs_dels_seq)
-                self.qrs_morphs.append(self.cur_qrs_morph_seq)
-
-                self.t_dels.append(self.cur_t_dels_seq)
-                self.t_morphs.append(self.cur_t_morph_seq)
-
-                self.p_dels.append(self.cur_p_dels_seq)
-
-                next_seq_start = self.cur_qrs_dels_seq[-1].offset_index
-            else:
-                next_seq_start += int((len(self.wdc[0]) - next_seq_start) * 0.1)
-
-            self.cur_qrs_dels_seq = []
-            self.cur_qrs_morph_seq = []
-
-            self.cur_t_dels_seq = []
-            self.cur_t_morph_seq = []
-
-            self.cur_p_dels_seq = []
+        self.wdc = get_wdc(self.filter)
 
     def qrs_del(self):
-        cur_qrs_dels_seq, cur_qrs_morph_seq = get_qrs_delineations(self, 0, len(self.wdc[0]))
+        cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, 0, len(self.wdc[0]))
+        self.qrs_dels = cur_qrs_dels
+        self.qrs_morphs = cur_qrs_morph
 
-        self.qrs_dels = cur_qrs_dels_seq
-        self.qrs_morphs = cur_qrs_morph_seq
+        next_start = cur_qrs_dels[-1].offset_index
 
-        next_seq_start = cur_qrs_dels_seq[-1].offset_index
+        while next_start < int(len(self.wdc[0]) * float(QRSParams['ALPHA_HUGE_PART'])):
 
-        while next_seq_start < int(len(self.wdc[0]) * 0.8):
+            cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, next_start, len(self.wdc[0]))
+            if cur_qrs_dels:
+                self.qrs_dels += cur_qrs_dels
+                self.qrs_morphs += cur_qrs_morph
 
-            cur_qrs_dels_seq, cur_qrs_morph_seq = get_qrs_delineations(self, next_seq_start, len(self.wdc[0]))
-
-            if cur_qrs_dels_seq:
-                self.qrs_dels += cur_qrs_dels_seq
-                self.qrs_morphs += cur_qrs_morph_seq
-
-                next_seq_start = cur_qrs_dels_seq[-1].offset_index
+                next_start = cur_qrs_dels[-1].offset_index
             else:
-                next_seq_start += int((len(self.wdc[0]) - next_seq_start) * 0.1)
+                next_start += int((len(self.wdc[0]) - next_start) * float(QRSParams['ALPHA_INC']))
+
+    def t_del(self):
+        cur_t_dels, cur_t_morph = get_t_dels(self)
+        self.t_dels = cur_t_dels
+        self.t_morphs = cur_t_morph
+
+    def p_del(self):
+        cur_p_dels_seq, cur_p_morph_seq = get_p_dels(self)
+        self.p_dels = cur_p_dels_seq
+        self.p_morphs = cur_p_morph_seq
 
     def calc_characteristics(self):
-        qrs_characteristics = get_qrs_characteristics(self)
-        p_characteristics = get_p_characteristics(self)
-        t_characteristics = get_t_characteristics(self)
-        self.characteristics = qrs_characteristics + p_characteristics + t_characteristics
+        qrs_chars = get_qrs_chars(self)
+        p_chars = get_p_chars(self)
+        t_chars = get_t_chars(self)
+        self.chars = qrs_chars + p_chars + t_chars
+
+    def print_del_info(self):
+
+        num_qrs_dels = len(self.qrs_dels)
+        num_t_dels = len(self.t_dels)
+        num_p_dels = len(self.p_dels)
+
+        print(str(self.name) + "QRS: " + str(num_qrs_dels) + " T: " + str(num_t_dels) + " P: " + str(num_p_dels))
+
 

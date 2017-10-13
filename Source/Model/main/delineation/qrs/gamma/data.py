@@ -10,13 +10,13 @@ class QRSMorphologyData:
         wdc = ecg_lead.wdc
         aux_wdc_scale_id = get_qrs_aux_wdc_scale_id(ecg_lead)
         num_scales = aux_wdc_scale_id + 1
-        sampling_rate = ecg_lead.sampling_rate
+        rate = ecg_lead.rate
 
         onset_index = delineation.onset_index
         peak_index = delineation.peak_index
         offset_index = delineation.offset_index
 
-        normal_length = int(QRSParams['GAMMA_NORMAL_LENGTH'] * sampling_rate)
+        normal_length = int(QRSParams['GAMMA_NORMAL_LENGTH'] * rate)
         current_length = offset_index - onset_index
         allowed_length_diff = normal_length - current_length
 

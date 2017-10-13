@@ -5,7 +5,7 @@ from Source.Model.main.params.qrs import *
 
 def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
 
-    sampling_rate = ecg_lead.sampling_rate
+    rate = ecg_lead.rate
 
     # Init necessary data
     scale_id = qrs_morphology_data.scale_id
@@ -23,7 +23,7 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
         first_zc_index = zcs[first_zc_id].index
 
         # Begin of allowed interval
-        left_lim = first_zc_index - int(float(QRSParams['GAMMA_LEFT_WINDOW']) * sampling_rate)
+        left_lim = first_zc_index - int(float(QRSParams['GAMMA_LEFT_WINDOW']) * rate)
 
         # Onset searching
         is_onset_found = False
@@ -103,7 +103,7 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
             qrs_onset_index = onset_index_beta
 
     # Including onset to morphology
-    qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]
+    qrs_onset_value = ecg_lead.filter[qrs_onset_index]
     qrs_onset_sign = WaveSign.none
     qrs_onset_point = Point(PointName.qrs_onset, qrs_onset_index, qrs_onset_value, qrs_onset_sign)
     if direction < 0:

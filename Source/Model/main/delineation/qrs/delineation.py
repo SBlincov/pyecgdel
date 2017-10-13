@@ -12,11 +12,7 @@ from Source.Model.main.delineation.qrs.beta.beta import beta_processing
 from Source.Model.main.delineation.qrs.gamma.gamma import *
 
 
-class InvalidQRSDelineation(Exception):
-    pass
-
-
-def get_qrs_delineations(ecg_lead, begin_index, end_index):
+def get_qrs_dels(ecg_lead, begin_index, end_index):
 
     qrs_zcs = alpha_processing(ecg_lead, begin_index, end_index)
 

@@ -11,17 +11,13 @@ from Source.Model.main.delineation.t.alpha.alpha import get_t_delineation
 from Source.Model.main.delineation.t.beta.beta import get_t_morphology
 
 
-class InvalidPDelineation(Exception):
-    pass
-
-
-def get_t_delineations(ecg_lead):
+def get_t_dels(ecg_lead):
 
     delineations = []
     morphologies = []
     num_dels = 0
 
-    for qrs_id in range(1, len(ecg_lead.cur_qrs_dels_seq)):
+    for qrs_id in range(1, len(ecg_lead.qrs_dels)):
 
         delineation = get_t_delineation(ecg_lead, qrs_id)
 
@@ -32,5 +28,6 @@ def get_t_delineations(ecg_lead):
             num_dels += 1
 
     return delineations, morphologies
+
 
 

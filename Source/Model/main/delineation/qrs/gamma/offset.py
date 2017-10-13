@@ -5,7 +5,7 @@ from Source.Model.main.params.qrs import *
 
 def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
 
-    sampling_rate = ecg_lead.sampling_rate
+    rate = ecg_lead.rate
 
     # Init necessary data
     scale_id = qrs_morphology_data.scale_id
@@ -23,7 +23,7 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
         last_zc_index = zcs[last_zc_id].index
 
         # Begin of allowed interval
-        right_lim = last_zc_index + int(float(QRSParams['GAMMA_RIGHT_WINDOW']) * sampling_rate)
+        right_lim = last_zc_index + int(float(QRSParams['GAMMA_RIGHT_WINDOW']) * rate)
 
         # Offset searching
         is_offset_found = False
@@ -103,7 +103,7 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
             qrs_offset_index = offset_index_beta
 
     # Including offset to morphology
-    qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
+    qrs_offset_value = ecg_lead.filter[qrs_offset_index]
     qrs_offset_sign = WaveSign.none
     qrs_offset_point = Point(PointName.qrs_offset, qrs_offset_index, qrs_offset_value, qrs_offset_sign)
     if direction < 0:

@@ -22,8 +22,8 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc):
 
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
-    sampling_rate = ecg_lead.sampling_rate
-    window = int(float(QRSParams['BETA_ONSET_WINDOW']) * sampling_rate)
+    rate = ecg_lead.rate
+    window = int(float(QRSParams['BETA_ONSET_WINDOW']) * rate)
 
     zc = qrs_zc
     mms = get_qrs_onset_mms(ecg_lead, zc)
@@ -44,7 +44,7 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc):
         candidate_mm = find_left_mm(next_mm.index - 1, wdc)
 
         if abs(candidate_mm.value) > float(QRSParams['BETA_ONSET_MM_HIGH_LIM']) * abs(first_mm.value) \
-                and abs(first_mm.index - candidate_mm.index) < int(float(QRSParams['BETA_ONSET_MM_WINDOW']) * sampling_rate):
+                and abs(first_mm.index - candidate_mm.index) < int(float(QRSParams['BETA_ONSET_MM_WINDOW']) * rate):
             first_mm = candidate_mm
             next_mm = find_left_mm(first_mm.index - 1, wdc)
         else:
@@ -58,7 +58,7 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc):
     left_zc_index = find_left_thc_index(wdc, first_mm.index, next_mm.index, 0.0)
 
     # Compromise
-    compromise_window = int(float(QRSParams['BETA_ONSET_COMPROMISE_WINDOW']) * sampling_rate)
+    compromise_window = int(float(QRSParams['BETA_ONSET_COMPROMISE_WINDOW']) * rate)
     compromis_mm_lim = float(QRSParams['BETA_ONSET_COMPROMISE_MM_LIM']) * min(abs(zc.left_mm.value), abs(zc.right_mm.value))
     if (right_zc_index - left_zc_index) > compromise_window \
             and abs(first_mm.value) < compromis_mm_lim:
@@ -73,8 +73,8 @@ def get_qrs_onset_mms(ecg_lead, qrs_zc):
 
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
-    sampling_rate = ecg_lead.sampling_rate
-    window = int(float(QRSParams['BETA_ONSET_WINDOW']) * sampling_rate)
+    rate = ecg_lead.rate
+    window = int(float(QRSParams['BETA_ONSET_WINDOW']) * rate)
 
     current_mm = ModulusMaxima(qrs_zc.left_mm.index, wdc)
     next_mm = find_left_mm(current_mm.index - 1, wdc)
@@ -93,8 +93,8 @@ def get_qrs_onset_mms(ecg_lead, qrs_zc):
 
 def get_qrs_onset_mm_id(ecg_lead, qrs_zc, mms, onset_mm_id):
 
-    sampling_rate = ecg_lead.sampling_rate
-    window = int(float(QRSParams['BETA_ONSET_WINDOW']) * sampling_rate)
+    rate = ecg_lead.rate
+    window = int(float(QRSParams['BETA_ONSET_WINDOW']) * rate)
 
     mm_val = max(abs(qrs_zc.left_mm.value), abs(qrs_zc.right_mm.value)) * float(QRSParams['BETA_ONSET_MM_LOW_LIM'])
 

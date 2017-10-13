@@ -9,7 +9,7 @@ from .characteristics_names import *
 import numpy as np
 
 
-def get_p_characteristics(lead):
+def get_p_chars(lead):
 
     sampling_rate = lead.sampling_rate
     signal = lead.filtrated

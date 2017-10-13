@@ -8,15 +8,15 @@ import numpy as np
 import os
 
 
-def save_ecg_data_local(ecg, details):
+def save_data_local(ecg, details):
 
-    sampling_rate = float(ConfigParams['SAMPLING_RATE'])
+    rate = float(ConfigParams['SAMPLING_RATE'])
     leads_names = ConfigParams['LEADS_NAMES']
 
     if len(ecg.leads) is not len(leads_names):
         raise InvalidECGData('Number of existing leads in ecg instance differs from number of leads in database')
 
-    if abs(ecg.leads[0].sampling_rate - sampling_rate) > EPSILON:
+    if abs(ecg.leads[0].rate - rate) > EPSILON:
         raise InvalidECGData('Sampling rate in current instance must be equal to sampling rate in database')
 
     for lead_id in range(len(leads_names)):
@@ -27,7 +27,7 @@ def save_ecg_data_local(ecg, details):
         data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, leads_names[lead_id], details)
 
         if details is ECGDataDetails.filtrated:
-            np.savetxt(data_file_name, ecg.leads[lead_id].filtrated, fmt='%.3e')
+            np.savetxt(data_file_name, ecg.leads[lead_id].filter, fmt='%.3e')
 
         elif details is ECGDataDetails.wdc:
             np.savetxt(data_file_name, np.transpose(ecg.leads[lead_id].wdc), fmt='%.3e')

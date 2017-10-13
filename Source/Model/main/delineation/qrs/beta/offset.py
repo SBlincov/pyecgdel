@@ -22,8 +22,8 @@ def define_qrs_offset_index(ecg_lead, delineation, qrs_zc):
 
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
-    sampling_rate = ecg_lead.sampling_rate
-    window = int(float(QRSParams['BETA_OFFSET_WINDOW']) * sampling_rate)
+    rate = ecg_lead.rate
+    window = int(float(QRSParams['BETA_OFFSET_WINDOW']) * rate)
 
     zc = qrs_zc
     mms = get_qrs_offset_mms(ecg_lead, zc)
@@ -56,8 +56,8 @@ def get_qrs_offset_mms(ecg_lead, qrs_zc):
 
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
-    sampling_rate = ecg_lead.sampling_rate
-    window = int(float(QRSParams['BETA_OFFSET_WINDOW']) * sampling_rate)
+    rate = ecg_lead.rate
+    window = int(float(QRSParams['BETA_OFFSET_WINDOW']) * rate)
 
     current_mm = ModulusMaxima(qrs_zc.right_mm.index, wdc)
     next_mm = find_right_mm(current_mm.index + 1, wdc)

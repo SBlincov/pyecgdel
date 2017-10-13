@@ -9,7 +9,7 @@ def r_processing(r_zc_id, ecg_lead, delineation, qrs_morphology_data, points, di
     r_zc_sign = qrs_morphology_data.r_signs[scale_id]
 
     r_index = zcs[r_zc_id].index
-    r_value = ecg_lead.filtrated[r_index]
+    r_value = ecg_lead.filter[r_index]
     if r_zc_sign is ExtremumSign.positive:
         r_sign = WaveSign.positive
     else:

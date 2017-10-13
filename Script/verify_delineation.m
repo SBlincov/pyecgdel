@@ -3,7 +3,7 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 50005192;
+record = 2508;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 lead_ids = 1:12;
@@ -29,7 +29,7 @@ mean_qrs = zeros(num_leads, 1);
 mean_qrs_global = 0;
 mean_qrs_part = 0.75;
 diff_qrs_part = 0.25;
-diff_qrs_corr = 0.20;
+diff_qrs_corr = 0.25;
 
 %% Reading all leads and calc global avg QRS length
 for lead_id = 1:num_leads

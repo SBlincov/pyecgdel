@@ -41,7 +41,7 @@ for lead_name_id in range(0, len(leads_names)):
 
 ecg = ECG(ecg_input_data_dict)
 ecg.cwt_filtration()
-ecg.add_filtrated_data_to_dict(result_data_dict, result_columns_names, id_file)
+ecg.add_filter_data_to_dict(result_data_dict, result_columns_names, id_file)
 ecg.dwt()
 ecg.delineation()
 ecg.add_delineation_data_to_dict(result_data_dict, result_columns_names, id_file)

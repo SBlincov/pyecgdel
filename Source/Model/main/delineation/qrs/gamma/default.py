@@ -14,13 +14,13 @@ def processing_default_morphology(ecg_lead, delineation, qrs_morphology_data):
     offset_index = delineation.offset_index
 
     qrs_onset_index = onset_index
-    qrs_onset_value = ecg_lead.filtrated[qrs_onset_index]
+    qrs_onset_value = ecg_lead.filter[qrs_onset_index]
     qrs_onset_sign = WaveSign.none
     qrs_onset_point = Point(PointName.qrs_onset, qrs_onset_index, qrs_onset_value, qrs_onset_sign)
     points.insert(0, qrs_onset_point)
 
     r_index = zcs[peak_zc_id].index
-    r_value = ecg_lead.filtrated[r_index]
+    r_value = ecg_lead.filter[r_index]
     if zcs[peak_zc_id].extremum_sign is ExtremumSign.negative:
         r_sign = WaveSign.negative
     else:
@@ -29,7 +29,7 @@ def processing_default_morphology(ecg_lead, delineation, qrs_morphology_data):
     points.append(r_point)
 
     qrs_offset_index = offset_index
-    qrs_offset_value = ecg_lead.filtrated[qrs_offset_index]
+    qrs_offset_value = ecg_lead.filter[qrs_offset_index]
     qrs_offset_sign = WaveSign.none
     qrs_offset_point = Point(PointName.qrs_offset, qrs_offset_index, qrs_offset_value, qrs_offset_sign)
     points.append(qrs_offset_point)
