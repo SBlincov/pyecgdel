@@ -52,8 +52,15 @@ def multi_lead_processing(leads):
     #   sum of values
     #   occurrence rate
 
-    ons_sum = ons[max_dels_lead_id]
-    offs_sum = offs[max_dels_lead_id]
+    ons_sum = []
+    offs_sum = []
+
+    for on_id in range(0, len(ons[max_dels_lead_id])):
+        ons_sum.append(ons[max_dels_lead_id][on_id])
+
+    for off_id in range(0, len(offs[max_dels_lead_id])):
+        offs_sum.append(offs[max_dels_lead_id][off_id])
+
     borders_counts = []
     for bord_id in range(0, len(ons_sum)):
         borders_counts.append(1)
@@ -98,15 +105,29 @@ def multi_lead_processing(leads):
                     on_diff_diff_abs = abs(abs(on_diff_own) - abs(on_diff_der))
                     off_diff_diff_abs = abs(abs(off_diff_own) - abs(off_diff_der))
 
-                    if (on_diff_diff_abs < off_diff_diff_abs) and (on_diff_diff_abs < mean_qrs_global * diff_corr):
+                    if (on_diff_diff_abs < off_diff_diff_abs) and (on_diff_diff_abs < diff_corr):
 
                         on_argmin = off_argmin
                         on_min = on_diffs[on_argmin]
 
-                    elif (off_diff_diff_abs < on_diff_diff_abs) and (off_diff_diff_abs < mean_qrs_global * diff_corr):
+                    elif (off_diff_diff_abs < on_diff_diff_abs) and (off_diff_diff_abs < diff_corr):
 
                         off_argmin = on_argmin
                         off_min = off_diffs[off_argmin]
+
+                    else:
+
+                        total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
+
+                        if total_min == abs(on_diff_own) or total_min == abs(off_diff_own):
+
+                            on_argmin = off_argmin
+                            on_min = on_diffs[on_argmin]
+
+                        else:
+
+                            off_argmin = on_argmin
+                            off_min = off_diffs[off_argmin]
 
                 on_curr = ons_sum[on_argmin] / borders_counts[on_argmin] + on_diffs[on_argmin]
                 off_curr = offs_sum[off_argmin] / borders_counts[off_argmin] + off_diffs[off_argmin]
@@ -115,7 +136,7 @@ def multi_lead_processing(leads):
 
                     argmin = on_argmin
 
-                    if (abs(on_min) < loc) and (abs(off_min) < loc):
+                    if (abs(on_min) < loc) or (abs(off_min) < loc):
 
                         ons_sum[argmin] += on_curr
                         offs_sum[argmin] += off_curr
@@ -172,7 +193,7 @@ def multi_lead_processing(leads):
             off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
             if off_argmin.size > 1:
                 off_argmin = off_argmin[0]
-            off_min = on_diffs[off_argmin]
+            off_min = off_diffs[off_argmin]
 
             # Additional checking of argmins
             if abs(on_argmin - off_argmin) == 1:
@@ -186,23 +207,37 @@ def multi_lead_processing(leads):
                 on_diff_diff_abs = abs(abs(on_diff_own) - abs(on_diff_der))
                 off_diff_diff_abs = abs(abs(off_diff_own) - abs(off_diff_der))
 
-                if (on_diff_diff_abs < off_diff_diff_abs) and (on_diff_diff_abs < mean_qrs_global * diff_corr):
+                if (on_diff_diff_abs < off_diff_diff_abs) and (on_diff_diff_abs < diff_corr):
 
                     on_argmin = off_argmin
                     on_min = on_diffs[on_argmin]
 
-                elif (off_diff_diff_abs < on_diff_diff_abs) and (off_diff_diff_abs < mean_qrs_global * diff_corr):
+                elif (off_diff_diff_abs < on_diff_diff_abs) and (off_diff_diff_abs < diff_corr):
 
                     off_argmin = on_argmin
                     off_min = off_diffs[off_argmin]
 
+                else:
+
+                    total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
+
+                    if total_min == abs(on_diff_own) or total_min == abs(off_diff_own):
+
+                        on_argmin = off_argmin
+                        on_min = on_diffs[on_argmin]
+
+                    else:
+
+                        off_argmin = on_argmin
+                        off_min = off_diffs[off_argmin]
+
             if on_argmin == off_argmin:
 
                 argmin = on_argmin
-                corr_lead.insert(argmin, del_id)
+                corr_lead[argmin] = del_id
 
         corr_mtx.append(corr_lead)
-        corr_lead = []
+        corr_lead = [-1] * num_total
 
     ololo = corr_mtx
 
