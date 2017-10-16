@@ -16,12 +16,12 @@ from Source.Model.main.delineation.p.routines import *
 
 def is_p_peak_zc_candidate_exist(ecg_lead, qrs_id, zcs):
 
-    sampling_rate = ecg_lead.sampling_rate
+    rate = ecg_lead.rate
 
     begin_index = get_p_begin_index(ecg_lead, qrs_id)
     end_index = get_p_end_index(ecg_lead, qrs_id)
 
-    zcs_peaks_candidates_begin_index = begin_index + int(float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * sampling_rate)
+    zcs_peaks_candidates_begin_index = begin_index + int(float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * rate)
     zcs_peaks_candidates_end_index = end_index
 
     result = False
@@ -36,12 +36,12 @@ def is_p_peak_zc_candidate_exist(ecg_lead, qrs_id, zcs):
 
 def get_p_peak_zc_id(ecg_lead, qrs_id, zcs):
 
-    sampling_rate = ecg_lead.sampling_rate
+    rate = ecg_lead.rate
 
     begin_index = get_p_begin_index(ecg_lead, qrs_id)
     end_index = get_p_end_index(ecg_lead, qrs_id)
 
-    zcs_peaks_candidates_begin_index = begin_index + int(float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * sampling_rate)
+    zcs_peaks_candidates_begin_index = begin_index + int(float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * rate)
     zcs_peaks_candidates_end_index = end_index
 
     candidates_zcs_ids = []
@@ -82,11 +82,11 @@ def get_p_peak_zc_id(ecg_lead, qrs_id, zcs):
 
 def get_p_flexure_zc_id(ecg_lead, qrs_id, zcs, peak_zc_id):
 
-    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
+    qrs_dels = ecg_lead.qrs_dels
 
     flexure_zc_id = -1
 
-    rr = cur_qrs_dels_seq[qrs_id].peak_index - cur_qrs_dels_seq[qrs_id - 1].peak_index
+    rr = qrs_dels[qrs_id].peak_index - qrs_dels[qrs_id - 1].peak_index
 
     for zc_id in range(1, len(zcs) - 1):
         if abs(zcs[zc_id - 1].index - zcs[zc_id].index) < float(PParams['FLEXURE_SHIFT']) * rr \

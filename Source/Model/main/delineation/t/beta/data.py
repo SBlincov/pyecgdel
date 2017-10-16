@@ -8,7 +8,7 @@ class TMorphologyData:
     def __init__(self, ecg_lead, delineation, target_scale_id):
 
         wdc_all_scales = ecg_lead.wdc
-        sampling_rate = ecg_lead.sampling_rate
+        rate = ecg_lead.rate
 
         onset_index = delineation.onset_index
         peak_index = delineation.peak_index

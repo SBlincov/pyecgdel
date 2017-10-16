@@ -9,7 +9,7 @@ from Source.Model.main.zero_crossings.zero_crossing import *
 def onset_processing(ecg_lead, delineation, t_morphology_data, points):
 
     onset_index = delineation.onset_index
-    onset_value = ecg_lead.filtrated[onset_index]
+    onset_value = ecg_lead.filter[onset_index]
     onset_sign = WaveSign.none
     onset_point = Point(PointName.t_onset, onset_index, onset_value, onset_sign)
     points.insert(0, onset_point)

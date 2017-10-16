@@ -13,21 +13,21 @@ from Source.Model.main.params.t import TParams
 
 def get_t_delineation(ecg_lead, qrs_id):
 
-    sampling_rate = ecg_lead.sampling_rate
+    rate = ecg_lead.rate
 
     delineation = WaveDelineation()
 
     # First check for T existing:
     #     If gap between two neighbor QRS is less than shift from QRS for searching T,
     #     Then there is no T
-    qrs_gap = ecg_lead.cur_qrs_dels_seq[qrs_id].peak_index - ecg_lead.cur_qrs_dels_seq[qrs_id - 1].peak_index
-    shift = int(float(TParams['ALPHA_BEGIN_SHIFT']) * sampling_rate)
+    qrs_gap = ecg_lead.qrs_dels[qrs_id].onset_index - ecg_lead.qrs_dels[qrs_id - 1].offset_index
+    shift = int(float(TParams['ALPHA_QRS_BTW']) * rate)
     if shift >= qrs_gap:
         delineation.specification = WaveSpecification.absence
         return delineation
 
     # Get zcs - candidates for T in allowed interval
-    mm_window = int(float(TParams['ALPHA_MM_WINDOW']) * sampling_rate)
+    mm_window = int(float(TParams['ALPHA_MM_WINDOW']) * rate)
     zcs = get_t_zcs(ecg_lead, qrs_id, mm_window)
 
     # Second check for T existing:

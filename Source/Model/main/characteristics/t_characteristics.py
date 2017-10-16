@@ -10,9 +10,8 @@ import numpy as np
 
 
 def get_t_chars(lead):
-
-    sampling_rate = lead.sampling_rate
-    signal = lead.filtrated
+    rate = lead.rate
+    signal = lead.filter
     qrs_dels = lead.qrs_dels
     t_dels = lead.t_dels
 
@@ -20,9 +19,7 @@ def get_t_chars(lead):
 
     beat_num = 0
     if qrs_dels:
-        for qrs_seq in qrs_dels:
-            if qrs_seq:
-                beat_num += (len(qrs_seq) - 1)
+        beat_num += (len(qrs_dels) - 1)
 
     t_num = 0
     if t_dels:
@@ -33,31 +30,26 @@ def get_t_chars(lead):
         spec_distribution = []
         t_val_distribution = []
 
-        for qrs_seq_id in range(0, len(qrs_dels)):
-            qrs_seq = qrs_dels[qrs_seq_id]
-            t_seq = t_dels[qrs_seq_id]
+        t_num += len(t_dels)
 
-            if t_seq:
-                t_num += len(t_seq)
+        for t_id in range(0, len(t_dels)):
+            t_distribution.append((t_dels[t_id].offset_index - t_dels[t_id].onset_index) / rate)
+            spec_distribution.append(t_dels[t_id].specification)
+            t_val_distribution.append(signal[t_dels[t_id].peak_index])
 
-                for t_id in range(0, len(t_seq)):
-                    t_distribution.append((t_seq[t_id].offset_index - t_seq[t_id].onset_index) / sampling_rate)
-                    spec_distribution.append(t_seq[t_id].specification)
-                    t_val_distribution.append(signal[t_seq[t_id].peak_index])
+            qrs_id = t_id
+            diff = t_dels[t_id].onset_index - qrs_dels[qrs_id].offset_index
 
-                    qrs_id = t_id
-                    diff = t_seq[t_id].onset_index - qrs_seq[qrs_id].offset_index
+            while diff > 0 and qrs_id < len(qrs_dels) - 1:
+                qrs_id += 1
+                diff = t_dels[t_id].onset_index - qrs_dels[qrs_id].offset_index
+            qrs_id -= 1
 
-                    while diff > 0 and qrs_id < len(qrs_seq) - 1:
-                        qrs_id += 1
-                        diff = t_seq[t_id].onset_index - qrs_seq[qrs_id].offset_index
-                    qrs_id -= 1
+            qt_distribution.append((t_dels[t_id].offset_index - qrs_dels[qrs_id].onset_index) / rate)
 
-                    qt_distribution.append((t_seq[t_id].offset_index - qrs_seq[qrs_id].onset_index) / sampling_rate)
-
-                    s_index = qrs_seq[qrs_id].offset_index
-                    t_index = t_seq[t_id].onset_index
-                    st_distribution.append(signal[t_index] - signal[s_index])
+            s_index = qrs_dels[qrs_id].offset_index
+            t_index = t_dels[t_id].onset_index
+            st_distribution.append(signal[t_index] - signal[s_index])
 
         if beat_num > 0:
             presence_t = t_num / beat_num * 100.0
@@ -120,4 +112,3 @@ def get_t_chars(lead):
             t_characteristics.append([CharacteristicsNames.min_t_val, 'n'])
 
     return t_characteristics
-

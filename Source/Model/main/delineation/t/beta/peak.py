@@ -14,7 +14,7 @@ def peak_processing(ecg_lead, delineation, t_morphology_data, points):
 
     t_zc_sign = t_morphology_data.t_sign
     t_index = zcs[peak_zc_id].index
-    t_value = ecg_lead.filtrated[t_index]
+    t_value = ecg_lead.filter[t_index]
     if t_zc_sign == ExtremumSign.positive:
         t_sign = WaveSign.positive
     else:

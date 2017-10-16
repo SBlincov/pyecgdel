@@ -6,6 +6,7 @@ TParams['WDC_SCALE_ID'] = TDefaultParams.WDC_SCALE_ID
 
 TParams['ALPHA_MM_WINDOW'] = TDefaultParams.ALPHA_MM_WINDOW
 TParams['ALPHA_BEGIN_SHIFT'] = TDefaultParams.ALPHA_BEGIN_SHIFT
+TParams['ALPHA_QRS_BTW'] = TDefaultParams.ALPHA_QRS_BTW
 TParams['ALPHA_QRS_GAP'] = TDefaultParams.ALPHA_QRS_GAP
 TParams['ALPHA_MM_SHARP'] = TDefaultParams.ALPHA_MM_SHARP
 TParams['ALPHA_PEAK_ZC_AMPL_DEC_LEFT'] = TDefaultParams.ALPHA_PEAK_ZC_AMPL_DEC_LEFT

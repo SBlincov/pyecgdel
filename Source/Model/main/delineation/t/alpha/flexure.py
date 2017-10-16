@@ -18,17 +18,17 @@ def check_flexure_t(triplet, ecg_lead, qrs_id, zcs, delineation):
 
         delineation.specification = WaveSpecification.flexure
         delineation.peak_index = zcs[peak_zc_id].index
-        delineation.special_points_indexes.append(zcs[left_peak_zc_id].index)
-        delineation.special_points_indexes.append(zcs[right_peak_zc_id].index)
+        # delineation.special_points_indexes.append(zcs[left_peak_zc_id].index)
+        # delineation.special_points_indexes.append(zcs[right_peak_zc_id].index)
 
 
 def get_t_flexure_zc_id(ecg_lead, qrs_id, zcs, peak_zc_id):
 
-    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
+    qrs_dels = ecg_lead.qrs_dels
 
     flexure_zc_id = -1
 
-    rr = cur_qrs_dels_seq[qrs_id].peak_index - cur_qrs_dels_seq[qrs_id - 1].peak_index
+    rr = qrs_dels[qrs_id].peak_index - qrs_dels[qrs_id - 1].peak_index
 
     begin_index = get_t_begin_index(ecg_lead, qrs_id)
     end_index = get_t_end_index(ecg_lead, qrs_id)

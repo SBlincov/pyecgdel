@@ -10,9 +10,8 @@ import numpy as np
 
 
 def get_p_chars(lead):
-
-    sampling_rate = lead.sampling_rate
-    signal = lead.filtrated
+    rate = lead.rate
+    signal = lead.filter
     qrs_dels = lead.qrs_dels
     p_dels = lead.p_dels
 
@@ -20,9 +19,7 @@ def get_p_chars(lead):
 
     beat_num = 0
     if qrs_dels:
-        for qrs_seq in qrs_dels:
-            if qrs_seq:
-                beat_num += (len(qrs_seq) - 1)
+        beat_num += (len(qrs_dels) - 1)
 
     p_num = 0
     if p_dels:
@@ -32,25 +29,20 @@ def get_p_chars(lead):
         spec_distribution = []
         p_val_distribution = []
 
-        for qrs_seq_id in range(0, len(qrs_dels)):
-            qrs_seq = qrs_dels[qrs_seq_id]
-            p_seq = p_dels[qrs_seq_id]
+        p_num += len(p_dels)
+        for p_id in range(0, len(p_dels)):
+            p_distribution.append((p_dels[p_id].offset_index - p_dels[p_id].onset_index) / rate)
+            spec_distribution.append(p_dels[p_id].specification)
+            p_val_distribution.append(signal[p_dels[p_id].peak_index])
 
-            if p_seq:
-                p_num += len(p_seq)
-                for p_id in range(0, len(p_seq)):
-                    p_distribution.append((p_seq[p_id].offset_index - p_seq[p_id].onset_index) / sampling_rate)
-                    spec_distribution.append(p_seq[p_id].specification)
-                    p_val_distribution.append(signal[p_seq[p_id].peak_index])
+            qrs_id = p_id
+            diff = qrs_dels[qrs_id].onset_index - p_dels[p_id].offset_index
 
-                    qrs_id = p_id
-                    diff = qrs_seq[qrs_id].onset_index - p_seq[p_id].offset_index
+            while diff < 0 and qrs_id < len(qrs_dels) - 1:
+                qrs_id += 1
+                diff = qrs_dels[qrs_id].onset_index - p_dels[p_id].offset_index
 
-                    while diff < 0 and qrs_id < len(qrs_seq) - 1:
-                        qrs_id += 1
-                        diff = qrs_seq[qrs_id].onset_index - p_seq[p_id].offset_index
-
-                    pq_distribution.append((qrs_seq[qrs_id].onset_index - p_seq[p_id].onset_index) / sampling_rate)
+            pq_distribution.append((qrs_dels[qrs_id].onset_index - p_dels[p_id].onset_index) / rate)
 
         if beat_num > 0:
             presence_p = p_num / beat_num * 100.0
@@ -83,7 +75,8 @@ def get_p_chars(lead):
             p_characteristics.append([CharacteristicsNames.flexure_p, flexure_p])
             biphasic_p = float(spec_distribution.count(WaveSpecification.biphasic)) / float(len(spec_distribution)) * 100.0
             p_characteristics.append([CharacteristicsNames.biphasic_p, biphasic_p])
-            atrial_fibrillation_p = float(spec_distribution.count(WaveSpecification.atrial_fibrillation)) / float(len(spec_distribution)) * 100.0
+            atrial_fibrillation_p = float(spec_distribution.count(WaveSpecification.atrial_fibrillation)) / float(
+                len(spec_distribution)) * 100.0
             p_characteristics.append([CharacteristicsNames.atrial_fibrillation_p, atrial_fibrillation_p])
 
         else:
@@ -108,10 +101,3 @@ def get_p_chars(lead):
             p_characteristics.append([CharacteristicsNames.min_p_val, 'n'])
 
     return p_characteristics
-
-
-
-
-
-
-

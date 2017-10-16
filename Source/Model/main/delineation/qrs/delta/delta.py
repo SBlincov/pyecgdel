@@ -1,5 +1,5 @@
-import numpy as np
-from Source.Model.main.params.qrs import QRSParams
+from Source.Model.main.delineation.qrs.delta.matrix import *
+from Source.Model.main.delineation.qrs.gamma.gamma import *
 
 
 def multi_lead_processing(leads):
@@ -159,86 +159,75 @@ def multi_lead_processing(leads):
 
                     raise Exception("Onset and offset out of correspondence")
 
-    num_total = len(borders_counts)
-    on_all_avg = []
-    off_all_avg = []
+    corr_mtx = get_com_matrix(leads, borders_counts, ons_sum, offs_sum)
 
-    for complex_id in range(0, num_total):
-        on_all_avg.append(ons_sum[complex_id] / borders_counts[complex_id])
-        off_all_avg.append(offs_sum[complex_id] / borders_counts[complex_id])
+    for count_id in range(0, len(borders_counts)):
 
-    # Creating the corresponding matrix
-    corr_mtx = []
-    corr_lead = [-1] * num_total
+        qrs_count = 0
+        mean_qrs_on = 0
+        mean_qrs_off = 0
+
+        for lead_id in range(0, num_leads):
+
+            if corr_mtx[lead_id][count_id] > -1:
+                qrs_count += 1
+                mean_qrs_on += ons[lead_id][corr_mtx[lead_id][count_id]]
+                mean_qrs_off += offs[lead_id][corr_mtx[lead_id][count_id]]
+
+        mean_qrs_on = int(mean_qrs_on / qrs_count)
+        mean_qrs_off = int(mean_qrs_off / qrs_count)
+
+        qrs_del_extra = WaveDelineation()
+        qrs_del_extra.onset_index = mean_qrs_on
+        qrs_del_extra.offset_index = mean_qrs_off
+        qrs_del_extra.specification = WaveSpecification.exist
+
+        if qrs_count >= int(QRSParams['DELTA_MIN_QRS_FOUND']):
+
+            for lead_id in range(0, num_leads):
+
+                if corr_mtx[lead_id][count_id] == -1:
+                    lead = leads[lead_id]
+                    qrs_del_extra_zcs = get_zcs_with_global_mms(lead.wdc[int(QRSParams['WDC_SCALE_ID'])],
+                                                                qrs_del_extra.onset_index,
+                                                                qrs_del_extra.offset_index)
+
+                    qrs_del_extra_zc = qrs_del_extra_zcs[0]
+                    for zc_id in range(1, len(qrs_del_extra_zcs)):
+                        if qrs_del_extra_zcs[zc_id].mm_amplitude > qrs_del_extra_zc.mm_amplitude:
+                            qrs_del_extra_zc = qrs_del_extra_zcs[zc_id]
+
+                    qrs_del_extra.peak_index = qrs_del_extra_zc.index
+                    qrs_del_id = 0
+
+                    if qrs_del_extra.peak_index < lead.qrs_dels[0].peak_index:
+                        lead.qrs_dels.insert(qrs_del_id, qrs_del_extra)
+                    elif qrs_del_extra.peak_index > lead.qrs_dels[-1].peak_index:
+                        qrs_del_id = len(lead.qrs_dels)
+                        lead.qrs_dels.append(qrs_del_extra)
+                    else:
+                        for del_id in range(1, len(lead.qrs_dels)):
+                            if lead.qrs_dels[del_id-1].peak_index < qrs_del_extra.peak_index < \
+                                    lead.qrs_dels[del_id].peak_index:
+                                qrs_del_id = del_id
+                                lead.qrs_dels.insert(qrs_del_id, qrs_del_extra)
+
+                    morphology = get_qrs_morphology(lead, qrs_del_id, lead.qrs_dels[qrs_del_id])
+                    lead.qrs_morphs.insert(qrs_del_id, morphology)
+
+        if qrs_count <= int(QRSParams['DELTA_MAX_QRS_LOST']):
+
+            for lead_id in range(0, num_leads):
+
+                if corr_mtx[lead_id][count_id] > -1:
+                    lead = leads[lead_id]
+                    for morph_id in range(0, len(lead.qrs_morphs)):
+                        if lead.qrs_morphs[morph_id].del_id == corr_mtx[lead_id][count_id]:
+                            lead.qrs_dels.pop(morph_id)
+                            lead.qrs_morphs.pop(morph_id)
+                            break
 
     for lead_id in range(0, num_leads):
-
-        ons_lead = ons[lead_id]
-        offs_lead = offs[lead_id]
-
-        for del_id in range(0, len_of_dels[lead_id]):
-
-            on_diffs = []
-            off_diffs = []
-
-            for complex_id in range(0, num_total):
-                on_diffs.append(ons_lead[del_id] - on_all_avg[complex_id])
-                off_diffs.append(offs_lead[del_id] - off_all_avg[complex_id])
-
-            on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))
-            if on_argmin.size > 1:
-                on_argmin = on_argmin[0]
-            on_min = on_diffs[on_argmin]
-
-            off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
-            if off_argmin.size > 1:
-                off_argmin = off_argmin[0]
-            off_min = off_diffs[off_argmin]
-
-            # Additional checking of argmins
-            if abs(on_argmin - off_argmin) == 1:
-
-                on_diff_own = on_diffs[on_argmin]
-                on_diff_der = on_diffs[off_argmin]
-
-                off_diff_own = off_diffs[off_argmin]
-                off_diff_der = off_diffs[on_argmin]
-
-                on_diff_diff_abs = abs(abs(on_diff_own) - abs(on_diff_der))
-                off_diff_diff_abs = abs(abs(off_diff_own) - abs(off_diff_der))
-
-                if (on_diff_diff_abs < off_diff_diff_abs) and (on_diff_diff_abs < diff_corr):
-
-                    on_argmin = off_argmin
-                    on_min = on_diffs[on_argmin]
-
-                elif (off_diff_diff_abs < on_diff_diff_abs) and (off_diff_diff_abs < diff_corr):
-
-                    off_argmin = on_argmin
-                    off_min = off_diffs[off_argmin]
-
-                else:
-
-                    total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
-
-                    if total_min == abs(on_diff_own) or total_min == abs(off_diff_own):
-
-                        on_argmin = off_argmin
-                        on_min = on_diffs[on_argmin]
-
-                    else:
-
-                        off_argmin = on_argmin
-                        off_min = off_diffs[off_argmin]
-
-            if on_argmin == off_argmin:
-
-                argmin = on_argmin
-                corr_lead[argmin] = del_id
-
-        corr_mtx.append(corr_lead)
-        corr_lead = [-1] * num_total
-
-    ololo = corr_mtx
-
-
+        lead = leads[lead_id]
+        for morph_id in range(0, len(lead.qrs_morphs)):
+            lead.qrs_morphs[morph_id].del_id = morph_id
