@@ -1,5 +1,7 @@
 from Source.Model.main.delineation.qrs.delta.matrix import *
-from Source.Model.main.delineation.qrs.gamma.gamma import *
+from Source.Model.main.delineation.qrs.delta.addition import *
+from Source.Model.main.delineation.qrs.delta.removal import *
+import warnings
 
 
 def multi_lead_processing(leads):
@@ -31,7 +33,9 @@ def multi_lead_processing(leads):
             ons_lead.append(on_index_curr)
             offs_lead.append(off_index_curr)
             mean_qrs_curr += (off_index_curr - on_index_curr)
-        mean_qrs_curr /= len(dels)
+
+        if len(dels) > 0:
+            mean_qrs_curr /= len(dels)
 
         ons.append(ons_lead)
         offs.append(offs_lead)
@@ -64,6 +68,8 @@ def multi_lead_processing(leads):
     borders_counts = []
     for bord_id in range(0, len(ons_sum)):
         borders_counts.append(1)
+
+    del_candidates = []
 
     for lead_id in range(0, num_leads):
 
@@ -153,13 +159,15 @@ def multi_lead_processing(leads):
                             offs_sum.insert(argmin + 1, off_curr)
                             borders_counts.insert(argmin + 1, 1)
                         else:
-                            raise Exception("Wrong left and right diffs")
+                            del_candidates.append([lead_id, argmin])
+                            # raise Exception("Wrong left and right diffs")
 
                 else:
 
-                    raise Exception("Onset and offset out of correspondence")
+                    warnings.warn("Onset and offset out of correspondence", UserWarning)
+                    # raise Exception("Onset and offset out of correspondence")
 
-    corr_mtx = get_com_matrix(leads, borders_counts, ons_sum, offs_sum)
+    corr_mtx = get_com_matrix(leads, borders_counts, ons_sum, offs_sum, del_candidates)
 
     for count_id in range(0, len(borders_counts)):
 
@@ -184,48 +192,11 @@ def multi_lead_processing(leads):
 
         if qrs_count >= int(QRSParams['DELTA_MIN_QRS_FOUND']):
 
-            for lead_id in range(0, num_leads):
-
-                if corr_mtx[lead_id][count_id] == -1:
-                    lead = leads[lead_id]
-                    qrs_del_extra_zcs = get_zcs_with_global_mms(lead.wdc[int(QRSParams['WDC_SCALE_ID'])],
-                                                                qrs_del_extra.onset_index,
-                                                                qrs_del_extra.offset_index)
-
-                    qrs_del_extra_zc = qrs_del_extra_zcs[0]
-                    for zc_id in range(1, len(qrs_del_extra_zcs)):
-                        if qrs_del_extra_zcs[zc_id].mm_amplitude > qrs_del_extra_zc.mm_amplitude:
-                            qrs_del_extra_zc = qrs_del_extra_zcs[zc_id]
-
-                    qrs_del_extra.peak_index = qrs_del_extra_zc.index
-                    qrs_del_id = 0
-
-                    if qrs_del_extra.peak_index < lead.qrs_dels[0].peak_index:
-                        lead.qrs_dels.insert(qrs_del_id, qrs_del_extra)
-                    elif qrs_del_extra.peak_index > lead.qrs_dels[-1].peak_index:
-                        qrs_del_id = len(lead.qrs_dels)
-                        lead.qrs_dels.append(qrs_del_extra)
-                    else:
-                        for del_id in range(1, len(lead.qrs_dels)):
-                            if lead.qrs_dels[del_id-1].peak_index < qrs_del_extra.peak_index < \
-                                    lead.qrs_dels[del_id].peak_index:
-                                qrs_del_id = del_id
-                                lead.qrs_dels.insert(qrs_del_id, qrs_del_extra)
-
-                    morphology = get_qrs_morphology(lead, qrs_del_id, lead.qrs_dels[qrs_del_id])
-                    lead.qrs_morphs.insert(qrs_del_id, morphology)
+            add_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
 
         if qrs_count <= int(QRSParams['DELTA_MAX_QRS_LOST']):
 
-            for lead_id in range(0, num_leads):
-
-                if corr_mtx[lead_id][count_id] > -1:
-                    lead = leads[lead_id]
-                    for morph_id in range(0, len(lead.qrs_morphs)):
-                        if lead.qrs_morphs[morph_id].del_id == corr_mtx[lead_id][count_id]:
-                            lead.qrs_dels.pop(morph_id)
-                            lead.qrs_morphs.pop(morph_id)
-                            break
+            remove_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
 
     for lead_id in range(0, num_leads):
         lead = leads[lead_id]

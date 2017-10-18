@@ -26,6 +26,13 @@ def get_qrs_dels(ecg_lead, begin_index, end_index):
         morphologies.append(morphology)
         num_dels += 1
 
+    if len(delineations) > 1:
+        for del_id in range(1, len(delineations)):
+            if delineations[del_id].onset_index <= delineations[del_id - 1].offset_index:
+                delineations[del_id].onset_index = delineations[del_id - 1].offset_index + 1
+                morphologies[del_id].points[0].index = delineations[del_id - 1].offset_index + 1
+                morphologies[del_id].points[0].value = ecg_lead.filter[delineations[del_id - 1].offset_index + 1]
+
     mean_rr = 0.0
 
     for qrs_delineation_id in range(0, len(delineations) - 1):

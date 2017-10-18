@@ -30,8 +30,8 @@ class PeakZCsIds:
 
             delineation.specification = WaveSpecification.flexure
             delineation.peak_index = zcs[peak_zc_id].index
-            delineation.special_points_indexes.append(zcs[left_peak_zc_id].index)
-            delineation.special_points_indexes.append(zcs[right_peak_zc_id].index)
+            # delineation.special_points_indexes.append(zcs[left_peak_zc_id].index)
+            # delineation.special_points_indexes.append(zcs[right_peak_zc_id].index)
 
     def check_left_biphasic_p(self, ecg_lead, zcs, delineation):
 
