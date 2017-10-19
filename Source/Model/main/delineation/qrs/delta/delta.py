@@ -182,21 +182,23 @@ def multi_lead_processing(leads):
                 mean_qrs_on += ons[lead_id][corr_mtx[lead_id][count_id]]
                 mean_qrs_off += offs[lead_id][corr_mtx[lead_id][count_id]]
 
-        mean_qrs_on = int(mean_qrs_on / qrs_count)
-        mean_qrs_off = int(mean_qrs_off / qrs_count)
+        if qrs_count > 0:
 
-        qrs_del_extra = WaveDelineation()
-        qrs_del_extra.onset_index = mean_qrs_on
-        qrs_del_extra.offset_index = mean_qrs_off
-        qrs_del_extra.specification = WaveSpecification.exist
+            mean_qrs_on = int(mean_qrs_on / qrs_count)
+            mean_qrs_off = int(mean_qrs_off / qrs_count)
 
-        if qrs_count >= int(QRSParams['DELTA_MIN_QRS_FOUND']):
+            qrs_del_extra = WaveDelineation()
+            qrs_del_extra.onset_index = mean_qrs_on
+            qrs_del_extra.offset_index = mean_qrs_off
+            qrs_del_extra.specification = WaveSpecification.exist
 
-            add_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
+            if qrs_count >= int(QRSParams['DELTA_MIN_QRS_FOUND']):
 
-        if qrs_count <= int(QRSParams['DELTA_MAX_QRS_LOST']):
+                add_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
 
-            remove_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
+            if qrs_count <= int(QRSParams['DELTA_MAX_QRS_LOST']):
+
+                remove_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
 
     for lead_id in range(0, num_leads):
         lead = leads[lead_id]
