@@ -100,4 +100,20 @@ def get_p_chars(lead):
             p_characteristics.append([CharacteristicsNames.max_p_val, 'n'])
             p_characteristics.append([CharacteristicsNames.min_p_val, 'n'])
 
+    else:
+
+        p_characteristics.append([CharacteristicsNames.presence_p, 'n'])
+        p_characteristics.append([CharacteristicsNames.mean_p, 'n'])
+        p_characteristics.append([CharacteristicsNames.std_p, 'n'])
+        p_characteristics.append([CharacteristicsNames.mean_pq, 'n'])
+        p_characteristics.append([CharacteristicsNames.std_pq, 'n'])
+        p_characteristics.append([CharacteristicsNames.normal_p, 'n'])
+        p_characteristics.append([CharacteristicsNames.flexure_p, 'n'])
+        p_characteristics.append([CharacteristicsNames.biphasic_p, 'n'])
+        p_characteristics.append([CharacteristicsNames.atrial_fibrillation_p, 'n'])
+        p_characteristics.append([CharacteristicsNames.mean_p_val, 'n'])
+        p_characteristics.append([CharacteristicsNames.std_p_val, 'n'])
+        p_characteristics.append([CharacteristicsNames.max_p_val, 'n'])
+        p_characteristics.append([CharacteristicsNames.min_p_val, 'n'])
+
     return p_characteristics

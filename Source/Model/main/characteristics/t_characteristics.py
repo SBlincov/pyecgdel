@@ -111,4 +111,21 @@ def get_t_chars(lead):
             t_characteristics.append([CharacteristicsNames.max_t_val, 'n'])
             t_characteristics.append([CharacteristicsNames.min_t_val, 'n'])
 
+    else:
+
+        t_characteristics.append([CharacteristicsNames.presence_t, 'n'])
+        t_characteristics.append([CharacteristicsNames.mean_t, 'n'])
+        t_characteristics.append([CharacteristicsNames.std_t, 'n'])
+        t_characteristics.append([CharacteristicsNames.mean_qt, 'n'])
+        t_characteristics.append([CharacteristicsNames.std_qt, 'n'])
+        t_characteristics.append([CharacteristicsNames.mean_st, 'n'])
+        t_characteristics.append([CharacteristicsNames.std_st, 'n'])
+        t_characteristics.append([CharacteristicsNames.normal_t, 'n'])
+        t_characteristics.append([CharacteristicsNames.flexure_t, 'n'])
+        t_characteristics.append([CharacteristicsNames.biphasic_t, 'n'])
+        t_characteristics.append([CharacteristicsNames.mean_t_val, 'n'])
+        t_characteristics.append([CharacteristicsNames.std_t_val, 'n'])
+        t_characteristics.append([CharacteristicsNames.max_t_val, 'n'])
+        t_characteristics.append([CharacteristicsNames.min_t_val, 'n'])
+
     return t_characteristics

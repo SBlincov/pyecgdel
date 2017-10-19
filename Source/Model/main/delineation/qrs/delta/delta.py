@@ -200,6 +200,12 @@ def multi_lead_processing(leads):
 
                 remove_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
 
+    restore_morph_order(leads)
+
+
+def restore_morph_order(leads):
+
+    num_leads = len(leads)
     for lead_id in range(0, num_leads):
         lead = leads[lead_id]
         for morph_id in range(0, len(lead.qrs_morphs)):

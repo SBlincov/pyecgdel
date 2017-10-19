@@ -1,4 +1,5 @@
 from Source.Model.main.delineation.qrs.gamma.gamma import *
+from Source.Model.main.delineation.qrs.delta.removal import *
 
 
 def add_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates):
@@ -14,14 +15,7 @@ def add_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates):
 
             if [lead_id, count_id] in del_candidates:
 
-                i = -1
-                index = -1
-                while index == -1:
-                    i += 1
-                    index = corr_mtx[lead_id][count_id - i]
-
-                lead.qrs_dels.pop(index + i)
-                lead.qrs_morphs.pop(index + i)
+                remove_del_candidate(lead, corr_mtx, lead_id, count_id)
 
             qrs_del_extra_zcs = get_zcs_with_global_mms(lead.wdc[int(QRSParams['WDC_SCALE_ID'])],
                                                         qrs_del_extra.onset_index,

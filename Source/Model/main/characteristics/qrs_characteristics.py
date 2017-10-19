@@ -83,4 +83,18 @@ def get_qrs_chars(lead):
             qrs_characteristics.append([CharacteristicsNames.max_r_val, 'n'])
             qrs_characteristics.append([CharacteristicsNames.min_r_val, 'n'])
 
+    else:
+
+        qrs_characteristics.append([CharacteristicsNames.mean_rr, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.std_rr, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.mean_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.std_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.normal_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.flexure_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.extra_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.mean_r_val, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.std_r_val, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.max_r_val, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.min_r_val, 'n'])
+
     return qrs_characteristics
