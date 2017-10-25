@@ -61,18 +61,20 @@ class ECGLead:
         self.qrs_dels = cur_qrs_dels
         self.qrs_morphs = cur_qrs_morph
 
-        next_start = cur_qrs_dels[-1].offset_index
+        if cur_qrs_dels:
 
-        while next_start < int(len(self.wdc[0]) * float(QRSParams['ALPHA_HUGE_PART'])):
+            next_start = cur_qrs_dels[-1].offset_index
 
-            cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, next_start, len(self.wdc[0]))
-            if cur_qrs_dels:
-                self.qrs_dels += cur_qrs_dels
-                self.qrs_morphs += cur_qrs_morph
+            while next_start < int(len(self.wdc[0]) * float(QRSParams['ALPHA_HUGE_PART'])):
 
-                next_start = cur_qrs_dels[-1].offset_index
-            else:
-                next_start += int((len(self.wdc[0]) - next_start) * float(QRSParams['ALPHA_INC']))
+                cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, next_start, len(self.wdc[0]))
+                if cur_qrs_dels:
+                    self.qrs_dels += cur_qrs_dels
+                    self.qrs_morphs += cur_qrs_morph
+
+                    next_start = cur_qrs_dels[-1].offset_index
+                else:
+                    next_start += int((len(self.wdc[0]) - next_start) * float(QRSParams['ALPHA_INC']))
 
     def t_del(self):
         cur_t_dels, cur_t_morph = get_t_dels(self)

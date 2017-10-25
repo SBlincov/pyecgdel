@@ -30,8 +30,8 @@ class PeakZCsIds:
 
             delineation.specification = WaveSpecification.flexure
             delineation.peak_index = zcs[peak_zc_id].index
-            delineation.special_points_indexes.append(zcs[left_peak_zc_id].index)
-            delineation.special_points_indexes.append(zcs[right_peak_zc_id].index)
+            # delineation.special_points_indexes.append(zcs[left_peak_zc_id].index)
+            # delineation.special_points_indexes.append(zcs[right_peak_zc_id].index)
 
     def check_left_biphasic_p(self, ecg_lead, zcs, delineation):
 
@@ -41,14 +41,14 @@ class PeakZCsIds:
         right_peak_zc_id = self.right_zc_id
         right_peak_zc = zcs[right_peak_zc_id]
 
-        sampling_rate = ecg_lead.sampling_rate
+        rate = ecg_lead.rate
 
         biphasic_th_more_peak_zc = float(PParams['BIPHASIC_AMPLITUDE_MORE']) * abs(right_peak_zc.right_mm.value)
         biphasic_th_less_peak_zc = float(PParams['BIPHASIC_AMPLITUDE_LESS']) * abs(right_peak_zc.right_mm.value)
 
         if biphasic_th_more_peak_zc < abs(left_peak_zc.left_mm.value) < biphasic_th_less_peak_zc:
 
-            if is_prev_zc_exist(zcs, left_peak_zc_id, float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * sampling_rate):
+            if is_prev_zc_exist(zcs, left_peak_zc_id, float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * rate):
                 prev_zc_id = left_peak_zc_id - 1
                 prev_zc = zcs[prev_zc_id]
 
@@ -62,7 +62,7 @@ class PeakZCsIds:
                     if prev_zc.mm_amplitude > float(PParams['BIPHASIC_AMPLITUDE']) * amplitude:
 
                         delineation.specification = WaveSpecification.biphasic
-                        delineation.special_points_indexes.append(prev_zc.index)
+                        # delineation.special_points_indexes.append(prev_zc.index)
 
                         self.left_zc_id = prev_zc_id
 
@@ -88,7 +88,7 @@ class PeakZCsIds:
                     and distance_between_zcs(zcs, prev_zc_id, left_peak_zc_id) < rr * float(TParams['BIPHASIC_LIMIT_SHIFT']):
 
                 delineation.specification = WaveSpecification.biphasic
-                delineation.special_points_indexes.append(prev_zc.index)
+                # delineation.special_points_indexes.append(prev_zc.index)
 
                 self.left_zc_id = prev_zc_id
 
@@ -121,7 +121,7 @@ class PeakZCsIds:
                     if next_zc.mm_amplitude > float(PParams['BIPHASIC_AMPLITUDE']) * amplitude:
 
                         delineation.specification = WaveSpecification.biphasic
-                        delineation.special_points_indexes.append(next_zc.index)
+                        # delineation.special_points_indexes.append(next_zc.index)
 
                         self.right_zc_id = next_zc_id
 
@@ -147,7 +147,7 @@ class PeakZCsIds:
                     and distance_between_zcs(zcs, right_peak_zc_id, next_zc_id) < rr * float(TParams['BIPHASIC_LIMIT_SHIFT']):
 
                 delineation.specification = WaveSpecification.biphasic
-                delineation.special_points_indexes.append(next_zc.index)
+                # delineation.special_points_indexes.append(next_zc.index)
 
                 self.right_zc_id = next_zc_id
 

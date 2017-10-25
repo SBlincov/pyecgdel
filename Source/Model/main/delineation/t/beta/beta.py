@@ -15,7 +15,10 @@ def get_t_morphology(ecg_lead, del_id, delineation):
     t_morphology_data_main = TMorphologyData(ecg_lead, delineation, main_scale_id)
     t_morphology_data_aux = TMorphologyData(ecg_lead, delineation, aux_scale_id)
 
-    num_zcs_main = len(t_morphology_data_main.zcs)
+    if hasattr(t_morphology_data_main, 'zcs'):
+        num_zcs_main = len(t_morphology_data_main.zcs)
+    else:
+        num_zcs_main = 0
 
     degree = Degree.unknown
 

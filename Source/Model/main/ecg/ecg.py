@@ -86,7 +86,8 @@ class ECG:
             print("QRS delineation " + str(self.leads[lead_id].name) + " complete")
         print("")
 
-        multi_lead_processing(self.leads)
+        if len(self.leads) > 1:
+            multi_lead_processing(self.leads)
 
         for lead_id in range(0, len(self.leads)):
             print("T delineation " + str(self.leads[lead_id].name) + " ...")

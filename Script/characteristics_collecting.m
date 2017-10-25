@@ -20,16 +20,36 @@ for recordID = 1:numRecords
         localPath = sprintf('record_%d/%s/characteristics.txt', recordID, leadNames{leadID});
         fullPath = strcat(globalPath, localPath);
         delimiter = ' ';
-        data = readtable(fullPath, 'ReadRowNames', 0, 'ReadVariableNames', 0, 'Delimiter', delimiter, 'FileType', 'text', 'TreatAsEmpty',{missingCharacter});
-        names = table2array(data(:, 1));
-        values = table2array(data(:, end));
-        for nameID = 1:length(names)
-            names{nameID} = strcat(leadNames{leadID}, '_', names{nameID});
+        data = readtable(fullPath, 'ReadRowNames', 0, 'ReadVariableNames', 0, 'Delimiter', delimiter, 'FileType', 'text');
+        if isempty(data) 
+            continue
+        else
+            for i=1:height(data(:, end))
+                if ~iscell(data{i, end-1})
+                    if ~isnan(data{i, end-1})
+                        data{i, end} = data{i, end-1};
+                    end
+                end
+            end
+            names = table2array(data(:, 1));
+            values = table2array(data(:, end));
+            for nameID = 1:length(names)
+                names{nameID} = strcat(leadNames{leadID}, '_', names{nameID});
+            end
+            if iscell(values)
+                for valueID = 1:length(values)
+                    if values{valueID} == missingCharacter
+                        values{valueID} = missingNumber;
+                    else
+                        values{valueID} = str2double(values{valueID});
+                    end
+                end
+                values = cell2mat(values);
+            end
+            leadNamesArray = horzcat(leadNamesArray, (names)');
+            leadDataArray = horzcat(leadDataArray, (values)');
+            clearvars values names
         end
-        values(isnan(values)) = missingNumber;
-        leadNamesArray = horzcat(leadNamesArray, (names)');
-        leadDataArray = horzcat(leadDataArray, (values)');
-        clearvars values names
     end
     
     diagnosisPath = sprintf('record_%d/diagnosis.txt', recordID);
@@ -60,4 +80,5 @@ dataArray = horzcat(dataArray, diagnosisArray);
 leadNamesArray = horzcat(leadNamesArray, 'diagnosis');
 
 dataArray = array2table(dataArray, 'VariableNames', leadNamesArray);
-writetable(dataArray, strcat(globalPath, 'characteristics.txt'), 'Delimiter', '\t');
+writetable(dataArray, strcat(globalPath, 'characteristics'), 'FileType', 'spreadsheet');
+%writetable(dataArray, strcat(globalPath, 'characteristics.txt'), 'Delimiter', '\t');

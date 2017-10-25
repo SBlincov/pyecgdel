@@ -3,6 +3,7 @@ class TDefaultParams:
     WDC_SCALE_ID = 4
     ALPHA_MM_WINDOW = 0.15
     ALPHA_BEGIN_SHIFT = 0.05
+    ALPHA_QRS_BTW = 0.15
     ALPHA_QRS_GAP = 0.5
     ALPHA_MM_SHARP = 5.0
     ALPHA_PEAK_ZC_AMPL_DEC_LEFT = 0.6

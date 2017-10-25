@@ -24,7 +24,7 @@ def get_p_dels(ecg_lead):
     dels = []
     morphs = []
 
-    for qrs_id in range(1, len(ecg_lead.cur_qrs_dels_seq)):
+    for qrs_id in range(1, len(ecg_lead.qrs_dels)):
 
         delineation = get_p_del(ecg_lead, qrs_id)
 
@@ -38,25 +38,25 @@ def get_p_del(ecg_lead, qrs_id):
 
     delineation = WaveDelineation()
 
-    if ecg_lead.cur_qrs_dels_seq[qrs_id].specification is WaveSpecification.extra:
+    if ecg_lead.qrs_dels[qrs_id].specification is WaveSpecification.extra:
         return delineation
 
-    sampling_rate = ecg_lead.sampling_rate
+    rate = ecg_lead.rate
 
-    mm_window = int(float(PParams['MM_WINDOW']) * sampling_rate)
+    mm_window = int(float(PParams['MM_WINDOW']) * rate)
 
     zcs = get_p_zcs(ecg_lead, qrs_id, mm_window)
 
     if not zcs:
         return delineation
 
-    if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['RIGHT_MM_DIST']) * sampling_rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['OFFSET_MM_SHARPNESS'])):
+    if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['RIGHT_MM_DIST']) * rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['OFFSET_MM_SHARPNESS'])):
         zcs.pop(-1)
 
     if not zcs:
         return delineation
 
-    if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['LEFT_MM_DIST']) * sampling_rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['ONSET_MM_SHARPNESS'])):
+    if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['LEFT_MM_DIST']) * rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['ONSET_MM_SHARPNESS'])):
         zcs.pop(0)
 
     if not zcs:
@@ -66,7 +66,7 @@ def get_p_del(ecg_lead, qrs_id):
     begin_index = get_p_begin_index(ecg_lead, qrs_id)
     end_index = get_p_end_index(ecg_lead, qrs_id)
 
-    if window < int(float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * sampling_rate):
+    if window < int(float(PParams['ZCS_PEAK_SEARCHING_SHIFT']) * rate):
         return delineation
 
     if not is_p_peak_zc_candidate_exist(ecg_lead, qrs_id, zcs):
@@ -123,8 +123,8 @@ def is_small_p(ecg_lead, qrs_id, zcs, peak_zc_id):
     wdc_scale_id = get_p_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
     p_amplitude = zcs[peak_zc_id].mm_amplitude
-    begin_qrs_index = ecg_lead.cur_qrs_dels_seq[qrs_id].onset_index
-    end_qrs_index = ecg_lead.cur_qrs_dels_seq[qrs_id].offset_index
+    begin_qrs_index = ecg_lead.qrs_dels[qrs_id].onset_index
+    end_qrs_index = ecg_lead.qrs_dels[qrs_id].offset_index
     qrs_aux_zcs = get_zcs_with_global_mms(wdc, begin_qrs_index, end_qrs_index)
     if qrs_aux_zcs:
 

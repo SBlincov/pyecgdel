@@ -3,7 +3,7 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 2508;
+record = 2440;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 lead_ids = 1:12;
@@ -114,6 +114,22 @@ for lead_id = 1:num_leads
                     right_argmin_diff = left_argmin_diff;
                     right_min_diff_abs = abs(right_diffs(right_argmin_diff));
                     
+                else
+                    
+                    total_min = min([abs(left_diff_own) abs(left_diff_der) abs(right_diff_own) abs(right_diff_der)]);
+                    
+                    if total_min == abs(left_diff_own) || total_min == abs(right_diff_own)
+                        
+                        left_argmin_diff = right_argmin_diff;
+                        left_min_diff_abs = abs(left_diffs(left_argmin_diff));
+                        
+                    else
+                        
+                        right_argmin_diff = left_argmin_diff;
+                        right_min_diff_abs = abs(right_diffs(right_argmin_diff));
+                        
+                    end
+                    
                 end
                 
             end
@@ -216,6 +232,22 @@ for lead_id = 1:num_leads
                 right_argmin_diff = left_argmin_diff;
                 right_min_diff_abs = abs(right_diffs(right_argmin_diff));
                 
+            else
+                
+                total_min = min([abs(left_diff_own) abs(left_diff_der) abs(right_diff_own) abs(right_diff_der)]);
+                
+                if total_min == abs(left_diff_own) || total_min == abs(right_diff_own)
+                    
+                    left_argmin_diff = right_argmin_diff;
+                    left_min_diff_abs = abs(left_diffs(left_argmin_diff));
+                    
+                else
+                    
+                    right_argmin_diff = left_argmin_diff;
+                    right_min_diff_abs = abs(right_diffs(right_argmin_diff));
+                    
+                end
+                
             end
             
         end
@@ -255,7 +287,7 @@ for cmplx_id = 1:num_qrs_all
             
             right_curr = qrs_rights{lead_id}(corr_matrix(cmplx_id, lead_id));
             rights = vertcat(rights, right_curr);
-
+            
         end
     end
     

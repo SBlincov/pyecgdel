@@ -10,9 +10,8 @@ import numpy as np
 
 
 def get_qrs_chars(lead):
-
-    sampling_rate = lead.sampling_rate
-    signal = lead.filtrated
+    rate = lead.rate
+    signal = lead.filter
     qrs_dels = lead.qrs_dels
 
     qrs_characteristics = []
@@ -24,22 +23,20 @@ def get_qrs_chars(lead):
         spec_distribution = []
         r_val_distribution = []
 
-        for qrs_seq in qrs_dels:
+        if len(qrs_dels) > 1:
 
-            if len(qrs_seq) > 1:
-
-                for qrs_id in range(0, len(qrs_seq) - 1):
-                    current_rr = (qrs_seq[qrs_id + 1].peak_index - qrs_seq[qrs_id].peak_index) / sampling_rate
-                    rr_distribution.append(current_rr)
-                    current_qrs = (qrs_seq[qrs_id].offset_index - qrs_seq[qrs_id].onset_index) / sampling_rate
-                    qrs_distribution.append(current_qrs)
-                    spec_distribution.append(qrs_seq[qrs_id].specification)
-                    r_val_distribution.append(signal[qrs_seq[qrs_id].peak_index])
-
-                current_qrs = (qrs_seq[len(qrs_seq) - 1].offset_index - qrs_seq[len(qrs_seq) - 1].onset_index) / sampling_rate
+            for qrs_id in range(0, len(qrs_dels) - 1):
+                current_rr = (qrs_dels[qrs_id + 1].peak_index - qrs_dels[qrs_id].peak_index) / rate
+                rr_distribution.append(current_rr)
+                current_qrs = (qrs_dels[qrs_id].offset_index - qrs_dels[qrs_id].onset_index) / rate
                 qrs_distribution.append(current_qrs)
-                spec_distribution.append(qrs_seq[len(qrs_seq) - 1].specification)
-                r_val_distribution.append(signal[qrs_seq[len(qrs_seq) - 1].peak_index])
+                spec_distribution.append(qrs_dels[qrs_id].specification)
+                r_val_distribution.append(signal[qrs_dels[qrs_id].peak_index])
+
+            current_qrs = (qrs_dels[len(qrs_dels) - 1].offset_index - qrs_dels[len(qrs_dels) - 1].onset_index) / rate
+            qrs_distribution.append(current_qrs)
+            spec_distribution.append(qrs_dels[len(qrs_dels) - 1].specification)
+            r_val_distribution.append(signal[qrs_dels[len(qrs_dels) - 1].peak_index])
 
         if rr_distribution:
             mean_rr = np.mean(rr_distribution)
@@ -86,13 +83,18 @@ def get_qrs_chars(lead):
             qrs_characteristics.append([CharacteristicsNames.max_r_val, 'n'])
             qrs_characteristics.append([CharacteristicsNames.min_r_val, 'n'])
 
+    else:
+
+        qrs_characteristics.append([CharacteristicsNames.mean_rr, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.std_rr, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.mean_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.std_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.normal_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.flexure_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.extra_qrs, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.mean_r_val, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.std_r_val, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.max_r_val, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.min_r_val, 'n'])
+
     return qrs_characteristics
-
-
-
-
-
-
-
-
-

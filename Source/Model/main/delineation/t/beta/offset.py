@@ -8,7 +8,7 @@ from Source.Model.main.zero_crossings.zero_crossing import *
 
 def offset_processing(ecg_lead, delineation, t_morphology_data, points):
     offset_index = delineation.offset_index
-    offset_value = ecg_lead.filtrated[offset_index]
+    offset_value = ecg_lead.filter[offset_index]
     offset_sign = WaveSign.none
     offset_point = Point(PointName.t_offset, offset_index, offset_value, offset_sign)
     points.append(offset_point)
