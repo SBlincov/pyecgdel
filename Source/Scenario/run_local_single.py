@@ -1,7 +1,7 @@
 from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 
-DBConfig.name = 'physionet2017'
+DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -17,13 +17,14 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
-record_id = 139
+record_id = 50005444
 
 record_name = "record_" + str(record_id)
 
 print('Record Name: ', record_name)
 ecg = ECG(data=LOCAL_DB, name=None, record=record_name)
 ecg.cwt_filtration()
+ecg.adaptive_filtration()
 ecg.save_local(ECGDataDetails.filtrated)
 ecg.dwt()
 ecg.save_local(ECGDataDetails.wdc)
