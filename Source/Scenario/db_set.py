@@ -121,7 +121,14 @@ for record_name in records_names:
 
             d["json_lead_" + lead + "_qrs_morphology"] = [(file_id, qrs_records)]
 
-            d["json_lead_" + lead + "_t_morphology"] = [(file_id, [])]
+            t_morphs_path = local_path + '/lead_' + lead + '/t_morphology.txt'
+            lines = [line.rstrip('\n') for line in open(t_morphs_path)]
+            t_records = []
+            for line in lines:
+                t_m = line.split()
+                t_records.append(t_m[0:5])
+
+            d["json_lead_" + lead + "_t_morphology"] = [(file_id, t_records)]
 
         cb.bulk_data_set(d)
         cb.commit()
