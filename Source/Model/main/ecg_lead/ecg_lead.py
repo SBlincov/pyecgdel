@@ -5,6 +5,7 @@
 from Source.Model.main.delineation.qrs.delineation import *
 from Source.Model.main.filtration.cwt_filtration import *
 from Source.Model.main.filtration.common_filtration import *
+from Source.Model.main.filtration.adaptive_filtration import *
 from Source.Model.main.delineation.p.delineation import *
 from Source.Model.main.discrete_wavelet_transform.wdc import *
 from Source.Model.main.data_details.ecg_data_details import *
@@ -52,6 +53,9 @@ class ECGLead:
 
     def common_filtration(self):
         self.filter = common_filtration(self)
+
+    def adaptive_filtration(self):
+        self.filter = adaptive_filtration(self)
 
     def dwt(self):
         self.wdc = get_wdc(self.filter)

@@ -66,6 +66,15 @@ class ECG:
         print("ECG filtration complete")
         print("")
 
+    def adaptive_filtration(self):
+        print("ECG filtration...")
+        for lead_id in range(0, len(self.leads)):
+            print("Filtration " + str(self.leads[lead_id].name) + "...")
+            self.leads[lead_id].adaptive_filtration()
+            print("Filtration " + str(self.leads[lead_id].name) + " complete")
+        print("ECG filtration complete")
+        print("")
+
     def dwt(self):
         print("ECG DWT ...")
 
@@ -117,7 +126,7 @@ class ECG:
 
         for lead_id in range(0, len(self.leads)):
             column_name = self.leads[lead_id].name + "_original"
-            data_dict[column_name] = [(id_file, self.leads[lead_id].original)]
+            data_dict[column_name] = [(id_file, self.leads[lead_id].origin.tolist())]
             cols_names.append(column_name)
 
     def add_filter_data_to_dict(self, data_dict, columns_names, id_file):
@@ -130,7 +139,7 @@ class ECG:
 
         for lead_id in range(0, len(self.leads)):
             column_name = "json_" + self.leads[lead_id].name + "_filtrated"
-            data_dict[column_name] = [(id_file, self.leads[lead_id].filtrated.tolist())]
+            data_dict[column_name] = [(id_file, self.leads[lead_id].filter.tolist())]
             columns_names.append(column_name)
 
     def add_delineation_data_to_dict(self, data_dict, columns_names, id_file):
@@ -144,12 +153,11 @@ class ECG:
         for lead_id in range(0, len(self.leads)):
             column_name = "json_" + self.leads[lead_id].name + "_p_delineation"
             p_dels_data = []
-            for del_seq in self.leads[lead_id].p_dels:
-                for delineation in del_seq:
-                    p_dels_data.append(np.asarray([int(delineation.onset_index),
-                                                   int(delineation.peak_index),
-                                                   int(delineation.offset_index),
-                                                   int(delineation.specification.value)], dtype=np.int32).tolist())
+            for delineation in self.leads[lead_id].p_dels:
+                p_dels_data.append(np.asarray([int(delineation.onset_index),
+                                               int(delineation.peak_index),
+                                               int(delineation.offset_index),
+                                               int(delineation.specification.value)], dtype=np.int32).tolist())
 
             if len(p_dels_data) is 0:
                 data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
@@ -164,12 +172,11 @@ class ECG:
 
             column_name = "json_" + self.leads[lead_id].name + "_qrs_delineation"
             qrs_dels_data = []
-            for del_seq in self.leads[lead_id].qrs_dels:
-                for delineation in del_seq:
-                    qrs_dels_data.append(np.asarray([int(delineation.onset_index),
-                                                     int(delineation.peak_index),
-                                                     int(delineation.offset_index),
-                                                     int(delineation.specification.value)], dtype=np.int32).tolist())
+            for delineation in self.leads[lead_id].qrs_dels:
+                qrs_dels_data.append(np.asarray([int(delineation.onset_index),
+                                                 int(delineation.peak_index),
+                                                 int(delineation.offset_index),
+                                                 int(delineation.specification.value)], dtype=np.int32).tolist())
 
             if len(qrs_dels_data) is 0:
                 data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
@@ -184,12 +191,11 @@ class ECG:
 
             column_name = "json_" + self.leads[lead_id].name + "_t_delineation"
             t_dels_data = []
-            for del_seq in self.leads[lead_id].t_dels:
-                for delineation in del_seq:
-                    t_dels_data.append(np.asarray([int(delineation.onset_index),
-                                                   int(delineation.peak_index),
-                                                   int(delineation.offset_index),
-                                                   int(delineation.specification.value)], dtype=np.int32).tolist())
+            for delineation in self.leads[lead_id].t_dels:
+                t_dels_data.append(np.asarray([int(delineation.onset_index),
+                                               int(delineation.peak_index),
+                                               int(delineation.offset_index),
+                                               int(delineation.specification.value)], dtype=np.int32).tolist())
 
             if len(t_dels_data) is 0:
                 data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
@@ -214,14 +220,13 @@ class ECG:
 
             column_name = "json_" + self.leads[lead_id].name + "_qrs_morphology"
             qrs_morphs_data = []
-            for morph_seq in self.leads[lead_id].qrs_morphs:
-                for morphology in morph_seq:
-                    for morphology_point in morphology.points:
-                        qrs_morphs_data.append([int(morphology.del_id),
-                                                str(morphology_point.name),
-                                                int(morphology_point.index),
-                                                float(morphology_point.value),
-                                                int(morphology_point.sign)])
+            for morphology in self.leads[lead_id].qrs_morphs:
+                for morphology_point in morphology.points:
+                    qrs_morphs_data.append([int(morphology.del_id),
+                                            str(morphology_point.name),
+                                            int(morphology_point.index),
+                                            float(morphology_point.value),
+                                            int(morphology_point.sign)])
 
             data_dict[column_name] = [(id_file, qrs_morphs_data)]
             columns_names.append(column_name)
@@ -246,7 +251,7 @@ class ECG:
 
         for lead_id in range(0, len(self.leads)):
 
-            characteristics = self.leads[lead_id].characteristics
+            characteristics = self.leads[lead_id].chars
             characteristics_data_names = []
             characteristics_data_values = []
             for characteristic in characteristics:
