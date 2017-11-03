@@ -38,5 +38,7 @@ for record_name in records_names:
     ecg.save_local(ECGDataDetails.t_morphology)
     ecg.save_local(ECGDataDetails.p_delineation)
 
+    ecg.adaptive_filtration()
+
     ecg.characteristics()
     ecg.save_local(ECGDataDetails.characteristics)
