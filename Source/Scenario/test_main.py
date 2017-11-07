@@ -32,23 +32,13 @@ for lead_name in leads_names:
 data = cb.bulk_data_get(columns_names, "cardio_file.id=" + str(id_file))
 ecg_data = data['data']
 
-leads_names_exist = []
-leads_ids_exist = []
-for lead_id in range(0, len(leads_names)):
-    lead_data = ecg_data[0][lead_id]
-    if lead_data is not None:
-        leads_names_exist.append(leads_names[lead_id])
-        leads_ids_exist.append(lead_id)
-
-leads_names = leads_names_exist
-
 ecg_input_data_dict = dict()
 result_data_dict = dict()
 result_columns_names = []
 
-for lead_name_id in range(0, len(leads_names)):
-    if ecg_data[0][lead_name_id] is not None:
-        ecg_input_data_dict[leads_names[lead_name_id]] = ecg_data[0][lead_name_id]
+for lead_id in range(0, len(leads_names)):
+    if ecg_data[0][lead_id] is not None:
+        ecg_input_data_dict[leads_names[lead_id]] = ecg_data[0][lead_id]
 
 ecg = ECG(ecg_input_data_dict)
 ecg.cwt_filtration()
