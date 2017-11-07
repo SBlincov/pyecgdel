@@ -2,9 +2,7 @@ from Source.Model.main.delineation.t.routines import get_t_wdc_scale_id
 from Source.Model.main.delineation.t.beta.data import TMorphologyData
 from Source.Model.main.params.t import TParams
 from Source.Model.main.delineation.wave_delineation import *
-from Source.Model.main.delineation.morfology_point import *
-from Source.Model.main.zero_crossings.zero_crossing import *
-from Source.Model.main.delineation.t.beta.points import points_processing
+from Source.Model.main.delineation.t.beta.points import *
 
 
 def get_t_morphology(ecg_lead, del_id, delineation):
@@ -53,7 +51,10 @@ def get_t_morphology(ecg_lead, del_id, delineation):
 
     else:
         # Getting points
-        points = points_processing(ecg_lead, delineation, t_morphology_data_main)
+        if t_morphology_data_main.correct:
+            points = points_processing(ecg_lead, delineation, t_morphology_data_main)
+        else:
+            points = points_processing_trivial(ecg_lead, delineation)
 
     branch_id = [0, 0]
 

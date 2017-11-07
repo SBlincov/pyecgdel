@@ -28,6 +28,9 @@ def save_data_local(ecg, details):
         if details is ECGDataDetails.filtrated:
             np.savetxt(data_file_name, ecg.leads[lead_id].filter, fmt='%.3e')
 
+        elif details is ECGDataDetails.adaptive_filtrated:
+            np.savetxt(data_file_name, ecg.leads[lead_id].filter, fmt='%.3e')
+
         elif details is ECGDataDetails.wdc:
             np.savetxt(data_file_name, np.transpose(ecg.leads[lead_id].wdc), fmt='%.3e')
 

@@ -12,6 +12,7 @@ class InvalidECGDataDetails(Exception):
 class ECGDataDetails(Enum):
     original = 'original'
     filtrated = 'filtrated'
+    adaptive_filtrated = 'adaptive_filtrated'
     wdc = 'wdc'
     qrs_delineation = 'qrs_delineation'
     qrs_morphology = 'qrs_morphology'

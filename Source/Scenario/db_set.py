@@ -54,7 +54,7 @@ for record_name in records_names:
 
     file_id = int(record_name[7:])
 
-    data = cb.bulk_data_get(columns_names, "device_model='AT-101' AND cardio_file.id=" + str(file_id))
+    data = cb.bulk_data_get(columns_names, "cardio_file.id=" + str(file_id))
     if len(data['data']) is not 0:
         for column_name in columns_names:
             cb.delete(file_id, column_name)
@@ -65,7 +65,7 @@ for record_name in records_names:
         for lead in cb.leads:
             print(lead)
 
-            filtrated = np.loadtxt(local_path + '/lead_' + lead + '/filtrated.txt')
+            filtrated = np.loadtxt(local_path + '/lead_' + lead + '/adaptive_filtrated.txt')
             d["json_lead_" + lead + "_filtrated"] = [(file_id, filtrated.tolist())]
 
             p_delineation = np.loadtxt(local_path + '/lead_' + lead + '/p_delineation.txt', dtype=np.int)

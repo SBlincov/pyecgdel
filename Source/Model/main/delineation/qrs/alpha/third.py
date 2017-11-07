@@ -17,13 +17,14 @@ def get_additional_qrs_zcs_ids(ecg_lead, zcs, zcs_ids, wdc, wdc_aux):
             for zc_id_add in range(len(zcs_ids_add)):
                 zcs_ids_add[zc_id_add] = zcs_ids_add[zc_id_add] + zcs_ids[zc_id]
 
-            begin_zc = zcs[zcs_ids_add[0]]
-            end_zc = zcs[zcs_ids_add[-1]]
+            if len(zcs_ids_add) > 0:
+                begin_zc = zcs[zcs_ids_add[0]]
+                end_zc = zcs[zcs_ids_add[-1]]
 
-            zcs_ids_add = get_confirmed_qrs_zcs_ids(ecg_lead, zcs, zcs_ids_add, wdc)
-            zcs_ids_add = get_confirmed_qrs_zcs_ids(ecg_lead, zcs, zcs_ids_add, wdc_aux)
-            if zcs_ids_add:
-                zcs_ids = zcs_ids + zcs_ids_add
+                zcs_ids_add = get_confirmed_qrs_zcs_ids(ecg_lead, zcs, zcs_ids_add, wdc)
+                zcs_ids_add = get_confirmed_qrs_zcs_ids(ecg_lead, zcs, zcs_ids_add, wdc_aux)
+                if zcs_ids_add:
+                    zcs_ids = zcs_ids + zcs_ids_add
 
     zcs_ids = np.sort(zcs_ids)
 
