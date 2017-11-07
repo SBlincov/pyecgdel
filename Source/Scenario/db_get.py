@@ -22,6 +22,11 @@ all_columns = cb.get_columns()
 
 patients = cb.get_patient_list()
 
+all_files = cb.get_files(1)
+files_names = []
+for i in all_files:
+    files_names.append(cb.get_file_id(i))
+
 columns = ["json_lead_i_original",
            "json_lead_ii_original",
            "json_lead_iii_original",
@@ -39,27 +44,29 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    data = cb.bulk_data_get([column], "device_model='AT-101' AND cardio_file.id<=3066")
-    #data = cb.bulk_data_get([column], "device_model='AT-101'")
-    records_ids = data['id']
-    ecg_data = data['data']
+    for file_name in files_names:
 
-    for i in range(0, len(records_ids)):
+        data = cb.bulk_data_get([column], "cardio_file.id=" + str(file_name))
+        #data = cb.bulk_data_get([column], "device_model='AT-101'")
+        records_ids = data['id']
+        ecg_data = data['data']
 
-        record_id = records_ids[i]
+        for i in range(0, len(records_ids)):
 
-        record_name = "record_" + str(record_id)
-        lead_name = column[5:-9]
+            record_id = records_ids[i]
 
-        print("lead: ", lead_name, " record: ", record_name)
+            record_name = "record_" + str(record_id)
+            lead_name = column[5:-9]
 
-        record_path = db_path + '\\' + record_name
-        if not os.path.exists(record_path):
-            os.makedirs(record_path)
+            print("lead: ", lead_name, " record: ", record_name)
 
-        lead_path = record_path + '\\' + lead_name
-        if not os.path.exists(lead_path):
-            os.makedirs(lead_path)
+            record_path = db_path + '\\' + record_name
+            if not os.path.exists(record_path):
+                os.makedirs(record_path)
 
-        ecg_data_path = lead_path + '\\original.txt'
-        np.savetxt(ecg_data_path, np.transpose(np.array(ecg_data[i])), fmt='%d')
+            lead_path = record_path + '\\' + lead_name
+            if not os.path.exists(lead_path):
+                os.makedirs(lead_path)
+
+            ecg_data_path = lead_path + '\\original.txt'
+            np.savetxt(ecg_data_path, np.transpose(np.array(ecg_data[i])), fmt='%d')

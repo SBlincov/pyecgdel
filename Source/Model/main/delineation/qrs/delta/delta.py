@@ -192,11 +192,11 @@ def multi_lead_processing(leads):
             qrs_del_extra.offset_index = mean_qrs_off
             qrs_del_extra.specification = WaveSpecification.exist
 
-            if qrs_count >= int(QRSParams['DELTA_MIN_QRS_FOUND']):
+            if qrs_count >= int(QRSParams['DELTA_MIN_QRS_FOUND'] * num_leads):
 
                 add_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
 
-            if qrs_count <= int(QRSParams['DELTA_MAX_QRS_LOST']):
+            if qrs_count <= int(QRSParams['DELTA_MAX_QRS_LOST'] * num_leads):
 
                 remove_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates)
 

@@ -42,7 +42,7 @@ ecg = ECG(ecg_input_data_dict)
 ecg.cwt_filtration()
 # For now the filtering used for delineation is internal to this module
 # and filtering for output is done separately later
-#ecg.add_filtrated_data_to_dict(result_data_dict, result_columns_names, id_file)
+# ecg.add_filtrated_data_to_dict(result_data_dict, result_columns_names, id_file)
 ecg.dwt()
 ecg.delineation()
 ecg.add_delineation_data_to_dict(result_data_dict, result_columns_names, id_file)
