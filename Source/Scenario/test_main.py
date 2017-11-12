@@ -29,16 +29,16 @@ columns_names = []
 for lead_name in leads_names:
     columns_names.append("json_" + lead_name + "_original")
 
-data = cb.bulk_data_get(columns_names, "device_model='AT-101' AND cardio_file.id=" + str(id_file))
+data = cb.bulk_data_get(columns_names, "cardio_file.id=" + str(id_file))
 ecg_data = data['data']
 
 ecg_input_data_dict = dict()
 result_data_dict = dict()
 result_columns_names = []
 
-for lead_name_id in range(0, len(leads_names)):
-    if ecg_data[0][lead_name_id] is not None:
-        ecg_input_data_dict[leads_names[lead_name_id]] = ecg_data[0][lead_name_id]
+for lead_id in range(0, len(leads_names)):
+    if ecg_data[0][lead_id] is not None:
+        ecg_input_data_dict[leads_names[lead_id]] = ecg_data[0][lead_id]
 
 ecg = ECG(ecg_input_data_dict)
 ecg.cwt_filtration()
