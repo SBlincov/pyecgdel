@@ -3,7 +3,7 @@ import sys
 from Source.Model.main.ecg.ecg import *
 from Source.CardioBase.cardiobase import Cardiobase
 
-DBConfig.name = 'shiller'
+DBConfig.name = 'shiller_add'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -72,7 +72,7 @@ for record_name in records_names:
             print("p_del shape: ", p_delineation.shape)
             if len(p_delineation) is 0:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, [])]
-            elif len(p_delineation) is 1:
+            elif p_delineation.ndim is 1:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, [p_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, p_delineation.tolist())]
@@ -81,7 +81,7 @@ for record_name in records_names:
             print("qrs_del shape: ", qrs_delineation.shape)
             if len(qrs_delineation) is 0:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [])]
-            elif len(qrs_delineation) is 1:
+            elif qrs_delineation.ndim is 1:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [qrs_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, qrs_delineation.tolist())]
@@ -90,7 +90,7 @@ for record_name in records_names:
             print("t_del shape: ", t_delineation.shape)
             if len(t_delineation) is 0:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, [])]
-            elif len(t_delineation) is 1:
+            elif t_delineation.ndim is 1:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, [t_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, t_delineation.tolist())]

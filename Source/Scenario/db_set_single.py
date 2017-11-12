@@ -33,9 +33,13 @@ for lead_name in leads_names:
     columns_names.append("json_" + lead_name + "_qrs_delineation")
     columns_names.append("json_" + lead_name + "_t_delineation")
 
+    columns_names.append("json_" + lead_name + "_p_morphology")
+    columns_names.append("json_" + lead_name + "_qrs_morphology")
+    columns_names.append("json_" + lead_name + "_t_morphology")
+
     columns_names.append("json_" + lead_name + "_characteristics")
 
-record_name = 'record_2319'
+record_name = 'record_50376386'
 
 d = {}
 local_path = DBConfig.get_db_path() + "\\" + record_name + "\\"
@@ -60,7 +64,7 @@ if file_id is not -1:
         print("p_del shape: ", p_delineation.shape)
         if len(p_delineation) is 0:
             d["json_lead_" + lead + "_p_delineation"] = [(file_id, [])]
-        elif len(p_delineation) is 1:
+        elif p_delineation.ndim is 1:
             d["json_lead_" + lead + "_p_delineation"] = [(file_id, [p_delineation.tolist()])]
         else:
             d["json_lead_" + lead + "_p_delineation"] = [(file_id, p_delineation.tolist())]
@@ -69,7 +73,7 @@ if file_id is not -1:
         print("qrs_del shape: ", qrs_delineation.shape)
         if len(qrs_delineation) is 0:
             d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [])]
-        elif len(qrs_delineation) is 1:
+        elif qrs_delineation.ndim is 1:
             d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [qrs_delineation.tolist()])]
         else:
             d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, qrs_delineation.tolist())]
@@ -78,7 +82,7 @@ if file_id is not -1:
         print("t_del shape: ", t_delineation.shape)
         if len(t_delineation) is 0:
             d["json_lead_" + lead + "_t_delineation"] = [(file_id, [])]
-        elif len(t_delineation) is 1:
+        elif t_delineation.ndim is 1:
             d["json_lead_" + lead + "_t_delineation"] = [(file_id, [t_delineation.tolist()])]
         else:
             d["json_lead_" + lead + "_t_delineation"] = [(file_id, t_delineation.tolist())]
@@ -97,6 +101,26 @@ if file_id is not -1:
             else:
                 ch_values.append(None)
         d["json_lead_" + lead + "_characteristics"] = [(file_id, [ch_names, ch_values])]
+
+        d["json_lead_" + lead + "_p_morphology"] = [(file_id, [])]
+
+        qrs_morphs_path = local_path + '/lead_' + lead + '/qrs_morphology.txt'
+        lines = [line.rstrip('\n') for line in open(qrs_morphs_path)]
+        qrs_records = []
+        for line in lines:
+            qrs_m = line.split()
+            qrs_records.append(qrs_m[0:5])
+
+        d["json_lead_" + lead + "_qrs_morphology"] = [(file_id, qrs_records)]
+
+        t_morphs_path = local_path + '/lead_' + lead + '/t_morphology.txt'
+        lines = [line.rstrip('\n') for line in open(t_morphs_path)]
+        t_records = []
+        for line in lines:
+            t_m = line.split()
+            t_records.append(t_m[0:5])
+
+        d["json_lead_" + lead + "_t_morphology"] = [(file_id, t_records)]
 
     cb.bulk_data_set(d)
     cb.commit()

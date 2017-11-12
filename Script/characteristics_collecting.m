@@ -1,8 +1,8 @@
-globalPath = ('../Data/physionet2017/');
+globalPath = ('../Data/physionet2015/');
 
-numRecords = 8528;
+numRecords = 750;
 numLeads = 1;
-leadNames = {'lead'};
+leadNames = {'lead_ii', 'lead_avr'};
 
 numCharacteristics = 38;
 
