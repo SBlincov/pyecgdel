@@ -1,6 +1,7 @@
 class TDefaultParams:
 
     WDC_SCALE_ID = 4
+
     ALPHA_MM_WINDOW = 0.15
     ALPHA_BEGIN_SHIFT = 0.05
     ALPHA_QRS_BTW = 0.15
@@ -24,6 +25,5 @@ class TDefaultParams:
     BETA_SCALE = 3
     BETA_PEAK_ZC_AMPL = 0.7
 
-    MUTABILITY_PERCENTAGE = 0.3
 
 

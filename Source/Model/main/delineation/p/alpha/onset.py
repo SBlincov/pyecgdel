@@ -28,7 +28,7 @@ def define_p_onset_index(ecg_lead, delineation, zcs, left_peak_zc_id, begin_inde
         searching_onset_left_border_index = begin_index
 
     current_mm = find_left_mm(zcs[left_peak_zc_id].index, wdc)
-    onset_mm_candidate_coeff = abs(current_mm.value) * float(PParams['ONSET_MM_COEFF'])
+    onset_mm_candidate_coeff = abs(current_mm.value) * float(PParams['ALPHA_ONSET_MM'])
 
     mm_list = []
     while current_mm.index > searching_onset_left_border_index:
@@ -47,7 +47,7 @@ def define_p_onset_index(ecg_lead, delineation, zcs, left_peak_zc_id, begin_inde
                 correct_onset_mm_id = onset_mm_id
 
     onset_start_searching_index = mm_list[correct_onset_mm_id].index
-    threshold = mm_list[correct_onset_mm_id].value * float(PParams['ONSET_OFFSET_THRESHOLD'])
+    threshold = mm_list[correct_onset_mm_id].value * float(PParams['ALPHA_ONSET_OFFSET_THR'])
 
     onset_index_candidate_1 = find_left_thc_index(wdc, onset_start_searching_index, begin_index, threshold)
     onset_index_candidate_2 = find_left_mm(onset_start_searching_index - 1, wdc).index

@@ -160,12 +160,10 @@ def multi_lead_processing(leads):
                             borders_counts.insert(argmin + 1, 1)
                         else:
                             del_candidates.append([lead_id, argmin])
-                            # raise Exception("Wrong left and right diffs")
 
                 else:
 
                     warnings.warn("Onset and offset out of correspondence", UserWarning)
-                    # raise Exception("Onset and offset out of correspondence")
 
     corr_mtx = get_com_matrix(leads, borders_counts, ons_sum, offs_sum, del_candidates)
 

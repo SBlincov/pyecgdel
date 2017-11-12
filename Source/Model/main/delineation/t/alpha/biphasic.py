@@ -23,7 +23,6 @@ def check_left_biphasic_t(triplet, ecg_lead, qrs_id, zcs, delineation):
         if prev_zc.mm_amplitude > amplitude * float(TParams['ALPHA_BIPHASE_AMPL_LEFT']) \
                 and distance_between_zcs(zcs, prev_zc_id, left_peak_zc_id) < rr * float(TParams['ALPHA_BIPHASE_AMPL_SHIFT']):
             delineation.specification = WaveSpecification.biphasic
-            # delineation.special_points_indexes.append(prev_zc.index)
 
             triplet.left_zc_id = prev_zc_id
 
@@ -48,6 +47,5 @@ def check_right_biphasic_t(triplet, ecg_lead, qrs_id, zcs, delineation):
         if next_zc.mm_amplitude > amplitude * float(TParams['ALPHA_BIPHASE_AMPL_RIGHT']) \
                 and distance_between_zcs(zcs, right_peak_zc_id, next_zc_id) < rr * float(TParams['ALPHA_BIPHASE_AMPL_SHIFT']):
             delineation.specification = WaveSpecification.biphasic
-            # delineation.special_points_indexes.append(next_zc.index)
 
             triplet.right_zc_id = next_zc_id
