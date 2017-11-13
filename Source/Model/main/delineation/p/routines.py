@@ -16,7 +16,6 @@ class InvalidPProcessing(Exception):
 
 
 def get_p_wdc_scale_id(ecg_lead):
-
     num_wdc_scales = len(ecg_lead.wdc)
 
     wdc_scale_id = int(PParams['WDC_SCALE_ID'])
@@ -35,8 +34,8 @@ def get_window(ecg_lead, qrs_id):
 
     qrs_gap = qrs_dels[qrs_id].onset_index - qrs_dels[qrs_id - 1].offset_index
 
-    window_candidate_1 = int(qrs_gap * float(PParams['BEGIN_QRS_GAP_PROPORTION']))
-    window_candidate_2 = int(rate * float(PParams['ZCS_SEARCHING_WINDOW']))
+    window_candidate_1 = int(qrs_gap * float(PParams['ALPHA_ZCS_QRS_GAP']))
+    window_candidate_2 = int(rate * float(PParams['ALPHA_ZCS_WINDOW']))
 
     window = min(window_candidate_1, window_candidate_2)
 

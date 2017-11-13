@@ -1,7 +1,7 @@
 from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 
-DBConfig.name = 'physionet2015'
+DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -17,7 +17,7 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
-record_id = 50
+record_id = 3147
 
 record_name = "record_" + str(record_id)
 
@@ -33,6 +33,7 @@ ecg.save_local(ECGDataDetails.qrs_morphology)
 ecg.save_local(ECGDataDetails.t_delineation)
 ecg.save_local(ECGDataDetails.t_morphology)
 ecg.save_local(ECGDataDetails.p_delineation)
+ecg.save_local(ECGDataDetails.p_morphology)
 
 ecg.adaptive_filtration()
 ecg.save_local(ECGDataDetails.adaptive_filtrated)

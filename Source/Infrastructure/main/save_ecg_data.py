@@ -93,6 +93,16 @@ def save_data_local(ecg, details):
 
             np.savetxt(data_file_name, morphology_info, fmt=fmt)
 
+        elif details is ECGDataDetails.t_delineation:
+            delineation_info = []
+            for delineation in ecg.leads[lead_id].t_dels:
+                delineation_info.append([delineation.onset_index,
+                                         delineation.peak_index,
+                                         delineation.offset_index,
+                                         delineation.specification.value])
+
+            np.savetxt(data_file_name, delineation_info, fmt='%d')
+
         elif details is ECGDataDetails.t_morphology:
 
             del_ids = []
@@ -152,15 +162,56 @@ def save_data_local(ecg, details):
 
             np.savetxt(data_file_name, delineation_info, fmt='%d')
 
-        elif details is ECGDataDetails.t_delineation:
-            delineation_info = []
-            for delineation in ecg.leads[lead_id].t_dels:
-                delineation_info.append([delineation.onset_index,
-                                         delineation.peak_index,
-                                         delineation.offset_index,
-                                         delineation.specification.value])
+        elif details is ECGDataDetails.p_morphology:
 
-            np.savetxt(data_file_name, delineation_info, fmt='%d')
+            del_ids = []
+            names = []
+            indexes = []
+            values = []
+            signs = []
+            degrees = []
+            branch_ids_0 = []
+            branch_ids_1 = []
+
+            for morph in ecg.leads[lead_id].p_morphs:
+
+                del_id = morph.del_id
+                branch_id = morph.branch_id
+                degree_id = morph.degree
+
+                for point in morph.points:
+                    name = str(point.name)
+                    index = point.index
+                    value = point.value
+                    sign = int(point.sign)
+                    degree = int(degree_id)
+
+                    del_ids.append(del_id)
+                    names.append(name)
+                    indexes.append(index)
+                    values.append(value)
+                    signs.append(sign)
+                    degrees.append(degree)
+                    branch_ids_0.append(branch_id[0])
+                    branch_ids_1.append(branch_id[1])
+
+            morphology_info = np.zeros(len(del_ids),
+                                       dtype=[('var1', int), ('var2', 'U50'), ('var3', int), ('var4', float),
+                                              ('var5', int), ('var6', int), ('var7', int), ('var8', int)])
+            fmt = "%d %s %d %8e %d %d %d %d"
+
+            morphology_info['var1'] = del_ids
+            morphology_info['var2'] = names
+            morphology_info['var3'] = indexes
+            morphology_info['var4'] = values
+            morphology_info['var5'] = signs
+            morphology_info['var6'] = degrees
+            morphology_info['var7'] = branch_ids_0
+            morphology_info['var8'] = branch_ids_1
+
+            np.savetxt(data_file_name, morphology_info, fmt=fmt)
+
+
 
         elif details is ECGDataDetails.characteristics:
             characteristics = ecg.leads[lead_id].chars
