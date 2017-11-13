@@ -102,6 +102,6 @@ class ECGLead:
         num_t_dels = len(self.t_dels)
         num_p_dels = len(self.p_dels)
 
-        print(str(self.name) + "QRS: " + str(num_qrs_dels) + " T: " + str(num_t_dels) + " P: " + str(num_p_dels))
+        print(str(self.name) + ": \t QRS: " + str(num_qrs_dels) + " T: " + str(num_t_dels) + " P: " + str(num_p_dels))
 
 

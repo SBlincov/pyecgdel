@@ -1,6 +1,6 @@
 from Source.Model.main.delineation.wave_delineation import WaveSpecification
 from Source.Model.main.params.t import TParams
-from Source.Model.main.delineation.t.zcs import is_next_zc_exist, is_prev_zc_exist, distance_between_zcs
+from Source.Model.main.delineation.peaks_zcs_ids import is_next_zc_exist, is_prev_zc_exist, distance_between_zcs
 
 
 def check_left_biphasic_t(triplet, ecg_lead, qrs_id, zcs, delineation):

@@ -30,6 +30,8 @@ class PDefaultParams:
     LEGACY_FIB_NUM_ZCS = 4
     LEGACY_FIB_STD = 0.15
 
+    BETA_SCALE = 3
+    BETA_PEAK_ZC_AMPL = 0.7
 
 
 

@@ -31,6 +31,7 @@ PParams['ALPHA_ONSET_OFFSET_THR'] = PDefaultParams.ALPHA_ONSET_OFFSET_THR
 PParams['LEGACY_FIB_NUM_ZCS'] = PDefaultParams.LEGACY_FIB_NUM_ZCS
 PParams['LEGACY_FIB_STD'] = PDefaultParams.LEGACY_FIB_STD
 
-
+PParams['BETA_SCALE'] = PDefaultParams.BETA_SCALE
+PParams['BETA_PEAK_ZC_AMPL'] = PDefaultParams.BETA_PEAK_ZC_AMPL
 
 
