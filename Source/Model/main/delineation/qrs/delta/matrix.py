@@ -14,6 +14,7 @@ def get_com_matrix(leads, borders_counts, ons_sum, offs_sum, del_candidates):
     for lead_id in range(0, num_leads):
 
         lead = leads[lead_id]
+
         dels = lead.qrs_dels
 
         len_of_dels.append(len(dels))

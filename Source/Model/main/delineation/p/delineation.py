@@ -6,11 +6,17 @@
 """
 
 from Source.Model.main.delineation.wave_delineation import WaveSpecification
-from Source.Model.main.delineation.p.alpha.alpha import get_p_del
-from Source.Model.main.delineation.p.beta.beta import get_p_morph
+from Source.Model.main.delineation.p.beta.beta import get_p_del
+from Source.Model.main.delineation.p.gamma.gamma import get_p_morph
 
 
 def get_p_dels(ecg_lead):
+
+    """
+        Process P delineation
+        :param ecg_lead: certain ECG lead
+        :return (dels, morphs): - pair of delineation and morphology instances
+    """
 
     dels = []
     morphs = []

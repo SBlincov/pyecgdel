@@ -6,9 +6,9 @@
     qrs_id - индекс текущего комплекса QRS.
 """
 
-from Source.Model.main.params.p import *
-from Source.Model.main.modulus_maxima.routines import *
-from Source.Model.main.threshold_crossings.routines import *
+from Source.Model.main.params.p import PParams
+from Source.Model.main.modulus_maxima.routines import find_left_mm, find_right_mm
+from Source.Model.main.threshold_crossings.routines import find_left_thc_index, find_right_thc_index
 
 
 class InvalidPProcessing(Exception):
@@ -16,6 +16,13 @@ class InvalidPProcessing(Exception):
 
 
 def get_p_wdc_scale_id(ecg_lead):
+
+    """
+        Define WDC scale id for P delineation
+        :param ecg_lead: certain ECG lead
+        :return wdc_scale_id: WDC scale id for P delineation
+    """
+
     num_wdc_scales = len(ecg_lead.wdc)
 
     wdc_scale_id = int(PParams['WDC_SCALE_ID'])
@@ -27,6 +34,13 @@ def get_p_wdc_scale_id(ecg_lead):
 
 
 def get_window(ecg_lead, qrs_id):
+
+    """
+        Define searching window for P delineation
+        :param ecg_lead: certain ECG lead
+        :param qrs_id: id of QRS, to the left of which we delineate P
+        :return window: window of P delineation
+    """
 
     rate = ecg_lead.rate
 
@@ -60,6 +74,13 @@ def get_window(ecg_lead, qrs_id):
 
 def get_p_begin_index(ecg_lead, qrs_id):
 
+    """
+        Define begin index for P delineation
+        :param ecg_lead: certain ECG lead
+        :param qrs_id: id of QRS, to the left of which we delineate P
+        :return begin_index: begin index for P delineation
+    """
+
     qrs_dels = ecg_lead.qrs_dels
 
     window = get_window(ecg_lead, qrs_id)
@@ -69,6 +90,13 @@ def get_p_begin_index(ecg_lead, qrs_id):
 
 
 def get_p_end_index(ecg_lead, qrs_id):
+
+    """
+        Define end index for P delineation
+        :param ecg_lead: certain ECG lead
+        :param qrs_id: id of QRS, to the left of which we delineate P
+        :return end_index: end index for P delineation
+    """
 
     qrs_dels = ecg_lead.qrs_dels
     wdc_scale_id = get_p_wdc_scale_id(ecg_lead)
