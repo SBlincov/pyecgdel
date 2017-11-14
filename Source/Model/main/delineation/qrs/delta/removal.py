@@ -9,7 +9,7 @@ def remove_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates):
 
             if [lead_id, count_id] in del_candidates:
 
-                remove_del_candidate(lead, corr_mtx, lead_id, count_id)
+                remove_del_candidate(leads, corr_mtx, lead_id, count_id)
 
             for morph_id in range(0, len(lead.qrs_morphs)):
                 if lead.qrs_morphs[morph_id].del_id == corr_mtx[lead_id][count_id]:
@@ -18,7 +18,7 @@ def remove_complex(leads, corr_mtx, count_id, qrs_del_extra, del_candidates):
                     break
 
 
-def remove_del_candidate(lead, corr_mtx, lead_id, count_id):
+def remove_del_candidate(leads, corr_mtx, lead_id, count_id):
 
     i = -1
     index = -1
@@ -26,5 +26,5 @@ def remove_del_candidate(lead, corr_mtx, lead_id, count_id):
         i += 1
         index = corr_mtx[lead_id][count_id - i]
 
-    lead.qrs_dels.pop(index + i)
-    lead.qrs_morphs.pop(index + i)
+    leads[lead_id].qrs_dels.pop(index + i)
+    leads[lead_id].qrs_morphs.pop(index + i)

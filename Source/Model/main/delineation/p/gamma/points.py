@@ -1,7 +1,7 @@
-from Source.Model.main.delineation.p.beta.peak import peak_processing
-from Source.Model.main.delineation.p.beta.xtd import xtd_processing
-from Source.Model.main.delineation.p.beta.onset import onset_processing
-from Source.Model.main.delineation.p.beta.offset import offset_processing
+from Source.Model.main.delineation.p.gamma.peak import peak_processing
+from Source.Model.main.delineation.p.gamma.xtd import xtd_processing
+from Source.Model.main.delineation.p.gamma.onset import onset_processing
+from Source.Model.main.delineation.p.gamma.offset import offset_processing
 from Source.Model.main.delineation.morfology_point import WaveSign, PointName, Point
 
 

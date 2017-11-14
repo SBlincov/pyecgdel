@@ -1,65 +1,75 @@
-from Source.Model.main.delineation.morfology_point import Degree
-from Source.Model.main.delineation.p.routines import get_p_wdc_scale_id
-from Source.Model.main.delineation.p.beta.data import PMorphologyData
+from Source.Model.main.delineation.peaks_zcs_ids import PeakZCsIds
+from Source.Model.main.delineation.p.beta.peak import get_p_peak_zc_id, is_p_peak_zc_candidate_exist, is_small_p
+from Source.Model.main.delineation.p.beta.flexure import check_flexure_p
+from Source.Model.main.delineation.p.beta.biphasic import check_left_biphasic_p, check_right_biphasic_p
+from Source.Model.main.delineation.p.beta.onset import define_p_onset_index
+from Source.Model.main.delineation.p.beta.offset import define_p_offset_index
+from Source.Model.main.delineation.p.beta.legacy import check_for_atrial_fibrillation
+from Source.Model.main.delineation.p.routines import get_p_begin_index, get_p_end_index
+from Source.Model.main.delineation.p.zcs import get_p_zcs
+from Source.Model.main.delineation.wave_delineation import WaveDelineation, WaveSpecification
+from Source.Model.main.delineation.p.routines import get_window
+
 from Source.Model.main.params.p import PParams
-from Source.Model.main.delineation.wave_delineation import *
-from Source.Model.main.delineation.p.beta.points import *
 
 
-def get_p_morph(ecg_lead, del_id, delineation):
+def get_p_del(ecg_lead, qrs_id):
 
-    main_scale_id = get_p_wdc_scale_id(ecg_lead)
-    aux_scale_id = int(PParams['BETA_SCALE'])
+    delineation = WaveDelineation()
 
-    p_morph_data_main = PMorphologyData(ecg_lead, delineation, main_scale_id)
-    p_morph_data_aux = PMorphologyData(ecg_lead, delineation, aux_scale_id)
+    if ecg_lead.qrs_dels[qrs_id].specification is WaveSpecification.extra:
+        return delineation
 
-    if hasattr(p_morph_data_main, 'zcs'):
-        num_zcs_main = len(p_morph_data_main.zcs)
-    else:
-        num_zcs_main = 0
+    rate = ecg_lead.rate
 
-    degree = Degree.unknown
+    mm_window = int(float(PParams['ALPHA_MM_WINDOW']) * rate)
 
-    # In the case of adequate data
-    if p_morph_data_aux.correct == 1:
+    zcs = get_p_zcs(ecg_lead, qrs_id, mm_window)
 
-        zcs = p_morph_data_aux.zcs
-        p_zc_id = p_morph_data_aux.peak_zc_id
+    if not zcs:
+        return delineation
 
-        # Check: how many big zcs in delineation
-        zc_ampl_th = zcs[p_zc_id].mm_amplitude * float(PParams['BETA_PEAK_ZC_AMPL'])
-        big_zcs_ids = []
-        for zc_id in range(0, len(zcs)):
-            if zcs[zc_id].mm_amplitude > zc_ampl_th:
-                big_zcs_ids.append(zc_id)
+    if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['ALPHA_RIGHT_MM_DIST']) * rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['ALPHA_OFFSET_MM_SHARP'])):
+        zcs.pop(-1)
 
-        num_big_zcs = len(big_zcs_ids)
+    if not zcs:
+        return delineation
 
-        # Checking degree
-        if num_zcs_main > 2:
-            degree = Degree.unknown
-        else:
-            if num_big_zcs == num_zcs_main:
-                degree = Degree.satisfyingly
-            elif num_big_zcs == num_zcs_main + 1:
-                degree = Degree.doubtfully
-            else:
-                degree = Degree.unknown
+    if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['ALPHA_LEFT_MM_DIST']) * rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['ALPHA_ONSET_MM_SHARP'])):
+        zcs.pop(0)
 
-        # Getting points
-        points = points_processing(ecg_lead, delineation, p_morph_data_aux)
+    if not zcs:
+        return delineation
 
-    else:
-        # Getting points
-        if p_morph_data_main.correct:
-            points = points_processing(ecg_lead, delineation, p_morph_data_main)
-        else:
-            points = points_processing_trivial(ecg_lead, delineation)
+    window = get_window(ecg_lead, qrs_id)
+    begin_index = get_p_begin_index(ecg_lead, qrs_id)
+    end_index = get_p_end_index(ecg_lead, qrs_id)
 
-    branch_id = [0, 0]
+    if window < int(float(PParams['ALPHA_PEAK_BEGIN_SHIFT']) * rate):
+        return delineation
 
-    morphology = Morphology(del_id, points, degree, branch_id)
+    if not is_p_peak_zc_candidate_exist(ecg_lead, qrs_id, zcs):
+        return delineation
 
-    return morphology
+    peak_zc_id = get_p_peak_zc_id(ecg_lead, qrs_id, zcs)
 
+    if is_small_p(ecg_lead, qrs_id, zcs, peak_zc_id):
+        return delineation
+
+    peak_zc = zcs[peak_zc_id]
+    peak_index = peak_zc.index
+    delineation.peak_index = peak_index
+    delineation.specification = WaveSpecification.exist
+
+    peak_zcs_ids = PeakZCsIds(peak_zc_id, peak_zc_id, peak_zc_id)
+
+    check_flexure_p(peak_zcs_ids, ecg_lead, qrs_id, zcs, delineation)
+
+    check_left_biphasic_p(peak_zcs_ids, ecg_lead, zcs, delineation)
+
+    define_p_onset_index(ecg_lead, delineation, zcs, peak_zcs_ids.left_zc_id, begin_index)
+    define_p_offset_index(ecg_lead, delineation, zcs, peak_zcs_ids.right_zc_id, end_index)
+
+    check_for_atrial_fibrillation(delineation, zcs)
+
+    return delineation

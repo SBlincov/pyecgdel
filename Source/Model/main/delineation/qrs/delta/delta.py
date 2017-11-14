@@ -20,6 +20,7 @@ def multi_lead_processing(leads):
     for lead_id in range(0, num_leads):
 
         lead = leads[lead_id]
+
         dels = lead.qrs_dels
 
         len_of_dels.append(len(dels))
@@ -44,7 +45,7 @@ def multi_lead_processing(leads):
     # Computing global mean QRS length
     mean_qrs_global = np.mean(np.asarray(mean_qrs))
 
-    diff_corr = mean_qrs_global * float(QRSParams['DELTA_MEAN_QRS_DIFF_CORR'])
+    # Computing params, which scales from mean QRS length
     loc = mean_qrs_global * float(QRSParams['DELTA_MEAN_QRS_LOC'])
 
     # Computing lead id with maximum number of dels
@@ -52,25 +53,18 @@ def multi_lead_processing(leads):
     if max_dels_lead_id.size > 1:
         max_dels_lead_id = max_dels_lead_id[0]
 
-    # Creating array with all complexes:
-    #   sum of values
-    #   occurrence rate
-
-    ons_sum = []
-    offs_sum = []
-
-    for on_id in range(0, len(ons[max_dels_lead_id])):
-        ons_sum.append(ons[max_dels_lead_id][on_id])
-
-    for off_id in range(0, len(offs[max_dels_lead_id])):
-        offs_sum.append(offs[max_dels_lead_id][off_id])
-
-    borders_counts = []
-    for bord_id in range(0, len(ons_sum)):
+    # Creating arrays with all complexes:
+    ons_sum = []        # sum of onset values
+    offs_sum = []       # sum of offset values
+    borders_counts = [] # occurrence rate
+    for del_id in range(0, len_of_dels[max_dels_lead_id]):
+        ons_sum.append(ons[max_dels_lead_id][del_id])
+        offs_sum.append(offs[max_dels_lead_id][del_id])
         borders_counts.append(1)
 
-    del_candidates = []
+    del_candidates = [] # array with special candidates for deletion
 
+    # Filling arrays with all complexes:
     for lead_id in range(0, num_leads):
 
         # For all leads except init lead
@@ -81,25 +75,29 @@ def multi_lead_processing(leads):
 
             for del_id in range(0, len_of_dels[lead_id]):
 
-                curr_num_global = len(borders_counts)
+                curr_num_global = len(borders_counts) # Current number of global complexes
 
-                on_diffs = []
-                off_diffs = []
-                for g_del_id in range(0, curr_num_global):
-                    on_diffs.append(ons_lead[del_id] - ons_sum[g_del_id] / borders_counts[g_del_id])
-                    off_diffs.append(offs_lead[del_id] - offs_sum[g_del_id] / borders_counts[g_del_id])
+                on_diffs = []   # Differences between current onset and all global onsets (averaged)
+                off_diffs = []  # Differences between current offset and all global offsets (averaged)
+                for global_id in range(0, curr_num_global):
+                    on_diffs.append(ons_lead[del_id] - ons_sum[global_id] / borders_counts[global_id])
+                    off_diffs.append(offs_lead[del_id] - offs_sum[global_id] / borders_counts[global_id])
 
+                # Finding global onset closest to current onset
                 on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))
                 if on_argmin.size > 1:
                     on_argmin = on_argmin[0]
                 on_min = on_diffs[on_argmin]
 
+                # Finding global offset closest to current offset
                 off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
                 if off_argmin.size > 1:
                     off_argmin = off_argmin[0]
                 off_min = off_diffs[off_argmin]
 
-                # Additional checking of argmins
+                # Additional checking:
+                #   If global closest onset and offset correspond to the neighbour (not the same) complexes, we check:
+                #       What provides smaller difference?
                 if abs(on_argmin - off_argmin) == 1:
 
                     on_diff_own = on_diffs[on_argmin]
@@ -108,47 +106,34 @@ def multi_lead_processing(leads):
                     off_diff_own = off_diffs[off_argmin]
                     off_diff_der = off_diffs[on_argmin]
 
-                    on_diff_diff_abs = abs(abs(on_diff_own) - abs(on_diff_der))
-                    off_diff_diff_abs = abs(abs(off_diff_own) - abs(off_diff_der))
+                    total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
 
-                    if (on_diff_diff_abs < off_diff_diff_abs) and (on_diff_diff_abs < diff_corr):
-
-                        on_argmin = off_argmin
-                        on_min = on_diffs[on_argmin]
-
-                    elif (off_diff_diff_abs < on_diff_diff_abs) and (off_diff_diff_abs < diff_corr):
+                    if total_min == abs(on_diff_own) or total_min == abs(off_diff_der):
 
                         off_argmin = on_argmin
                         off_min = off_diffs[off_argmin]
 
                     else:
 
-                        total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
+                        on_argmin = off_argmin
+                        on_min = on_diffs[on_argmin]
 
-                        if total_min == abs(on_diff_own) or total_min == abs(off_diff_own):
-
-                            on_argmin = off_argmin
-                            on_min = on_diffs[on_argmin]
-
-                        else:
-
-                            off_argmin = on_argmin
-                            off_min = off_diffs[off_argmin]
-
+                # Calculate current optimal onset and offset
                 on_curr = ons_sum[on_argmin] / borders_counts[on_argmin] + on_diffs[on_argmin]
                 off_curr = offs_sum[off_argmin] / borders_counts[off_argmin] + off_diffs[off_argmin]
 
+                # If global closest onset and offset correspond to the same complexes
                 if on_argmin == off_argmin:
 
                     argmin = on_argmin
 
-                    if (abs(on_min) < loc) or (abs(off_min) < loc):
+                    if (abs(on_min) < loc) or (abs(off_min) < loc): # Global complex already exist
 
                         ons_sum[argmin] += on_curr
                         offs_sum[argmin] += off_curr
                         borders_counts[argmin] += 1
 
-                    else:
+                    else: # Need to insert additional global complex or delete special unique complex
 
                         if (on_diffs[argmin] < 0.0) and (off_diffs[argmin] < 0.0):
                             ons_sum.insert(argmin, on_curr)
