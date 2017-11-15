@@ -52,5 +52,6 @@ class QRSDefaultParams:
     DELTA_MIN_QRS_FOUND = 0.5
     DELTA_MAX_QRS_LOST = 0.3
 
+    EXTRA_BEAT_PART = 0.7
 
 

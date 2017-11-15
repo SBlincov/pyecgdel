@@ -95,51 +95,18 @@ class AllLeadsData:
                         on_diffs.append(ons_lead[del_id] - ons_sum[global_id] / borders_counts[global_id])
                         off_diffs.append(offs_lead[del_id] - offs_sum[global_id] / borders_counts[global_id])
 
-                    # Finding global onset closest to current onset
-                    on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))
-                    if on_argmin.size > 1:
-                        on_argmin = on_argmin[0]
-                    on_min = on_diffs[on_argmin]
-
-                    # Finding global offset closest to current offset
-                    off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
-                    if off_argmin.size > 1:
-                        off_argmin = off_argmin[0]
-                    off_min = off_diffs[off_argmin]
-
-                    # Additional checking:
-                    #   If global closest onset and offset correspond to the neighbour (not the same) complexes, we check:
-                    #       What provides smaller difference?
-                    if abs(on_argmin - off_argmin) == 1:
-
-                        on_diff_own = on_diffs[on_argmin]
-                        on_diff_der = on_diffs[off_argmin]
-
-                        off_diff_own = off_diffs[off_argmin]
-                        off_diff_der = off_diffs[on_argmin]
-
-                        total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
-
-                        if total_min == abs(on_diff_own) or total_min == abs(off_diff_der):
-
-                            off_argmin = on_argmin
-                            off_min = off_diffs[off_argmin]
-
-                        else:
-
-                            on_argmin = off_argmin
-                            on_min = on_diffs[on_argmin]
+                    min_data = MinData(on_diffs, off_diffs)
 
                     # Calculate current optimal onset and offset
-                    on_curr = ons_sum[on_argmin] / borders_counts[on_argmin] + on_diffs[on_argmin]
-                    off_curr = offs_sum[off_argmin] / borders_counts[off_argmin] + off_diffs[off_argmin]
+                    on_curr = ons_sum[min_data.on_argmin] / borders_counts[min_data.on_argmin] + on_diffs[min_data.on_argmin]
+                    off_curr = offs_sum[min_data.off_argmin] / borders_counts[min_data.off_argmin] + off_diffs[min_data.off_argmin]
 
                     # If global closest onset and offset correspond to the same complexes
-                    if on_argmin == off_argmin:
+                    if min_data.on_argmin == min_data.off_argmin:
 
-                        argmin = on_argmin
+                        argmin = min_data.on_argmin
 
-                        if (abs(on_min) < loc) or (abs(off_min) < loc):  # Global complex already exist
+                        if (abs(min_data.on_min) < loc) or (abs(min_data.off_min) < loc):  # Global complex already exist
 
                             ons_sum[argmin] += on_curr
                             offs_sum[argmin] += off_curr
@@ -156,7 +123,7 @@ class AllLeadsData:
                                 offs_sum.insert(argmin + 1, off_curr)
                                 borders_counts.insert(argmin + 1, 1)
                             else:
-                                del_candidates.append([lead_id, argmin])
+                                del_candidates.append([lead_id, del_id])
 
                     else:
 
@@ -166,3 +133,51 @@ class AllLeadsData:
         self.offs_sum = offs_sum
         self.borders_counts = borders_counts
         self.del_candidates = del_candidates
+
+
+class MinData:
+
+    def __init__(self, on_diffs, off_diffs):
+
+        # Finding global onset closest to current onset
+        on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))
+        if on_argmin.size > 1:
+            on_argmin = on_argmin[0]
+        on_min = on_diffs[on_argmin]
+
+        # Finding global offset closest to current offset
+        off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
+        if off_argmin.size > 1:
+            off_argmin = off_argmin[0]
+        off_min = off_diffs[off_argmin]
+
+        # Additional checking:
+        #   If global closest onset and offset correspond to the neighbour (not the same) complexes, we check:
+        #       What provides smaller difference?
+        if abs(on_argmin - off_argmin) == 1:
+
+            on_diff_own = on_diffs[on_argmin]
+            on_diff_der = on_diffs[off_argmin]
+
+            off_diff_own = off_diffs[off_argmin]
+            off_diff_der = off_diffs[on_argmin]
+
+            total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
+
+            if total_min == abs(on_diff_own) or total_min == abs(off_diff_der):
+
+                off_argmin = on_argmin
+                off_min = off_diffs[off_argmin]
+
+            else:
+
+                on_argmin = off_argmin
+                on_min = on_diffs[on_argmin]
+
+        self.on_argmin = on_argmin
+        self.on_min = on_min
+        self.off_argmin = off_argmin
+        self.off_min = off_min
+
+
+
