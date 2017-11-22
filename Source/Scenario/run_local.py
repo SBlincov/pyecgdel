@@ -2,7 +2,7 @@ from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 
 
-DBConfig.name = 'physionet2015'
+DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -37,6 +37,7 @@ for record_name in records_names:
     ecg.save_local(ECGDataDetails.t_delineation)
     ecg.save_local(ECGDataDetails.t_morphology)
     ecg.save_local(ECGDataDetails.p_delineation)
+    ecg.save_local(ECGDataDetails.p_morphology)
 
     ecg.adaptive_filtration()
     ecg.save_local(ECGDataDetails.adaptive_filtrated)
