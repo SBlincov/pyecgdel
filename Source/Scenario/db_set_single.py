@@ -19,6 +19,8 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
+record_name = "record_1092492334"
+
 cb = Cardiobase()
 cb.connect()
 
@@ -38,8 +40,6 @@ for lead_name in leads_names:
     columns_names.append("json_" + lead_name + "_t_morphology")
 
     columns_names.append("json_" + lead_name + "_characteristics")
-
-record_name = 'record_50376386'
 
 d = {}
 local_path = DBConfig.get_db_path() + "\\" + record_name + "\\"
@@ -102,7 +102,14 @@ if file_id is not -1:
                 ch_values.append(None)
         d["json_lead_" + lead + "_characteristics"] = [(file_id, [ch_names, ch_values])]
 
-        d["json_lead_" + lead + "_p_morphology"] = [(file_id, [])]
+        p_morphs_path = local_path + '/lead_' + lead + '/p_morphology.txt'
+        lines = [line.rstrip('\n') for line in open(p_morphs_path)]
+        p_records = []
+        for line in lines:
+            p_m = line.split()
+            p_records.append(p_m[0:5])
+
+        d["json_lead_" + lead + "_p_morphology"] = [(file_id, p_records)]
 
         qrs_morphs_path = local_path + '/lead_' + lead + '/qrs_morphology.txt'
         lines = [line.rstrip('\n') for line in open(qrs_morphs_path)]
