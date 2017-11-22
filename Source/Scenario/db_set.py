@@ -3,7 +3,7 @@ import sys
 from Source.Model.main.ecg.ecg import *
 from Source.CardioBase.cardiobase import Cardiobase
 
-DBConfig.name = 'shiller_add'
+DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -110,7 +110,14 @@ for record_name in records_names:
                     ch_values.append(None)
             d["json_lead_" + lead + "_characteristics"] = [(file_id, [ch_names, ch_values])]
 
-            d["json_lead_" + lead + "_p_morphology"] = [(file_id, [])]
+            p_morphs_path = local_path + '/lead_' + lead + '/p_morphology.txt'
+            lines = [line.rstrip('\n') for line in open(p_morphs_path)]
+            p_records = []
+            for line in lines:
+                p_m = line.split()
+                p_records.append(p_m[0:5])
+
+            d["json_lead_" + lead + "_p_morphology"] = [(file_id, p_records)]
 
             qrs_morphs_path = local_path + '/lead_' + lead + '/qrs_morphology.txt'
             lines = [line.rstrip('\n') for line in open(qrs_morphs_path)]
