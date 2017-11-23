@@ -25,9 +25,9 @@ class PointName(Enum):
     t_peak = "t_peak"
     t_offset = "t_offset"
 
-    p_onset = "t_onset"
-    p_peak = "t_peak"
-    p_offset = "t_offset"
+    p_onset = "p_onset"
+    p_peak = "p_peak"
+    p_offset = "p_offset"
 
     xtd_point = "xtd_point"
 

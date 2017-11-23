@@ -26,6 +26,10 @@ leads_names = ConfigParams['LEADS_NAMES']
 
 columns_names = []
 
+limit = 100
+
+curr_val = 0
+
 for lead_name in leads_names:
     columns_names.append("json_" + lead_name + "_filtrated")
 
@@ -48,6 +52,13 @@ for record_name in os.listdir(DBConfig.get_db_path()):
 num_records = len(records_names)
 
 for record_name in records_names:
+
+    curr_val = curr_val + 1
+
+    if curr_val == limit:
+        cb.disconnect()
+        cb.connect()
+        curr_val = 0
 
     d = {}
     local_path = DBConfig.get_db_path() + "\\" + record_name + "\\"
@@ -141,3 +152,5 @@ for record_name in records_names:
         cb.commit()
         print("\n")
         print("\n")
+
+cb.disconnect()

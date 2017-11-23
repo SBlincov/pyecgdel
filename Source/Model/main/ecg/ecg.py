@@ -218,6 +218,19 @@ class ECG:
 
         for lead_id in range(0, len(self.leads)):
 
+            column_name = "json_" + self.leads[lead_id].name + "_p_morphology"
+            p_morphs_data = []
+            for morphology in self.leads[lead_id].p_morphs:
+                for morphology_point in morphology.points:
+                    p_morphs_data.append([int(morphology.del_id),
+                                          str(morphology_point.name),
+                                          int(morphology_point.index),
+                                          float(morphology_point.value),
+                                          int(morphology_point.sign)])
+
+            data_dict[column_name] = [(id_file, p_morphs_data)]
+            columns_names.append(column_name)
+
             column_name = "json_" + self.leads[lead_id].name + "_qrs_morphology"
             qrs_morphs_data = []
             for morphology in self.leads[lead_id].qrs_morphs:
@@ -229,6 +242,19 @@ class ECG:
                                             int(morphology_point.sign)])
 
             data_dict[column_name] = [(id_file, qrs_morphs_data)]
+            columns_names.append(column_name)
+
+            column_name = "json_" + self.leads[lead_id].name + "_t_morphology"
+            t_morphs_data = []
+            for morphology in self.leads[lead_id].t_morphs:
+                for morphology_point in morphology.points:
+                    t_morphs_data.append([int(morphology.del_id),
+                                          str(morphology_point.name),
+                                          int(morphology_point.index),
+                                          float(morphology_point.value),
+                                          int(morphology_point.sign)])
+
+            data_dict[column_name] = [(id_file, t_morphs_data)]
             columns_names.append(column_name)
 
     def characteristics(self):
