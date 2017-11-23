@@ -90,6 +90,24 @@ class ECGLead:
         self.p_dels = cur_p_dels_seq
         self.p_morphs = cur_p_morph_seq
 
+    def del_correction(self):
+        filter = self.filter
+
+        qrs_morphs = self.qrs_morphs
+        for qrs_morph in qrs_morphs:
+            for point in qrs_morph.points:
+                point.value = filter[point.index]
+
+        t_morphs = self.t_morphs
+        for t_morph in t_morphs:
+            for point in t_morph.points:
+                point.value = filter[point.index]
+
+        p_morphs = self.p_morphs
+        for p_morph in p_morphs:
+            for point in p_morph.points:
+                point.value = filter[point.index]
+
     def calc_characteristics(self):
         qrs_chars = get_qrs_chars(self)
         p_chars = get_p_chars(self)
