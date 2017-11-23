@@ -32,15 +32,19 @@ for record_name in records_names:
     ecg.dwt()
     ecg.save_local(ECGDataDetails.wdc)
     ecg.delineation()
+    ecg.adaptive_filtration()
+    ecg.del_correction()
+    ecg.characteristics()
+
     ecg.save_local(ECGDataDetails.qrs_delineation)
     ecg.save_local(ECGDataDetails.qrs_morphology)
+
     ecg.save_local(ECGDataDetails.t_delineation)
     ecg.save_local(ECGDataDetails.t_morphology)
+
     ecg.save_local(ECGDataDetails.p_delineation)
     ecg.save_local(ECGDataDetails.p_morphology)
 
-    ecg.adaptive_filtration()
     ecg.save_local(ECGDataDetails.adaptive_filtrated)
 
-    ecg.characteristics()
     ecg.save_local(ECGDataDetails.characteristics)

@@ -116,6 +116,15 @@ class ECG:
         print("ECG delineation complete")
         print("")
 
+    def del_correction(self):
+        print("ECG del correction ...")
+
+        for lead_id in range(0, len(self.leads)):
+            self.leads[lead_id].del_correction()
+
+        print("ECG del correction complete")
+        print("")
+
     def add_origin_data_to_dict(self, data_dict, cols_names, id_file):
 
         if not isinstance(data_dict, dict):
