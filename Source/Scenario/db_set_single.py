@@ -19,7 +19,7 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
-record_name = "record_1092492334"
+record_name = "record_1092492068"
 
 cb = Cardiobase()
 cb.connect()
