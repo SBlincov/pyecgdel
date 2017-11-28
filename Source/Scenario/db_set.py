@@ -2,6 +2,7 @@ import sys
 
 from Source.Model.main.ecg.ecg import *
 from Source.CardioBase.cardiobase import Cardiobase
+import os
 
 DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
@@ -47,7 +48,7 @@ for record_name in os.listdir(DBConfig.get_db_path()):
 
 loaded_file_name = (os.path.join(DBConfig.get_db_path(), "loaded.txt"))
 loaded_file = open(loaded_file_name)
-loaded = loaded_file.readlines()
+loaded = loaded_file.read().splitlines()
 loaded_file.close()
 
 num_records = len(records_names)
@@ -55,6 +56,8 @@ num_records = len(records_names)
 for record_name in records_names:
 
     if record_name not in loaded:
+
+        print(record_name)
 
         d = {}
         local_path = DBConfig.get_db_path() + "\\" + record_name + "\\"
@@ -150,5 +153,5 @@ for record_name in records_names:
             print("\n")
 
         loaded_file = open(loaded_file_name, "a")
-        loaded_file.writelines("\n" + record_name)
+        loaded_file.write(record_name + '\n')
         loaded_file.close()
