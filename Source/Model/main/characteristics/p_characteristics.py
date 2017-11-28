@@ -6,6 +6,7 @@
 
 from ..delineation.wave_delineation import *
 from .characteristics_names import *
+from Source.Model.main.delineation.morfology_point import *
 import numpy as np
 
 
@@ -14,6 +15,7 @@ def get_p_chars(lead):
     signal = lead.filter
     qrs_dels = lead.qrs_dels
     p_dels = lead.p_dels
+    p_morphs = lead.p_morphs
 
     p_characteristics = []
 
@@ -21,7 +23,8 @@ def get_p_chars(lead):
     if qrs_dels:
         beat_num += (len(qrs_dels) - 1)
 
-    p_num = 0
+    p_num = len(p_dels)
+
     if p_dels:
 
         p_distribution = []
@@ -29,7 +32,9 @@ def get_p_chars(lead):
         spec_distribution = []
         p_val_distribution = []
 
-        p_num += len(p_dels)
+        points_global = []
+        num_xtd_points_global = []
+
         for p_id in range(0, len(p_dels)):
             p_distribution.append((p_dels[p_id].offset_index - p_dels[p_id].onset_index) / rate)
             spec_distribution.append(p_dels[p_id].specification)
@@ -43,6 +48,14 @@ def get_p_chars(lead):
                 diff = qrs_dels[qrs_id].onset_index - p_dels[p_id].offset_index
 
             pq_distribution.append((qrs_dels[qrs_id].onset_index - p_dels[p_id].onset_index) / rate)
+
+            points_global.append(p_morphs[p_id].points)
+
+            num_xtd_points = 0
+            for point in p_morphs[p_id].points:
+                if point.name is PointName.xtd_point:
+                    num_xtd_points += 1
+            num_xtd_points_global.append(num_xtd_points)
 
         if beat_num > 0:
             presence_p = p_num / beat_num * 100.0
@@ -69,14 +82,27 @@ def get_p_chars(lead):
             p_characteristics.append([CharacteristicsNames.std_pq, 'n'])
 
         if spec_distribution:
-            normal_p = float(spec_distribution.count(WaveSpecification.exist)) / float(len(spec_distribution)) * 100.0
+
+            num_normal = 0
+            num_flexure = 0
+            for p_id in range(0, len(p_dels)):
+                num_xtd_points = num_xtd_points_global[p_id]
+                if p_dels[p_id].specification is not WaveSpecification.biphasic:
+                    if num_xtd_points == 0:
+                        num_normal += 1
+                    else:
+                        num_flexure += 1
+
+            normal_p = float(num_normal) / float(p_num) * 100.0
             p_characteristics.append([CharacteristicsNames.normal_p, normal_p])
-            flexure_p = float(spec_distribution.count(WaveSpecification.flexure)) / float(len(spec_distribution)) * 100.0
+
+            flexure_p = float(num_flexure) / float(p_num) * 100.0
             p_characteristics.append([CharacteristicsNames.flexure_p, flexure_p])
-            biphasic_p = float(spec_distribution.count(WaveSpecification.biphasic)) / float(len(spec_distribution)) * 100.0
+
+            biphasic_p = float(spec_distribution.count(WaveSpecification.biphasic)) / float(p_num) * 100.0
             p_characteristics.append([CharacteristicsNames.biphasic_p, biphasic_p])
-            atrial_fibrillation_p = float(spec_distribution.count(WaveSpecification.atrial_fibrillation)) / float(
-                len(spec_distribution)) * 100.0
+
+            atrial_fibrillation_p = float(spec_distribution.count(WaveSpecification.atrial_fibrillation)) / float(p_num) * 100.0
             p_characteristics.append([CharacteristicsNames.atrial_fibrillation_p, atrial_fibrillation_p])
 
         else:
