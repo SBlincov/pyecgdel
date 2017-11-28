@@ -1,64 +1,8 @@
-import sys
-
 from Source.Model.main.ecg.ecg import *
-from Source.CardioBase.cardiobase import Cardiobase
 
-DBConfig.name = 'shiller'
-DBConfig.root = 'pyecgdel'
-DBConfig.data_catalogue = 'Data'
+def set_record(record_name, cb, columns_names):
 
-DBConfig.config_params = 'properties.txt'
-DBConfig.p_params = 'p_params.txt'
-DBConfig.qrs_params = 'qrs_params.txt'
-DBConfig.t_params = 't_params.txt'
-DBConfig.filter_params = 'filter_params.txt'
-
-init_params(params_type=ParamsType.config_params)
-init_params(params_type=ParamsType.p_params)
-init_params(params_type=ParamsType.qrs_params)
-init_params(params_type=ParamsType.t_params)
-init_params(params_type=ParamsType.filter_params)
-
-cb = Cardiobase()
-cb.connect()
-
-leads_names = ConfigParams['LEADS_NAMES']
-
-columns_names = []
-
-limit = 100
-
-curr_val = 0
-
-for lead_name in leads_names:
-    columns_names.append("json_" + lead_name + "_filtrated")
-
-    columns_names.append("json_" + lead_name + "_p_delineation")
-    columns_names.append("json_" + lead_name + "_qrs_delineation")
-    columns_names.append("json_" + lead_name + "_t_delineation")
-
-    columns_names.append("json_" + lead_name + "_p_morphology")
-    columns_names.append("json_" + lead_name + "_qrs_morphology")
-    columns_names.append("json_" + lead_name + "_t_morphology")
-
-    columns_names.append("json_" + lead_name + "_characteristics")
-
-records_names = []
-
-for record_name in os.listdir(DBConfig.get_db_path()):
-    if os.path.isdir(os.path.join(DBConfig.get_db_path(), record_name)):
-        records_names.append(record_name)
-
-num_records = len(records_names)
-
-for record_name in records_names:
-
-    curr_val = curr_val + 1
-
-    if curr_val == limit:
-        cb.disconnect()
-        cb.connect()
-        curr_val = 0
+    print(record_name)
 
     d = {}
     local_path = DBConfig.get_db_path() + "\\" + record_name + "\\"
@@ -126,7 +70,7 @@ for record_name in records_names:
             p_records = []
             for line in lines:
                 p_m = line.split()
-                p_records.append(p_m[0:5])
+                p_records.append(p_m[0:6])
 
             d["json_lead_" + lead + "_p_morphology"] = [(file_id, p_records)]
 
@@ -135,7 +79,7 @@ for record_name in records_names:
             qrs_records = []
             for line in lines:
                 qrs_m = line.split()
-                qrs_records.append(qrs_m[0:5])
+                qrs_records.append(qrs_m[0:6])
 
             d["json_lead_" + lead + "_qrs_morphology"] = [(file_id, qrs_records)]
 
@@ -144,7 +88,7 @@ for record_name in records_names:
             t_records = []
             for line in lines:
                 t_m = line.split()
-                t_records.append(t_m[0:5])
+                t_records.append(t_m[0:6])
 
             d["json_lead_" + lead + "_t_morphology"] = [(file_id, t_records)]
 
@@ -153,4 +97,4 @@ for record_name in records_names:
         print("\n")
         print("\n")
 
-cb.disconnect()
+

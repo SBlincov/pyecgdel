@@ -54,7 +54,17 @@ def get_qrs_morphology(ecg_lead, del_id, delineation):
                                     s_zc_id_diff, right_points,
                                     branch_id)
 
-    degree = Degree.satisfyingly
+    num_xtd_points = 0
+    for point in points:
+        if point.name is PointName.xtd_point:
+            num_xtd_points += 1
+
+    if num_xtd_points == 0:
+        degree = Degree.satisfyingly
+    elif 0 < num_xtd_points <= 2:
+        degree = Degree.doubtfully
+    else:
+        degree = Degree.unknown
 
     morphology = Morphology(del_id, points, degree, branch_id)
 
