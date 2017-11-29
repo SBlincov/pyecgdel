@@ -134,6 +134,22 @@ def get_qrs_chars(lead):
             triangular_index = np.max(hist[0]) / len(rr_distribution)
             qrs_characteristics.append([CharacteristicsNames.triangular_index, triangular_index])
 
+            arg_max = np.argmax(hist[0])
+            if arg_max.size > 1:
+                arg_max = arg_max[0]
+            left = arg_max
+            right = arg_max
+            for index in range(arg_max, len(hist[0])):
+                right = index
+                if hist[0][index] == 0:
+                    break
+            for index in range(arg_max, -1, -1):
+                left = index
+                if hist[0][index] == 0:
+                    break
+            TINN = hist[1][right] - hist[1][left]
+            qrs_characteristics.append([CharacteristicsNames.TINN, TINN])
+
         else:
 
             qrs_characteristics.append([CharacteristicsNames.mean_rr, 'n'])
@@ -153,6 +169,7 @@ def get_qrs_chars(lead):
 
             # Geometry
             qrs_characteristics.append([CharacteristicsNames.triangular_index, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.TINN, 'n'])
 
 
         if qrs_distribution:
@@ -215,5 +232,21 @@ def get_qrs_chars(lead):
         qrs_characteristics.append([CharacteristicsNames.std_r_val, 'n'])
         qrs_characteristics.append([CharacteristicsNames.max_r_val, 'n'])
         qrs_characteristics.append([CharacteristicsNames.min_r_val, 'n'])
+
+        # Regular
+        qrs_characteristics.append([CharacteristicsNames.mean_NN, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.max_sub_min_NN, 'n'])
+
+        # Statistics
+        qrs_characteristics.append([CharacteristicsNames.SDNN, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.SDANN, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.SDNNindex, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.RMSSD, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.NN50, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.pNN50, 'n'])
+
+        # Geometry
+        qrs_characteristics.append([CharacteristicsNames.triangular_index, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.TINN, 'n'])
 
     return qrs_characteristics
