@@ -7,6 +7,7 @@ from Source.Model.main.ecg_lead.ecg_lead import *
 from Source.Model.main.data_details.ecg_data_details import *
 from Source.Infrastructure.main.load_ecg_data import *
 from Source.Infrastructure.main.save_ecg_data import *
+from Source.Model.main.characteristics.global_characteristics import *
 
 from Source.Model.main.delineation.qrs.delta.delta import multi_lead_processing
 
@@ -271,10 +272,12 @@ class ECG:
 
     def characteristics(self):
         print("ECG calc characteristics...")
+
         for lead_id in range(0, len(self.leads)):
             print("Calc characteristics " + str(self.leads[lead_id].name) + "...")
             self.leads[lead_id].calc_characteristics()
             print("Calc characteristics " + str(self.leads[lead_id].name) + " complete")
+
         print("ECG calc characteristics complete")
         print("=======================================================================================================")
         print("")

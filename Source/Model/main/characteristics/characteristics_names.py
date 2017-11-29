@@ -7,6 +7,22 @@ from enum import Enum
 
 class CharacteristicsNames(Enum):
 
+    # Regular
+    mean_NN = "mean_NN"
+    max_sub_min_NN = "max_sub_min_NN"
+
+    # Statistical
+    SDNN = "SDNN"
+    SDANN = "SDANN"
+    SDNNindex = "SDNNindex"
+    RMSSD = "RMSSD"
+    NN50 = "NN50"
+    pNN50 = "pNN50"
+
+    # Geometry
+    triangular_index = "triangular index"
+    TINN = "TINN"
+
     mean_rr = "mean_rr"
     std_rr = "std_rr"
     mean_qrs = "mean_qrs"

@@ -28,13 +28,26 @@ def get_qrs_chars(lead):
         points_global = []
         num_xtd_points_global = []
 
+        rr_5_min = []
+
         num_complexes = len(qrs_dels)
 
         if len(qrs_dels) > 1:
 
+            curr_rr_5_min = []
+
+            id_5_min = 0
+
             for qrs_id in range(0, len(qrs_dels) - 1):
                 current_rr = (qrs_dels[qrs_id + 1].peak_index - qrs_dels[qrs_id].peak_index) / rate
                 rr_distribution.append(current_rr)
+
+                if(qrs_dels[qrs_id + 1].peak_index < int((id_5_min + 1) * 300 * rate)):
+                    curr_rr_5_min.append(current_rr)
+                else:
+                    rr_5_min.append(curr_rr_5_min)
+                    curr_rr_5_min = []
+                    id_5_min += 1
 
                 current_qrs = (qrs_dels[qrs_id].offset_index - qrs_dels[qrs_id].onset_index) / rate
                 qrs_distribution.append(current_qrs)
@@ -64,12 +77,83 @@ def get_qrs_chars(lead):
 
         if rr_distribution:
             mean_rr = np.mean(rr_distribution)
-            std_rr = np.std(rr_distribution)
             qrs_characteristics.append([CharacteristicsNames.mean_rr, mean_rr])
+            std_rr = np.std(rr_distribution)
             qrs_characteristics.append([CharacteristicsNames.std_rr, std_rr])
+
+            # Regular
+            mean_NN = mean_rr
+            qrs_characteristics.append([CharacteristicsNames.mean_NN, mean_NN])
+            max_sub_min_NN = np.max(rr_distribution) - np.min(rr_distribution)
+            qrs_characteristics.append([CharacteristicsNames.max_sub_min_NN, max_sub_min_NN])
+
+            # Statistics
+            SDNN = std_rr
+            qrs_characteristics.append([CharacteristicsNames.SDNN, SDNN])
+
+            if len(signal) / rate < 43200: # 12 hours
+                SDANN = SDNN
+                SDNNindex = SDNN
+            else:
+                mean_5_min = []
+                std_5_min = []
+                for curr_5_min in rr_5_min:
+                    curr_mean = np.mean(curr_5_min)
+                    curr_std = np.std(curr_5_min)
+                    mean_5_min.append(curr_mean)
+                    std_5_min.append(curr_std)
+
+                SDANN = np.std(mean_5_min)
+                SDNNindex = np.mean(std_5_min)
+
+            qrs_characteristics.append([CharacteristicsNames.SDANN, SDANN])
+            qrs_characteristics.append([CharacteristicsNames.SDNNindex, SDNNindex])
+
+            RMSSD = 0.0
+            rr_diffs = []
+            for rr_id in range(0, len(rr_distribution) - 1):
+                rr_diffs.append((rr_distribution[rr_id + 1] - rr_distribution[rr_id]))
+                RMSSD += pow((rr_distribution[rr_id + 1] - rr_distribution[rr_id]), 2.0)
+            RMSSD = RMSSD / (len(rr_distribution) - 1)
+            RMSSD = np.sqrt(RMSSD)
+
+            qrs_characteristics.append([CharacteristicsNames.RMSSD, RMSSD])
+
+            NN50 = 0
+            for rr_diff in rr_diffs:
+                if rr_diff > 0.05:
+                    NN50 += 1
+            pNN50 = NN50 / len(rr_diffs)
+
+            qrs_characteristics.append([CharacteristicsNames.NN50, NN50])
+            qrs_characteristics.append([CharacteristicsNames.pNN50, pNN50])
+
+            # Geometry
+            bins = np.arange(0.0, 3.0, 0.0078125).tolist()
+            hist = np.histogram(rr_distribution, bins)
+            triangular_index = np.max(hist[0]) / len(rr_distribution)
+            qrs_characteristics.append([CharacteristicsNames.triangular_index, triangular_index])
+
         else:
+
             qrs_characteristics.append([CharacteristicsNames.mean_rr, 'n'])
             qrs_characteristics.append([CharacteristicsNames.std_rr, 'n'])
+
+            # Regular
+            qrs_characteristics.append([CharacteristicsNames.mean_NN, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.max_sub_min_NN, 'n'])
+
+            # Statistics
+            qrs_characteristics.append([CharacteristicsNames.SDNN, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.SDANN, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.SDNNindex, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.RMSSD, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.NN50, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.pNN50, 'n'])
+
+            # Geometry
+            qrs_characteristics.append([CharacteristicsNames.triangular_index, 'n'])
+
 
         if qrs_distribution:
             mean_qrs = np.mean(qrs_distribution)
