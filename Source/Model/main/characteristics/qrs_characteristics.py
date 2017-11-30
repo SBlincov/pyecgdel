@@ -8,6 +8,8 @@ from Source.Model.main.delineation.wave_delineation import *
 from Source.Model.main.characteristics.characteristics_names import *
 from Source.Model.main.delineation.morfology_point import *
 import numpy as np
+from hrv.classical import frequency_domain
+from hrv.utils import open_rri
 
 
 def get_qrs_chars(lead):
@@ -153,6 +155,41 @@ def get_qrs_chars(lead):
             TINN = hist[1][right] - hist[1][left]
             qrs_characteristics.append([CharacteristicsNames.TINN, TINN])
 
+            # Frequency
+            rr_distribution_ms = []
+            for rr in rr_distribution:
+                rr_distribution_ms.append(rr * 1000)
+            frequency_characteristics = frequency_domain(rri=rr_distribution_ms,
+                                                         fs=4.0,
+                                                         method='welch',
+                                                         interp_method='cubic',
+                                                         detrend='linear')
+
+            TP = frequency_characteristics['total_power']
+            VLF = frequency_characteristics['vlf']
+            LF = frequency_characteristics['lf']
+            HF = frequency_characteristics['hf']
+            LFHF = frequency_characteristics['lf_hf']
+            LFnorm = frequency_characteristics['lfnu']
+            HFnorm = frequency_characteristics['hfnu']
+
+            qrs_characteristics.append([CharacteristicsNames.TP, TP])
+            qrs_characteristics.append([CharacteristicsNames.VLF, VLF])
+            qrs_characteristics.append([CharacteristicsNames.LF, LF])
+            qrs_characteristics.append([CharacteristicsNames.HF, HF])
+            if np.isnan(LFHF):
+                qrs_characteristics.append([CharacteristicsNames.LFHF, 'n'])
+            else:
+                qrs_characteristics.append([CharacteristicsNames.LFHF, LFHF])
+            if np.isnan(LFnorm):
+                qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
+            else:
+                qrs_characteristics.append([CharacteristicsNames.LFnorm, LFnorm])
+            if np.isnan(HFnorm):
+                qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
+            else:
+                qrs_characteristics.append([CharacteristicsNames.HFnorm, HFnorm])
+
         else:
 
             qrs_characteristics.append([CharacteristicsNames.mean_rr, 'n'])
@@ -174,6 +211,15 @@ def get_qrs_chars(lead):
             # Geometry
             qrs_characteristics.append([CharacteristicsNames.triangular_index, 'n'])
             qrs_characteristics.append([CharacteristicsNames.TINN, 'n'])
+
+            # Frequency
+            qrs_characteristics.append([CharacteristicsNames.TP, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.VLF, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.LF, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.HF, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.LFHF, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
 
 
         if qrs_distribution:
@@ -253,5 +299,14 @@ def get_qrs_chars(lead):
         # Geometry
         qrs_characteristics.append([CharacteristicsNames.triangular_index, 'n'])
         qrs_characteristics.append([CharacteristicsNames.TINN, 'n'])
+
+        # Frequency
+        qrs_characteristics.append([CharacteristicsNames.TP, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.VLF, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.LF, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.HF, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.LFHF, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
 
     return qrs_characteristics

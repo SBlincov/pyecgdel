@@ -24,6 +24,15 @@ class CharacteristicsNames(Enum):
     triangular_index = "triangular index"
     TINN = "TINN"
 
+    # Frequency
+    TP = "TP"
+    VLF = "VLF"
+    LF = "LF"
+    HF = "HF"
+    LFHF = "LFHF"
+    LFnorm = "LFnorm"
+    HFnorm = "HFnorm"
+
     mean_rr = "mean_rr"
     std_rr = "std_rr"
     mean_qrs = "mean_qrs"
