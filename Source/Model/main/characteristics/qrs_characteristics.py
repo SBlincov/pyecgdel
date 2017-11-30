@@ -119,6 +119,9 @@ def get_qrs_chars(lead):
 
             qrs_characteristics.append([CharacteristicsNames.RMSSD, RMSSD])
 
+            SDSD = np.std(rr_diffs)
+            qrs_characteristics.append([CharacteristicsNames.SDSD, SDSD])
+
             NN50 = 0
             for rr_diff in rr_diffs:
                 if rr_diff > 0.05:
@@ -166,6 +169,7 @@ def get_qrs_chars(lead):
             qrs_characteristics.append([CharacteristicsNames.RMSSD, 'n'])
             qrs_characteristics.append([CharacteristicsNames.NN50, 'n'])
             qrs_characteristics.append([CharacteristicsNames.pNN50, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.SDSD, 'n'])
 
             # Geometry
             qrs_characteristics.append([CharacteristicsNames.triangular_index, 'n'])
@@ -244,6 +248,7 @@ def get_qrs_chars(lead):
         qrs_characteristics.append([CharacteristicsNames.RMSSD, 'n'])
         qrs_characteristics.append([CharacteristicsNames.NN50, 'n'])
         qrs_characteristics.append([CharacteristicsNames.pNN50, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.SDSD, 'n'])
 
         # Geometry
         qrs_characteristics.append([CharacteristicsNames.triangular_index, 'n'])
