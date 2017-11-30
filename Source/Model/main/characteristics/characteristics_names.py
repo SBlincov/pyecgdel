@@ -18,6 +18,7 @@ class CharacteristicsNames(Enum):
     RMSSD = "RMSSD"
     NN50 = "NN50"
     pNN50 = "pNN50"
+    SDSD = "SDSD"
 
     # Geometry
     triangular_index = "triangular index"
