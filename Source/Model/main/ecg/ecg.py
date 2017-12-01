@@ -240,7 +240,7 @@ class ECG:
                                           int(morphology_point.index),
                                           float(morphology_point.value),
                                           int(morphology_point.sign),
-                                          int(morphology_point.degree)])
+                                          int(morphology.degree)])
 
             data_dict[column_name] = [(id_file, p_morphs_data)]
             columns_names.append(column_name)
@@ -254,7 +254,7 @@ class ECG:
                                             int(morphology_point.index),
                                             float(morphology_point.value),
                                             int(morphology_point.sign),
-                                            int(morphology_point.degree)])
+                                            int(morphology.degree)])
 
             data_dict[column_name] = [(id_file, qrs_morphs_data)]
             columns_names.append(column_name)
@@ -268,7 +268,7 @@ class ECG:
                                           int(morphology_point.index),
                                           float(morphology_point.value),
                                           int(morphology_point.sign),
-                                          int(morphology_point.degree)])
+                                          int(morphology.degree)])
 
             data_dict[column_name] = [(id_file, t_morphs_data)]
             columns_names.append(column_name)

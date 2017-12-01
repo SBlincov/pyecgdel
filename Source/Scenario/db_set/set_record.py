@@ -95,9 +95,9 @@ def set_record(record_name, cb, columns_names):
 
             for plot_data_name in QRSPlotDataNames:
                 plot_data_path = local_path + '/lead_' + lead + '/' + plot_data_name.value + '.txt'
-                column_name = "json_lead" + lead + "_" + plot_data_name.value
+                column_name = "json_lead_" + lead + "_" + plot_data_name.value
                 plot_data = np.loadtxt(plot_data_path)
-                d[column_name] = [(file_id, plot_data)]
+                d[column_name] = [(file_id, plot_data.tolist())]
 
         cb.bulk_data_set(d)
         cb.commit()

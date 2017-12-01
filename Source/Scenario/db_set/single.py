@@ -3,6 +3,7 @@ import sys
 from Source.Model.main.ecg.ecg import *
 from Source.CardioBase.cardiobase import Cardiobase
 from Source.Scenario.db_set.set_record import set_record
+from Source.Model.main.plot_data.qrs import *
 
 DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
@@ -20,7 +21,7 @@ init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
-record_name = "record_2319"
+record_name = "record_2321"
 
 cb = Cardiobase()
 cb.connect()
@@ -41,6 +42,10 @@ for lead_name in leads_names:
     columns_names.append("json_" + lead_name + "_t_morphology")
 
     columns_names.append("json_" + lead_name + "_characteristics")
+
+    for plot_data_name in QRSPlotDataNames:
+        column_name = "json_" + lead_name + "_" + plot_data_name.value
+        columns_names.append(column_name)
 
 
 set_record(record_name, cb, columns_names)
