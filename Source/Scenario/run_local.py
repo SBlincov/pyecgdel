@@ -35,6 +35,7 @@ for record_name in records_names:
     ecg.adaptive_filtration()
     ecg.del_correction()
     ecg.characteristics()
+    ecg.init_plot_data()
 
     ecg.save_local(ECGDataDetails.qrs_delineation)
     ecg.save_local(ECGDataDetails.qrs_morphology)
@@ -48,3 +49,4 @@ for record_name in records_names:
     ecg.save_local(ECGDataDetails.adaptive_filtrated)
 
     ecg.save_local(ECGDataDetails.characteristics)
+

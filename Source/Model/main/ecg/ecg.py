@@ -7,7 +7,6 @@ from Source.Model.main.ecg_lead.ecg_lead import *
 from Source.Model.main.data_details.ecg_data_details import *
 from Source.Infrastructure.main.load_ecg_data import *
 from Source.Infrastructure.main.save_ecg_data import *
-from Source.Model.main.characteristics.global_characteristics import *
 
 from Source.Model.main.delineation.qrs.delta.delta import multi_lead_processing
 
@@ -125,6 +124,10 @@ class ECG:
 
         print("ECG del correction complete")
         print("")
+
+    def init_plot_data(self):
+        for lead_id in range(0, len(self.leads)):
+            self.leads[lead_id].init_plot_data()
 
     def add_origin_data_to_dict(self, data_dict, cols_names, id_file):
 

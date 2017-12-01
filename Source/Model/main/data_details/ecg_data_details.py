@@ -21,6 +21,7 @@ class ECGDataDetails(Enum):
     t_delineation = 't_delineation'
     t_morphology = 't_morphology'
     characteristics = 'characteristics'
+    qrs_plot_data = 'qrs_plot_data'
 
     def __str__(self):
         return self.value

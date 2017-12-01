@@ -30,6 +30,7 @@ ecg.delineation()
 ecg.adaptive_filtration()
 ecg.del_correction()
 ecg.characteristics()
+ecg.init_plot_data()
 
 ecg.save_local(ECGDataDetails.qrs_delineation)
 ecg.save_local(ECGDataDetails.qrs_morphology)
@@ -43,3 +44,5 @@ ecg.save_local(ECGDataDetails.p_morphology)
 ecg.save_local(ECGDataDetails.adaptive_filtrated)
 
 ecg.save_local(ECGDataDetails.characteristics)
+
+ecg.save_local(ECGDataDetails.qrs_plot_data)

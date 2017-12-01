@@ -211,8 +211,6 @@ def save_data_local(ecg, details):
 
             np.savetxt(data_file_name, morphology_info, fmt=fmt)
 
-
-
         elif details is ECGDataDetails.characteristics:
             characteristics = ecg.leads[lead_id].chars
             names = [item[0].name for item in characteristics]
@@ -230,6 +228,12 @@ def save_data_local(ecg, details):
             characteristics_info['var2'] = values
 
             np.savetxt(data_file_name, characteristics_info, fmt=fmt)
+
+        elif details is ECGDataDetails.qrs_plot_data:
+
+            for plot_data_key in ecg.leads[lead_id].qrs_plot_data.dict:
+                data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, leads_names[lead_id], plot_data_key)
+                np.savetxt(data_file_name, ecg.leads[lead_id].qrs_plot_data.dict[plot_data_key], fmt='%.3e')
 
         else:
             raise InvalidECGDataDetails('Error! Invalid ecg details')
