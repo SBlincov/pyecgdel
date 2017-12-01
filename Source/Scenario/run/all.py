@@ -1,6 +1,6 @@
 from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
-
+from Source.Scenario.run.record import run_record
 
 DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
@@ -25,28 +25,4 @@ for record_name in os.listdir(DBConfig.get_db_path()):
         records_names.append(record_name)
 
 for record_name in records_names:
-    print('Record Name: ', record_name)
-    ecg = ECG(data=LOCAL_DB, name=None, record=record_name)
-    ecg.cwt_filtration()
-    ecg.save_local(ECGDataDetails.filtrated)
-    ecg.dwt()
-    ecg.save_local(ECGDataDetails.wdc)
-    ecg.delineation()
-    ecg.adaptive_filtration()
-    ecg.del_correction()
-    ecg.characteristics()
-    ecg.init_plot_data()
-
-    ecg.save_local(ECGDataDetails.qrs_delineation)
-    ecg.save_local(ECGDataDetails.qrs_morphology)
-
-    ecg.save_local(ECGDataDetails.t_delineation)
-    ecg.save_local(ECGDataDetails.t_morphology)
-
-    ecg.save_local(ECGDataDetails.p_delineation)
-    ecg.save_local(ECGDataDetails.p_morphology)
-
-    ecg.save_local(ECGDataDetails.adaptive_filtrated)
-
-    ecg.save_local(ECGDataDetails.characteristics)
-
+   run_record(record_name)

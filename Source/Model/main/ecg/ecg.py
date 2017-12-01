@@ -308,3 +308,20 @@ class ECG:
             data_dict[column_name] = [(id_file, [characteristics_data_names, characteristics_data_values])]
             columns_names.append(column_name)
 
+
+    def add_plot_data_to_dict(self, data_dict, columns_names, id_file):
+
+        if not isinstance(data_dict, dict):
+            raise InvalidECGData('data_dict must be dict instance')
+
+        if not isinstance(columns_names, list):
+            raise InvalidECGData('columns_names must be list instance')
+
+        for lead_id in range(0, len(self.leads)):
+
+            for plot_data_key in self.leads[lead_id].qrs_plot_data.dict:
+
+                column_name = "json_" + self.leads[lead_id].name + "_" + plot_data_key.name
+                data_dict[column_name] = [(id_file, self.leads[lead_id].qrs_plot_data.dict[plot_data_key])]
+                columns_names.append(column_name)
+
