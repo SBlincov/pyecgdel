@@ -42,7 +42,8 @@ def get_qrs_chars(lead):
 
             for qrs_id in range(0, len(qrs_dels) - 1):
                 current_rr = (qrs_dels[qrs_id + 1].peak_index - qrs_dels[qrs_id].peak_index) / rate
-                rr_distribution.append(current_rr)
+                if current_rr > 0.0:
+                    rr_distribution.append(current_rr)
 
                 if(qrs_dels[qrs_id + 1].peak_index < int((id_5_min + 1) * 300 * rate)):
                     curr_rr_5_min.append(current_rr)
