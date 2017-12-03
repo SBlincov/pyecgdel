@@ -80,9 +80,9 @@ def get_qrs_chars(lead):
 
         if rr_distribution:
             mean_rr = np.mean(rr_distribution)
-            qrs_characteristics.append([CharacteristicsNames.mean_rr, mean_rr])
+            qrs_characteristics.append([CharacteristicsNames.mean_rr, float(mean_rr)])
             std_rr = np.std(rr_distribution)
-            qrs_characteristics.append([CharacteristicsNames.std_rr, std_rr])
+            qrs_characteristics.append([CharacteristicsNames.std_rr, float(std_rr)])
 
             rr_dist_mod = rr_distribution
 
@@ -95,12 +95,12 @@ def get_qrs_chars(lead):
 
             # Regular
             mean_NN = np.mean(rr_dist_mod)
-            qrs_characteristics.append([CharacteristicsNames.mean_NN, mean_NN])
+            qrs_characteristics.append([CharacteristicsNames.mean_NN, float(mean_NN)])
             max_sub_min_NN = np.max(rr_dist_mod) - np.min(rr_dist_mod)
 
             # Statistics
             SDNN = np.std(rr_dist_mod)
-            qrs_characteristics.append([CharacteristicsNames.SDNN, SDNN])
+            qrs_characteristics.append([CharacteristicsNames.SDNN, float(SDNN)])
 
             if len(signal) / rate < 43200: # 12 hours
                 SDANN = SDNN
@@ -117,8 +117,8 @@ def get_qrs_chars(lead):
                 SDANN = np.std(mean_5_min)
                 SDNNindex = np.mean(std_5_min)
 
-            qrs_characteristics.append([CharacteristicsNames.SDANN, SDANN])
-            qrs_characteristics.append([CharacteristicsNames.SDNNindex, SDNNindex])
+            qrs_characteristics.append([CharacteristicsNames.SDANN, float(SDANN)])
+            qrs_characteristics.append([CharacteristicsNames.SDNNindex, float(SDNNindex)])
 
             RMSSD = 0.0
             rr_diffs = []
@@ -128,10 +128,10 @@ def get_qrs_chars(lead):
             RMSSD = RMSSD / (len(rr_dist_mod) - 1)
             RMSSD = np.sqrt(RMSSD)
 
-            qrs_characteristics.append([CharacteristicsNames.RMSSD, RMSSD])
+            qrs_characteristics.append([CharacteristicsNames.RMSSD, float(RMSSD)])
 
             SDSD = np.std(rr_diffs)
-            qrs_characteristics.append([CharacteristicsNames.SDSD, SDSD])
+            qrs_characteristics.append([CharacteristicsNames.SDSD, float(SDSD)])
 
             NN50 = 0
             for rr_diff in rr_diffs:
@@ -139,14 +139,14 @@ def get_qrs_chars(lead):
                     NN50 += 1
             pNN50 = NN50 / len(rr_diffs)
 
-            qrs_characteristics.append([CharacteristicsNames.NN50, NN50])
-            qrs_characteristics.append([CharacteristicsNames.pNN50, pNN50])
+            qrs_characteristics.append([CharacteristicsNames.NN50, float(NN50)])
+            qrs_characteristics.append([CharacteristicsNames.pNN50, float(pNN50)])
 
             # Geometry
             bins = np.arange(0.0, 3.0, 0.0078125).tolist()
             hist = np.histogram(rr_distribution, bins)
             triangular_index = np.max(hist[0]) / len(rr_distribution)
-            qrs_characteristics.append([CharacteristicsNames.triangular_index, triangular_index])
+            qrs_characteristics.append([CharacteristicsNames.triangular_index, float(triangular_index)])
 
             arg_max = np.argmax(hist[0])
             if arg_max.size > 1:
@@ -162,7 +162,7 @@ def get_qrs_chars(lead):
                 if hist[0][index] == 0:
                     break
             TINN = hist[1][right] - hist[1][left]
-            qrs_characteristics.append([CharacteristicsNames.TINN, TINN])
+            qrs_characteristics.append([CharacteristicsNames.TINN, float(TINN)])
 
             # Frequency
             if len(rr_dist_mod) > 3:
@@ -183,22 +183,22 @@ def get_qrs_chars(lead):
                 LFnorm = frequency_characteristics['lfnu']
                 HFnorm = frequency_characteristics['hfnu']
 
-                qrs_characteristics.append([CharacteristicsNames.TP, TP])
-                qrs_characteristics.append([CharacteristicsNames.VLF, VLF])
-                qrs_characteristics.append([CharacteristicsNames.LF, LF])
-                qrs_characteristics.append([CharacteristicsNames.HF, HF])
+                qrs_characteristics.append([CharacteristicsNames.TP, float(TP)])
+                qrs_characteristics.append([CharacteristicsNames.VLF, float(VLF)])
+                qrs_characteristics.append([CharacteristicsNames.LF, float(LF)])
+                qrs_characteristics.append([CharacteristicsNames.HF, float(HF)])
                 if np.isnan(LFHF):
                     qrs_characteristics.append([CharacteristicsNames.LFHF, 'n'])
                 else:
-                    qrs_characteristics.append([CharacteristicsNames.LFHF, LFHF])
+                    qrs_characteristics.append([CharacteristicsNames.LFHF, float(LFHF)])
                 if np.isnan(LFnorm):
                     qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
                 else:
-                    qrs_characteristics.append([CharacteristicsNames.LFnorm, LFnorm])
+                    qrs_characteristics.append([CharacteristicsNames.LFnorm, float(LFnorm)])
                 if np.isnan(HFnorm):
                     qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
                 else:
-                    qrs_characteristics.append([CharacteristicsNames.HFnorm, HFnorm])
+                    qrs_characteristics.append([CharacteristicsNames.HFnorm, float(HFnorm)])
             else:
                 qrs_characteristics.append([CharacteristicsNames.TP, 'n'])
                 qrs_characteristics.append([CharacteristicsNames.VLF, 'n'])
@@ -217,13 +217,13 @@ def get_qrs_chars(lead):
             PAPR = AMo / Mo
             IN = AMo / (2.0 * X * Mo)
 
-            qrs_characteristics.append([CharacteristicsNames.Mo, Mo])
-            qrs_characteristics.append([CharacteristicsNames.AMo, AMo])
-            qrs_characteristics.append([CharacteristicsNames.X, X])
-            qrs_characteristics.append([CharacteristicsNames.IVR, IVR])
-            qrs_characteristics.append([CharacteristicsNames.VPR, VPR])
-            qrs_characteristics.append([CharacteristicsNames.PAPR, PAPR])
-            qrs_characteristics.append([CharacteristicsNames.IN, IN])
+            qrs_characteristics.append([CharacteristicsNames.Mo, float(Mo)])
+            qrs_characteristics.append([CharacteristicsNames.AMo, float(AMo)])
+            qrs_characteristics.append([CharacteristicsNames.X, float(X)])
+            qrs_characteristics.append([CharacteristicsNames.IVR, float(IVR)])
+            qrs_characteristics.append([CharacteristicsNames.VPR, float(VPR)])
+            qrs_characteristics.append([CharacteristicsNames.PAPR, float(PAPR)])
+            qrs_characteristics.append([CharacteristicsNames.IN, float(IN)])
 
 
         else:
@@ -270,8 +270,8 @@ def get_qrs_chars(lead):
         if qrs_distribution:
             mean_qrs = np.mean(qrs_distribution)
             std_qrs = np.std(qrs_distribution)
-            qrs_characteristics.append([CharacteristicsNames.mean_qrs, mean_qrs])
-            qrs_characteristics.append([CharacteristicsNames.std_qrs, std_qrs])
+            qrs_characteristics.append([CharacteristicsNames.mean_qrs, float(mean_qrs)])
+            qrs_characteristics.append([CharacteristicsNames.std_qrs, float(std_qrs)])
         else:
             qrs_characteristics.append([CharacteristicsNames.mean_qrs, 'n'])
             qrs_characteristics.append([CharacteristicsNames.std_qrs, 'n'])
@@ -287,13 +287,13 @@ def get_qrs_chars(lead):
                     num_flexure_qrs += 1
 
             normal_qrs = float(num_normal_qrs) / float(num_complexes) * 100.0
-            qrs_characteristics.append([CharacteristicsNames.normal_qrs, normal_qrs])
+            qrs_characteristics.append([CharacteristicsNames.normal_qrs, float(normal_qrs)])
 
             flexure_qrs = float(num_flexure_qrs) / float(num_complexes) * 100.0
-            qrs_characteristics.append([CharacteristicsNames.flexure_qrs, flexure_qrs])
+            qrs_characteristics.append([CharacteristicsNames.flexure_qrs, float(flexure_qrs)])
 
             extra_qrs = float(spec_distribution.count(WaveSpecification.extra)) / float(num_complexes) * 100.0
-            qrs_characteristics.append([CharacteristicsNames.extra_qrs, extra_qrs])
+            qrs_characteristics.append([CharacteristicsNames.extra_qrs, float(extra_qrs)])
         else:
             qrs_characteristics.append([CharacteristicsNames.normal_qrs, 'n'])
             qrs_characteristics.append([CharacteristicsNames.flexure_qrs, 'n'])
@@ -304,10 +304,10 @@ def get_qrs_chars(lead):
             std_r_val = np.std(r_val_distribution)
             max_r_val = np.max(r_val_distribution)
             min_r_val = np.min(r_val_distribution)
-            qrs_characteristics.append([CharacteristicsNames.mean_r_val, mean_r_val])
-            qrs_characteristics.append([CharacteristicsNames.std_r_val, std_r_val])
-            qrs_characteristics.append([CharacteristicsNames.max_r_val, max_r_val])
-            qrs_characteristics.append([CharacteristicsNames.min_r_val, min_r_val])
+            qrs_characteristics.append([CharacteristicsNames.mean_r_val, float(mean_r_val)])
+            qrs_characteristics.append([CharacteristicsNames.std_r_val, float(std_r_val)])
+            qrs_characteristics.append([CharacteristicsNames.max_r_val, float(max_r_val)])
+            qrs_characteristics.append([CharacteristicsNames.min_r_val, float(min_r_val)])
         else:
             qrs_characteristics.append([CharacteristicsNames.mean_r_val, 'n'])
             qrs_characteristics.append([CharacteristicsNames.std_r_val, 'n'])

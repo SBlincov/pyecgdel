@@ -114,12 +114,12 @@ class QRSPlotData:
                                    float(ellipse_bis_angle)]
 
         plot_data_dict = {
-            QRSPlotDataNames.rr_dist : rr_dist,
-            QRSPlotDataNames.rr_bins_centers : bins_centers,
-            QRSPlotDataNames.rr_hist : hist,
-            QRSPlotDataNames.rr_pdf : pdf,
-            QRSPlotDataNames.rr_ellipse_pca : ellipse_pca,
-            QRSPlotDataNames.rr_ellipse_bis : ellipse_bis
+            QRSPlotDataNames.rr_dist : list(map(float, rr_dist)),
+            QRSPlotDataNames.rr_bins_centers : list(map(float, bins_centers)),
+            QRSPlotDataNames.rr_hist : list(map(float, hist)),
+            QRSPlotDataNames.rr_pdf : list(map(float, pdf)),
+            QRSPlotDataNames.rr_ellipse_pca : list(map(float, ellipse_pca)),
+            QRSPlotDataNames.rr_ellipse_bis : list(map(float, ellipse_bis))
         }
 
         self.dict = plot_data_dict

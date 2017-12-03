@@ -59,15 +59,15 @@ def get_p_chars(lead):
 
         if beat_num > 0:
             presence_p = p_num / beat_num * 100.0
-            p_characteristics.append([CharacteristicsNames.presence_p, presence_p])
+            p_characteristics.append([CharacteristicsNames.presence_p, float(presence_p)])
         else:
             p_characteristics.append([CharacteristicsNames.presence_p, 'n'])
 
         if p_distribution:
             mean_p = np.mean(p_distribution)
             std_p = np.std(p_distribution)
-            p_characteristics.append([CharacteristicsNames.mean_p, mean_p])
-            p_characteristics.append([CharacteristicsNames.std_p, std_p])
+            p_characteristics.append([CharacteristicsNames.mean_p, float(mean_p)])
+            p_characteristics.append([CharacteristicsNames.std_p, float(std_p)])
         else:
             p_characteristics.append([CharacteristicsNames.mean_p, 'n'])
             p_characteristics.append([CharacteristicsNames.std_p, 'n'])
@@ -75,8 +75,8 @@ def get_p_chars(lead):
         if pq_distribution:
             mean_pq = np.mean(pq_distribution)
             std_pq = np.std(pq_distribution)
-            p_characteristics.append([CharacteristicsNames.mean_pq, mean_pq])
-            p_characteristics.append([CharacteristicsNames.std_pq, std_pq])
+            p_characteristics.append([CharacteristicsNames.mean_pq, float(mean_pq)])
+            p_characteristics.append([CharacteristicsNames.std_pq, float(std_pq)])
         else:
             p_characteristics.append([CharacteristicsNames.mean_pq, 'n'])
             p_characteristics.append([CharacteristicsNames.std_pq, 'n'])
@@ -94,16 +94,16 @@ def get_p_chars(lead):
                         num_flexure += 1
 
             normal_p = float(num_normal) / float(p_num) * 100.0
-            p_characteristics.append([CharacteristicsNames.normal_p, normal_p])
+            p_characteristics.append([CharacteristicsNames.normal_p, float(normal_p)])
 
             flexure_p = float(num_flexure) / float(p_num) * 100.0
-            p_characteristics.append([CharacteristicsNames.flexure_p, flexure_p])
+            p_characteristics.append([CharacteristicsNames.flexure_p, float(flexure_p)])
 
             biphasic_p = float(spec_distribution.count(WaveSpecification.biphasic)) / float(p_num) * 100.0
-            p_characteristics.append([CharacteristicsNames.biphasic_p, biphasic_p])
+            p_characteristics.append([CharacteristicsNames.biphasic_p, float(biphasic_p)])
 
             atrial_fibrillation_p = float(spec_distribution.count(WaveSpecification.atrial_fibrillation)) / float(p_num) * 100.0
-            p_characteristics.append([CharacteristicsNames.atrial_fibrillation_p, atrial_fibrillation_p])
+            p_characteristics.append([CharacteristicsNames.atrial_fibrillation_p, float(atrial_fibrillation_p)])
 
         else:
             p_characteristics.append([CharacteristicsNames.normal_p, 'n'])
@@ -116,10 +116,10 @@ def get_p_chars(lead):
             std_p_val = np.std(p_val_distribution)
             max_p_val = np.max(p_val_distribution)
             min_p_val = np.min(p_val_distribution)
-            p_characteristics.append([CharacteristicsNames.mean_p_val, mean_p_val])
-            p_characteristics.append([CharacteristicsNames.std_p_val, std_p_val])
-            p_characteristics.append([CharacteristicsNames.max_p_val, max_p_val])
-            p_characteristics.append([CharacteristicsNames.min_p_val, min_p_val])
+            p_characteristics.append([CharacteristicsNames.mean_p_val, float(mean_p_val)])
+            p_characteristics.append([CharacteristicsNames.std_p_val, float(std_p_val)])
+            p_characteristics.append([CharacteristicsNames.max_p_val, float(max_p_val)])
+            p_characteristics.append([CharacteristicsNames.min_p_val, float(min_p_val)])
         else:
             p_characteristics.append([CharacteristicsNames.mean_p_val, 'n'])
             p_characteristics.append([CharacteristicsNames.std_p_val, 'n'])

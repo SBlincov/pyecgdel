@@ -65,15 +65,15 @@ def get_t_chars(lead):
 
         if beat_num > 0:
             presence_t = t_num / beat_num * 100.0
-            t_characteristics.append([CharacteristicsNames.presence_t, presence_t])
+            t_characteristics.append([CharacteristicsNames.presence_t, float(presence_t)])
         else:
             t_characteristics.append([CharacteristicsNames.presence_t, 'n'])
 
         if t_distribution:
             mean_t = np.mean(t_distribution)
             std_t = np.std(t_distribution)
-            t_characteristics.append([CharacteristicsNames.mean_t, mean_t])
-            t_characteristics.append([CharacteristicsNames.std_t, std_t])
+            t_characteristics.append([CharacteristicsNames.mean_t, float(mean_t)])
+            t_characteristics.append([CharacteristicsNames.std_t, float(std_t)])
         else:
             t_characteristics.append([CharacteristicsNames.mean_t, 'n'])
             t_characteristics.append([CharacteristicsNames.std_t, 'n'])
@@ -81,8 +81,8 @@ def get_t_chars(lead):
         if qt_distribution:
             mean_qt = np.mean(qt_distribution)
             std_qt = np.std(qt_distribution)
-            t_characteristics.append([CharacteristicsNames.mean_qt, mean_qt])
-            t_characteristics.append([CharacteristicsNames.std_qt, std_qt])
+            t_characteristics.append([CharacteristicsNames.mean_qt, float(mean_qt)])
+            t_characteristics.append([CharacteristicsNames.std_qt, float(std_qt)])
         else:
             t_characteristics.append([CharacteristicsNames.mean_qt, 'n'])
             t_characteristics.append([CharacteristicsNames.std_qt, 'n'])
@@ -90,8 +90,8 @@ def get_t_chars(lead):
         if st_distribution:
             mean_st = np.mean(st_distribution)
             std_st = np.std(st_distribution)
-            t_characteristics.append([CharacteristicsNames.mean_st, mean_st])
-            t_characteristics.append([CharacteristicsNames.std_st, std_st])
+            t_characteristics.append([CharacteristicsNames.mean_st, float(mean_st)])
+            t_characteristics.append([CharacteristicsNames.std_st, float(std_st)])
         else:
             t_characteristics.append([CharacteristicsNames.mean_st, 'n'])
             t_characteristics.append([CharacteristicsNames.std_st, 'n'])
@@ -109,13 +109,13 @@ def get_t_chars(lead):
                         num_flexure += 1
 
             normal_t = float(num_normal) / float(t_num) * 100.0
-            t_characteristics.append([CharacteristicsNames.normal_t, normal_t])
+            t_characteristics.append([CharacteristicsNames.normal_t, float(normal_t)])
 
             flexure_t = float(num_flexure) / float(t_num) * 100.0
-            t_characteristics.append([CharacteristicsNames.flexure_t, flexure_t])
+            t_characteristics.append([CharacteristicsNames.flexure_t, float(flexure_t)])
 
             biphasic_t = float(spec_distribution.count(WaveSpecification.biphasic)) / float(len(spec_distribution)) * 100.0
-            t_characteristics.append([CharacteristicsNames.biphasic_t, biphasic_t])
+            t_characteristics.append([CharacteristicsNames.biphasic_t, float(biphasic_t)])
         else:
             t_characteristics.append([CharacteristicsNames.normal_t, 'n'])
             t_characteristics.append([CharacteristicsNames.flexure_t, 'n'])
@@ -126,10 +126,10 @@ def get_t_chars(lead):
             std_t_val = np.std(t_val_distribution)
             max_t_val = np.max(t_val_distribution)
             min_t_val = np.min(t_val_distribution)
-            t_characteristics.append([CharacteristicsNames.mean_t_val, mean_t_val])
-            t_characteristics.append([CharacteristicsNames.std_t_val, std_t_val])
-            t_characteristics.append([CharacteristicsNames.max_t_val, max_t_val])
-            t_characteristics.append([CharacteristicsNames.min_t_val, min_t_val])
+            t_characteristics.append([CharacteristicsNames.mean_t_val, float(mean_t_val)])
+            t_characteristics.append([CharacteristicsNames.std_t_val, float(std_t_val)])
+            t_characteristics.append([CharacteristicsNames.max_t_val, float(max_t_val)])
+            t_characteristics.append([CharacteristicsNames.min_t_val, float(min_t_val)])
         else:
             t_characteristics.append([CharacteristicsNames.mean_t_val, 'n'])
             t_characteristics.append([CharacteristicsNames.std_t_val, 'n'])
