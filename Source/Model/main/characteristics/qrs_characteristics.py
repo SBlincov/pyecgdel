@@ -157,39 +157,48 @@ def get_qrs_chars(lead):
             qrs_characteristics.append([CharacteristicsNames.TINN, TINN])
 
             # Frequency
-            rr_distribution_ms = []
-            for rr in rr_distribution:
-                rr_distribution_ms.append(rr * 1000)
-            frequency_characteristics = frequency_domain(rri=rr_distribution_ms,
-                                                         fs=4.0,
-                                                         method='welch',
-                                                         interp_method='cubic',
-                                                         detrend='linear')
+            if len(rr_distribution) > 3:
+                rr_distribution_ms = []
+                for rr in rr_distribution:
+                    rr_distribution_ms.append(rr * 1000)
+                frequency_characteristics = frequency_domain(rri=rr_distribution_ms,
+                                                             fs=4.0,
+                                                             method='welch',
+                                                             interp_method='cubic',
+                                                             detrend='linear')
 
-            TP = frequency_characteristics['total_power']
-            VLF = frequency_characteristics['vlf']
-            LF = frequency_characteristics['lf']
-            HF = frequency_characteristics['hf']
-            LFHF = frequency_characteristics['lf_hf']
-            LFnorm = frequency_characteristics['lfnu']
-            HFnorm = frequency_characteristics['hfnu']
+                TP = frequency_characteristics['total_power']
+                VLF = frequency_characteristics['vlf']
+                LF = frequency_characteristics['lf']
+                HF = frequency_characteristics['hf']
+                LFHF = frequency_characteristics['lf_hf']
+                LFnorm = frequency_characteristics['lfnu']
+                HFnorm = frequency_characteristics['hfnu']
 
-            qrs_characteristics.append([CharacteristicsNames.TP, TP])
-            qrs_characteristics.append([CharacteristicsNames.VLF, VLF])
-            qrs_characteristics.append([CharacteristicsNames.LF, LF])
-            qrs_characteristics.append([CharacteristicsNames.HF, HF])
-            if np.isnan(LFHF):
+                qrs_characteristics.append([CharacteristicsNames.TP, TP])
+                qrs_characteristics.append([CharacteristicsNames.VLF, VLF])
+                qrs_characteristics.append([CharacteristicsNames.LF, LF])
+                qrs_characteristics.append([CharacteristicsNames.HF, HF])
+                if np.isnan(LFHF):
+                    qrs_characteristics.append([CharacteristicsNames.LFHF, 'n'])
+                else:
+                    qrs_characteristics.append([CharacteristicsNames.LFHF, LFHF])
+                if np.isnan(LFnorm):
+                    qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
+                else:
+                    qrs_characteristics.append([CharacteristicsNames.LFnorm, LFnorm])
+                if np.isnan(HFnorm):
+                    qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
+                else:
+                    qrs_characteristics.append([CharacteristicsNames.HFnorm, HFnorm])
+            else:
+                qrs_characteristics.append([CharacteristicsNames.TP, 'n'])
+                qrs_characteristics.append([CharacteristicsNames.VLF, 'n'])
+                qrs_characteristics.append([CharacteristicsNames.LF, 'n'])
+                qrs_characteristics.append([CharacteristicsNames.HF, 'n'])
                 qrs_characteristics.append([CharacteristicsNames.LFHF, 'n'])
-            else:
-                qrs_characteristics.append([CharacteristicsNames.LFHF, LFHF])
-            if np.isnan(LFnorm):
                 qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
-            else:
-                qrs_characteristics.append([CharacteristicsNames.LFnorm, LFnorm])
-            if np.isnan(HFnorm):
                 qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
-            else:
-                qrs_characteristics.append([CharacteristicsNames.HFnorm, HFnorm])
 
         else:
 
