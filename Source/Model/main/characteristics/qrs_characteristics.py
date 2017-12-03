@@ -97,7 +97,6 @@ def get_qrs_chars(lead):
             mean_NN = np.mean(rr_dist_mod)
             qrs_characteristics.append([CharacteristicsNames.mean_NN, mean_NN])
             max_sub_min_NN = np.max(rr_dist_mod) - np.min(rr_dist_mod)
-            qrs_characteristics.append([CharacteristicsNames.max_sub_min_NN, max_sub_min_NN])
 
             # Statistics
             SDNN = np.std(rr_dist_mod)
@@ -145,8 +144,8 @@ def get_qrs_chars(lead):
 
             # Geometry
             bins = np.arange(0.0, 3.0, 0.0078125).tolist()
-            hist = np.histogram(rr_dist_mod, bins)
-            triangular_index = np.max(hist[0]) / len(rr_dist_mod)
+            hist = np.histogram(rr_distribution, bins)
+            triangular_index = np.max(hist[0]) / len(rr_distribution)
             qrs_characteristics.append([CharacteristicsNames.triangular_index, triangular_index])
 
             arg_max = np.argmax(hist[0])
@@ -209,6 +208,24 @@ def get_qrs_chars(lead):
                 qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
                 qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
 
+            # Additional
+            Mo = np.max(hist[0])
+            AMo = Mo / sum(hist[0])
+            X = max_sub_min_NN
+            IVR = AMo / X
+            VPR = 1.0 / Mo * X
+            PAPR = AMo / Mo
+            IN = AMo / (2.0 * X * Mo)
+
+            qrs_characteristics.append([CharacteristicsNames.Mo, Mo])
+            qrs_characteristics.append([CharacteristicsNames.AMo, AMo])
+            qrs_characteristics.append([CharacteristicsNames.X, X])
+            qrs_characteristics.append([CharacteristicsNames.IVR, IVR])
+            qrs_characteristics.append([CharacteristicsNames.VPR, VPR])
+            qrs_characteristics.append([CharacteristicsNames.PAPR, PAPR])
+            qrs_characteristics.append([CharacteristicsNames.IN, IN])
+
+
         else:
 
             qrs_characteristics.append([CharacteristicsNames.mean_rr, 'n'])
@@ -239,6 +256,15 @@ def get_qrs_chars(lead):
             qrs_characteristics.append([CharacteristicsNames.LFHF, 'n'])
             qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
             qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
+
+            # Additional
+            qrs_characteristics.append([CharacteristicsNames.Mo, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.AMo, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.X, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.IVR, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.VPR, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.PAPR, 'n'])
+            qrs_characteristics.append([CharacteristicsNames.IN, 'n'])
 
 
         if qrs_distribution:
@@ -327,5 +353,14 @@ def get_qrs_chars(lead):
         qrs_characteristics.append([CharacteristicsNames.LFHF, 'n'])
         qrs_characteristics.append([CharacteristicsNames.LFnorm, 'n'])
         qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
+
+        # Additional
+        qrs_characteristics.append([CharacteristicsNames.Mo, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.AMo, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.X, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.IVR, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.VPR, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.PAPR, 'n'])
+        qrs_characteristics.append([CharacteristicsNames.IN, 'n'])
 
     return qrs_characteristics

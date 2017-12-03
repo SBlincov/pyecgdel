@@ -9,7 +9,6 @@ class CharacteristicsNames(Enum):
 
     # Regular
     mean_NN = "mean_NN"
-    max_sub_min_NN = "max_sub_min_NN"
 
     # Statistical
     SDNN = "SDNN"
@@ -32,6 +31,15 @@ class CharacteristicsNames(Enum):
     LFHF = "LFHF"
     LFnorm = "LFnorm"
     HFnorm = "HFnorm"
+
+    # Additional
+    Mo = "Mo"
+    AMo = "AMo"
+    X = "X"
+    IVR = "IVR"
+    VPR = "VPR"
+    PAPR = "PAPR"
+    IN = "IN"
 
     mean_rr = "mean_rr"
     std_rr = "std_rr"
