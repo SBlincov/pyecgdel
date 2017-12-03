@@ -67,12 +67,11 @@ class QRSPlotData:
                     ellipse_pca_b = b
                     ellipse_pca_angle = angle
 
-                    ellipse_pca = [ellipse_pca_center_x,
-                                   ellipse_pca_center_y,
-                                   ellipse_pca_a,
-                                   ellipse_pca_b,
-                                   ellipse_pca_angle]
-
+                    ellipse_pca = [float(ellipse_pca_center_x),
+                                   float(ellipse_pca_center_y),
+                                   float(ellipse_pca_a),
+                                   float(ellipse_pca_b),
+                                   float(ellipse_pca_angle)]
 
                     # Bisector ellipse
                     x_c = np.mean(x)
@@ -108,12 +107,11 @@ class QRSPlotData:
                     ellipse_bis_b = 2.0 * mean_135 + 6.0 * std_135
                     ellipse_bis_angle = 45.0
 
-
-                    ellipse_bis = [ellipse_bis_center_x,
-                                   ellipse_bis_center_y,
-                                   ellipse_bis_a,
-                                   ellipse_bis_b,
-                                   ellipse_bis_angle]
+                    ellipse_bis = [float(ellipse_bis_center_x),
+                                   float(ellipse_bis_center_y),
+                                   float(ellipse_bis_a),
+                                   float(ellipse_bis_b),
+                                   float(ellipse_bis_angle)]
 
         plot_data_dict = {
             QRSPlotDataNames.rr_dist : rr_dist,
