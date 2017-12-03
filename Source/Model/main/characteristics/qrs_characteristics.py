@@ -84,14 +84,23 @@ def get_qrs_chars(lead):
             std_rr = np.std(rr_distribution)
             qrs_characteristics.append([CharacteristicsNames.std_rr, std_rr])
 
+            rr_dist_mod = rr_distribution
+
+            # Magic for very short signal
+            if (len(signal) / rate <= 10):
+                repeat_coeff = 30
+                rr_dist_mod = []
+                for rep_id in range(0, repeat_coeff):
+                    rr_dist_mod = rr_dist_mod + rr_distribution
+
             # Regular
-            mean_NN = mean_rr
+            mean_NN = np.mean(rr_dist_mod)
             qrs_characteristics.append([CharacteristicsNames.mean_NN, mean_NN])
-            max_sub_min_NN = np.max(rr_distribution) - np.min(rr_distribution)
+            max_sub_min_NN = np.max(rr_dist_mod) - np.min(rr_dist_mod)
             qrs_characteristics.append([CharacteristicsNames.max_sub_min_NN, max_sub_min_NN])
 
             # Statistics
-            SDNN = std_rr
+            SDNN = np.std(rr_dist_mod)
             qrs_characteristics.append([CharacteristicsNames.SDNN, SDNN])
 
             if len(signal) / rate < 43200: # 12 hours
@@ -114,10 +123,10 @@ def get_qrs_chars(lead):
 
             RMSSD = 0.0
             rr_diffs = []
-            for rr_id in range(0, len(rr_distribution) - 1):
-                rr_diffs.append((rr_distribution[rr_id + 1] - rr_distribution[rr_id]))
-                RMSSD += pow((rr_distribution[rr_id + 1] - rr_distribution[rr_id]), 2.0)
-            RMSSD = RMSSD / (len(rr_distribution) - 1)
+            for rr_id in range(0, len(rr_dist_mod) - 1):
+                rr_diffs.append((rr_dist_mod[rr_id + 1] - rr_dist_mod[rr_id]))
+                RMSSD += pow((rr_dist_mod[rr_id + 1] - rr_dist_mod[rr_id]), 2.0)
+            RMSSD = RMSSD / (len(rr_dist_mod) - 1)
             RMSSD = np.sqrt(RMSSD)
 
             qrs_characteristics.append([CharacteristicsNames.RMSSD, RMSSD])
@@ -136,8 +145,8 @@ def get_qrs_chars(lead):
 
             # Geometry
             bins = np.arange(0.0, 3.0, 0.0078125).tolist()
-            hist = np.histogram(rr_distribution, bins)
-            triangular_index = np.max(hist[0]) / len(rr_distribution)
+            hist = np.histogram(rr_dist_mod, bins)
+            triangular_index = np.max(hist[0]) / len(rr_dist_mod)
             qrs_characteristics.append([CharacteristicsNames.triangular_index, triangular_index])
 
             arg_max = np.argmax(hist[0])
@@ -157,9 +166,9 @@ def get_qrs_chars(lead):
             qrs_characteristics.append([CharacteristicsNames.TINN, TINN])
 
             # Frequency
-            if len(rr_distribution) > 3:
+            if len(rr_dist_mod) > 3:
                 rr_distribution_ms = []
-                for rr in rr_distribution:
+                for rr in rr_dist_mod:
                     rr_distribution_ms.append(rr * 1000)
                 frequency_characteristics = frequency_domain(rri=rr_distribution_ms,
                                                              fs=4.0,
