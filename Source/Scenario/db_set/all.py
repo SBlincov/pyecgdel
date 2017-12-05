@@ -3,6 +3,7 @@ import sys
 from Source.Model.main.ecg.ecg import *
 from Source.CardioBase.cardiobase import Cardiobase
 from Source.Scenario.db_set.set_record import set_record
+from Source.Model.main.plot_data.qrs import *
 import os
 
 DBConfig.name = 'shiller'
@@ -40,6 +41,10 @@ for lead_name in leads_names:
     columns_names.append("json_" + lead_name + "_t_morphology")
 
     columns_names.append("json_" + lead_name + "_characteristics")
+
+    for plot_data_name in QRSPlotDataNames:
+        column_name = "json_" + lead_name + "_" + plot_data_name.value
+        columns_names.append(column_name)
 
 records_names = []
 

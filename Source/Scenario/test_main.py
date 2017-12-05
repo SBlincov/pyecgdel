@@ -22,7 +22,9 @@ init_params(qrs_params_from_hash, ParamsType.qrs_params)
 init_params(t_params_from_hash, ParamsType.t_params)
 init_params(filter_params_from_hash, ParamsType.filter_params)
 
-leads_names = ConfigParams['LEADS_NAMES']
+# leads_names = ConfigParams['LEADS_NAMES']
+
+leads_names = ["lead_i"]
 
 columns_names = []
 for lead_name in leads_names:
@@ -56,4 +58,3 @@ ecg.add_characteristics_data_to_dict(result_data_dict, result_columns_names, id_
 # Plot data
 ecg.init_plot_data()
 ecg.add_plot_data_to_dict(result_data_dict, result_columns_names, id_file)
-
