@@ -3,7 +3,11 @@ clear all;
 base_name = 'qtdb';
 freq = 250.0;
 
-record = 4;
+record = 1;
+
+is_filtered = 0;
+wdc_scale = 1;
+markerWidth = 12;
 
 leads = {'lead_ii', 'lead_v5'};
 
@@ -12,10 +16,6 @@ for lead_id = 1:2
     fig_ecg = figure;
     propertyeditor(fig_ecg)
     lead = leads{lead_id};
-    
-    wdc_scale = 1;
-    markerWidth = 12;
-    is_filtered = 1;
     
     db_path = sprintf('../Data/%s/', base_name);
     record_path = sprintf('record_%d/', record);
