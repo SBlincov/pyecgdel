@@ -33,7 +33,7 @@ for file_name in files_names:
     status = data['data']
 
     if len(status) > 0:
-        if status[0][0] == 'done' or status[0] == 'only_delineation':
+        if status[0][0] == 'done' or status[0][0] == 'only_delineation':
             correct_file_names.append(file_name)
 
 columns = ["json_lead_i_original",
