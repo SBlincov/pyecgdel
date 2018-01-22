@@ -108,3 +108,5 @@ ENV/
 .ropeproject
 
 Source/CardioBase/test_cardiobase\.exe
+
+*.asv

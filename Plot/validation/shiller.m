@@ -393,35 +393,39 @@ for id = 1:num_records
 end
 
 
-qrs_TP = qrs_TP
-qrs_FN = qrs_FN
-qrs_FP = qrs_FP
+qrs_TP = qrs_TP;
+qrs_FN = qrs_FN;
+qrs_FP = qrs_FP;
 for lead_id = 1:num_leads
     qrs_Se(lead_id) = qrs_TP(lead_id) / (qrs_TP(lead_id) + qrs_FN(lead_id));
     qrs_PPV(lead_id) = qrs_TP(lead_id) / (qrs_TP(lead_id) + qrs_FP(lead_id));
 end
-qrs_Se = qrs_Se
-qrs_PPV = qrs_PPV
 
-p_TP = p_TP
-p_FN = p_FN
-p_FP = p_FP
+qrs_Se_mean = mean(qrs_Se)
+qrs_PPV_mean = mean(qrs_PPV)
+
+p_TP = p_TP;
+p_FN = p_FN;
+p_FP = p_FP;
 for lead_id = 1:num_leads
     p_Se(lead_id) = p_TP(lead_id) / (p_TP(lead_id) + p_FN(lead_id));
     p_PPV(lead_id) = p_TP(lead_id) / (p_TP(lead_id) + p_FP(lead_id));
 end
-p_Se = p_Se
-p_PPV = p_PPV
 
-t_TP = t_TP
-t_FN = t_FN
-t_FP = t_FP
+p_Se_mean = mean(p_Se)
+p_PPV_mean = mean(p_PPV)
+
+t_TP = t_TP;
+t_FN = t_FN;
+t_FP = t_FP;
 for lead_id = 1:num_leads
     t_Se(lead_id) = t_TP(lead_id) / (t_TP(lead_id) + t_FN(lead_id));
     t_PPV(lead_id) = t_TP(lead_id) / (t_TP(lead_id) + t_FP(lead_id));
 end
-t_Se = t_Se
-t_PPV = t_PPV
+
+
+t_Se_mean = mean(t_Se)
+t_PPV_mean = mean(t_PPV)
 
 qrs_peak_error_mean_avg = qrs_peak_error_mean_avg / (num_leads * num_records)
 qrs_peak_error_std_avg = qrs_peak_error_std_avg / (num_leads * num_records)

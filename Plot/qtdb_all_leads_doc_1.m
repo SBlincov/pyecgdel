@@ -3,7 +3,7 @@ clear all;
 base_name = 'qtdb';
 freq = 250.0;
 
-record = 4;
+record = 2;
 
 is_filtered = 0;
 markerWidth = 12;
@@ -30,8 +30,8 @@ for lead_id = 1:2
     ecg_lead = importdata(file_name_ecg);
     
     for i = 1:size(ecg_lead)
-        times(i) = (i - 1);
-        %times(i) = (i - 1) / freq;
+        %times(i) = (i - 1);
+        times(i) = (i - 1) / freq;
     end
     
     hLine = plot(times, ecg_lead, 'k', 'LineWidth', 2);
