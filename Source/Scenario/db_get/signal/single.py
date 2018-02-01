@@ -41,10 +41,10 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    file_name = "1102654806"
+    file_name = "50653650"
 
     data = cb.bulk_data_get([column], "cardio_file.id=" + str(file_name))
-    # data = cb.bulk_data_get([column], "device_model='AT-101'")
+
     records_ids = data['id']
     ecg_data = data['data']
 

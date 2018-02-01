@@ -8,7 +8,8 @@ from Source.Model.main.data_details.ecg_data_details import *
 from Source.Infrastructure.main.load_ecg_data import *
 from Source.Infrastructure.main.save_ecg_data import *
 
-from Source.Model.main.delineation.qrs.delta.delta import multi_lead_processing
+from Source.Model.main.delineation.qrs.delta.delta import qrs_multi_lead_processing
+from Source.Model.main.delineation.p.delta.delta import p_multi_lead_processing
 
 
 class InvalidECG(Exception):
@@ -96,7 +97,7 @@ class ECG:
         print("")
 
         if len(self.leads) > 1:
-            multi_lead_processing(self.leads)
+            qrs_multi_lead_processing(self.leads)
 
         for lead_id in range(0, len(self.leads)):
             print("T delineation " + str(self.leads[lead_id].name) + " ...")
@@ -109,6 +110,9 @@ class ECG:
             self.leads[lead_id].p_del()
             print("P delineation " + str(self.leads[lead_id].name) + " complete")
         print("")
+
+        if len(self.leads) > 1:
+            p_multi_lead_processing(self.leads)
 
         for lead_id in range(0, len(self.leads)):
             self.leads[lead_id].print_del_info()

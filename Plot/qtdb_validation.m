@@ -291,7 +291,14 @@ for record = start_record : start_record + num_records - 1
         
     end
     
-    if is_qrs == 1 && size(qrs_ids{lead_id}, 1) > 0
+    is_our_qrs = 1;
+    for lead_id = 1:2
+         if ~(is_qrs == 1 && size(qrs_ids{lead_id}, 1) > 0)
+             is_our_qrs = 0;
+         end
+    end
+    
+    if is_qrs == 1 && is_our_qrs == 1
         
         qrs_rec_det = qrs_rec_det + 1;
         
@@ -393,7 +400,15 @@ for record = start_record : start_record + num_records - 1
         
     end
     
-    if is_p == 1 && size(p_ids{lead_id}, 1) > 0
+    
+    is_our_p = 1;
+    for lead_id = 1:2
+         if ~(is_p == 1 && size(p_ids{lead_id}, 1) > 0)
+             is_our_p = 0;
+         end
+    end
+    
+    if is_p == 1 && is_our_p == 1
         
         p_rec_det = p_rec_det + 1;
         
@@ -495,7 +510,15 @@ for record = start_record : start_record + num_records - 1
         
     end
     
-    if is_t == 1 && size(t_ids{lead_id}, 1) > 0
+    
+    is_our_t = 1;
+    for lead_id = 1:2
+         if ~(is_t == 1 && size(t_ids{lead_id}, 1) > 0)
+             is_our_t = 0;
+         end
+    end
+    
+    if is_t == 1 && is_our_t == 1
         
         t_rec_det = t_rec_det + 1;
         

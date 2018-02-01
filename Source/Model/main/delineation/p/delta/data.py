@@ -42,8 +42,22 @@ class DelData:
             offs.append(offs_lead)
             mean_p.append(mean_p_curr)
 
-        # Computing global mean QRS length
+        # Computing global mean P length
         mean_p_global = np.mean(np.asarray(mean_p))
+
+        # Computing global mean RR
+        rr_global = []
+        for lead_id in range(0, num_leads):
+            lead = leads[lead_id]
+            qrs_dels = lead.qrs_dels
+
+            if qrs_dels:
+                for qrs_id in range(0, len(qrs_dels) - 1):
+                    current_rr = (qrs_dels[qrs_id + 1].peak_index - qrs_dels[qrs_id].peak_index)
+                    if current_rr > 0.0:
+                        rr_global.append(current_rr)
+
+        mean_rr_global = np.mean(np.asarray(rr_global))
 
         self.num_leads = num_leads
         self.len_of_dels = len_of_dels
@@ -51,6 +65,7 @@ class DelData:
         self.offs = offs
         self.mean_p = mean_p
         self.mean_p_global = mean_p_global
+        self.mean_rr_global = mean_rr_global
 
 
 class AllLeadsData:
@@ -58,7 +73,7 @@ class AllLeadsData:
     def __init__(self, del_data):
 
         # Computing params, which scales from mean P length
-        loc = del_data.mean_qrs_global * float(PParams['DELTA_MEAN_QRS_LOC'])
+        loc = del_data.mean_rr_global * float(PParams['DELTA_MEAN_RR_LOC'])
 
         # Computing lead id with maximum number of dels
         max_dels_lead_id = np.argmax(np.asarray(del_data.len_of_dels))
@@ -178,6 +193,5 @@ class MinData:
         self.on_min = on_min
         self.off_argmin = off_argmin
         self.off_min = off_min
-
 
 

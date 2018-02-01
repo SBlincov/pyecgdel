@@ -27,6 +27,18 @@ files_names = []
 for i in all_files:
     files_names.append(cb.get_file_id(i))
 
+correct_file_names = []
+for file_name in files_names:
+    data = cb.bulk_data_get(["json_status"], "cardio_file.id=" + str(file_name))
+    status = data['data']
+
+    if len(status) > 0:
+        if status[0][0] == 'done' or status[0][0] == 'only_delineation':
+            correct_file_names.append(file_name)
+
+ecg_data_path = db_path + '\\delineated_by_doc_ids.txt'
+np.savetxt(ecg_data_path, np.transpose(np.array(correct_file_names)), fmt='%d')
+
 columns = ["json_lead_i_p_delineation_doc",
            "json_lead_i_qrs_delineation_doc",
            "json_lead_i_t_delineation_doc",
@@ -68,7 +80,7 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    for file_name in files_names:
+    for file_name in correct_file_names:
 
         data = cb.bulk_data_get([column], "cardio_file.id=" + str(file_name))
 
@@ -80,7 +92,11 @@ for column_id in range(0, len(columns)):
             record_id = records_ids[i]
 
             record_name = "record_" + str(record_id)
-            lead_name = column[5:-9]
+
+            if column[-17] == 's':
+                lead_name = column[5:-20]
+            else:
+                lead_name = column[5:-18]
 
             print("lead: ", lead_name, " record: ", record_name)
 
@@ -92,5 +108,11 @@ for column_id in range(0, len(columns)):
             if not os.path.exists(lead_path):
                 os.makedirs(lead_path)
 
-            ecg_data_path = lead_path + '\\original.txt'
-            np.savetxt(ecg_data_path, np.transpose(np.array(ecg_data[i])), fmt='%d')
+            del_name = column[5:]
+            del_name = del_name.replace(lead_name + '_', '')
+
+            del_data = ecg_data[i][0]
+            sort_data = sorted(del_data,key=lambda l:l[1])
+
+            ecg_data_path = lead_path + '\\' + del_name + '.txt'
+            np.savetxt(ecg_data_path, sort_data, fmt='%d')

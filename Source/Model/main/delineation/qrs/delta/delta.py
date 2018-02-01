@@ -2,7 +2,7 @@ from Source.Model.main.delineation.qrs.delta.matrix import *
 from Source.Model.main.delineation.qrs.delta.addition import *
 from Source.Model.main.delineation.qrs.delta.removal import *
 
-def multi_lead_processing(leads):
+def qrs_multi_lead_processing(leads):
 
     num_leads = len(leads)
 
