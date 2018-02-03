@@ -12,7 +12,7 @@ num_leads = size(leads, 2);
 
 fn_dd = sprintf('%s/delineated_by_doc_ids.txt', db_path);
 records_ids = importdata(fn_dd);
-
+7
 num_records = size(records_ids, 1);
 
 qrs_num_docs = zeros(num_leads, 1);
