@@ -91,6 +91,9 @@ def is_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -121,6 +124,9 @@ def is_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     r_zc_id = peak_zc_id
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
+
+    if r_zc_id not in dels_zcs_ids:
+        return False
 
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
@@ -154,6 +160,9 @@ def is_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -185,6 +194,9 @@ def is_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     r_zc_id = peak_zc_id
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
+
+    if r_zc_id not in dels_zcs_ids:
+        return False
 
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
@@ -219,6 +231,9 @@ def is_extra_zcs_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     r_zc_id = peak_zc_id
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
+
+    if r_zc_id not in dels_zcs_ids:
+        return False
 
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
@@ -260,6 +275,9 @@ def is_p_zcs_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -299,6 +317,9 @@ def is_extra_zcs_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     r_zc_id = peak_zc_id
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
+
+    if r_zc_id not in dels_zcs_ids:
+        return False
 
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
@@ -341,6 +362,9 @@ def is_p_zcs_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -382,6 +406,9 @@ def is_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -422,6 +449,9 @@ def is_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -461,6 +491,9 @@ def is_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     r_zc_id = peak_zc_id
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
+
+    if r_zc_id not in dels_zcs_ids:
+        return False
 
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
@@ -503,6 +536,9 @@ def is_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -543,6 +579,9 @@ def is_extra_zcs_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_
     r_zc_id = peak_zc_id
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
+
+    if r_zc_id not in dels_zcs_ids:
+        return False
 
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
@@ -587,6 +626,9 @@ def is_p_zcs_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_d
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -630,6 +672,9 @@ def is_extra_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_d
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
 
+    if r_zc_id not in dels_zcs_ids:
+        return False
+
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff
     s_zc_id_index = r_zc_id_index + s_zc_id_diff
@@ -672,6 +717,9 @@ def is_p_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff)
     r_zc_id = peak_zc_id
     q_zc_id = r_zc_id + q_zc_id_diff
     s_zc_id = r_zc_id + s_zc_id_diff
+
+    if r_zc_id not in dels_zcs_ids:
+        return False
 
     r_zc_id_index = dels_zcs_ids.index(r_zc_id)
     q_zc_id_index = r_zc_id_index + q_zc_id_diff

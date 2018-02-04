@@ -22,8 +22,6 @@ all_columns = cb.get_columns()
 
 patients = cb.get_patient_list()
 
-
-
 columns = ["json_lead_i_original",
            "json_lead_ii_original",
            "json_lead_iii_original",
@@ -41,7 +39,7 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    file_name = "50653650"
+    file_name = "1001831957"
 
     data = cb.bulk_data_get([column], "cardio_file.id=" + str(file_name))
 
