@@ -131,15 +131,14 @@ def load_data_local(ecg, details=ECGDataDetails.original):
 
             data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, lead_name, details)
 
-            if not os.path.exists(data_file_name):
-                raise InvalidECGData('Lead file is not exist')
+            if os.path.exists(data_file_name):
 
-            data = np.loadtxt(data_file_name)
+                data = np.loadtxt(data_file_name)
 
-            lead = ECGLead(lead_name, data, sampling_rate)
-            leads.append(lead)
+                lead = ECGLead(lead_name, data, sampling_rate)
+                leads.append(lead)
 
-            print("Init " + str(lead_name) + " complete")
+                print("Init " + str(lead_name) + " complete")
 
         ecg.leads = leads
 
