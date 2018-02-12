@@ -9,12 +9,14 @@ class DelData:
         num_leads = len(leads)
 
         ons = []
+        peaks = []
         offs = []
+        num_points = []
         len_of_dels = []
         mean_qrs = []
 
         # Considering all leads:
-        #   Taking all onset and offset indexes
+        #   Taking all onset, peak and offset indexes
         #   Saving number of dels for each lead
         #   Saving mean QRS length for each lead
         for lead_id in range(0, num_leads):
@@ -22,24 +24,33 @@ class DelData:
             lead = leads[lead_id]
 
             dels = lead.qrs_dels
+            morphs = lead.qrs_morphs
 
             len_of_dels.append(len(dels))
 
             ons_lead = []
+            peaks_lead = []
             offs_lead = []
+            num_points_lead = []
             mean_qrs_curr = 0.0
             for del_id in range(0, len_of_dels[lead_id]):
                 on_index_curr = dels[del_id].onset_index
+                peak_index_curr = dels[del_id].peak_index
                 off_index_curr = dels[del_id].offset_index
+                num_points_curr = len(morphs[del_id].points)
                 ons_lead.append(on_index_curr)
+                peaks_lead.append(peak_index_curr)
                 offs_lead.append(off_index_curr)
+                num_points_lead.append(num_points_curr)
                 mean_qrs_curr += (off_index_curr - on_index_curr)
 
             if len(dels) > 0:
                 mean_qrs_curr /= len(dels)
 
             ons.append(ons_lead)
+            peaks.append(peaks_lead)
             offs.append(offs_lead)
+            num_points.append(num_points_lead)
             mean_qrs.append(mean_qrs_curr)
 
         # Computing global mean QRS length
@@ -48,7 +59,9 @@ class DelData:
         self.num_leads = num_leads
         self.len_of_dels = len_of_dels
         self.ons = ons
+        self.peaks = peaks
         self.offs = offs
+        self.num_points = num_points
         self.mean_qrs = mean_qrs
         self.mean_qrs_global = mean_qrs_global
 
