@@ -7,6 +7,40 @@ from enum import Enum
 
 class CharacteristicsNames(Enum):
 
+    # Regular
+    mean_NN = "mean_NN"
+
+    # Statistical
+    SDNN = "SDNN"
+    SDANN = "SDANN"
+    SDNNindex = "SDNNindex"
+    RMSSD = "RMSSD"
+    NN50 = "NN50"
+    pNN50 = "pNN50"
+    SDSD = "SDSD"
+
+    # Geometry
+    triangular_index = "triangular index"
+    TINN = "TINN"
+
+    # Frequency
+    TP = "TP"
+    VLF = "VLF"
+    LF = "LF"
+    HF = "HF"
+    LFHF = "LFHF"
+    LFnorm = "LFnorm"
+    HFnorm = "HFnorm"
+
+    # Additional
+    Mo = "Mo"
+    AMo = "AMo"
+    X = "X"
+    IVR = "IVR"
+    VPR = "VPR"
+    PAPR = "PAPR"
+    IN = "IN"
+
     mean_rr = "mean_rr"
     std_rr = "std_rr"
     mean_qrs = "mean_qrs"

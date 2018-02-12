@@ -54,9 +54,6 @@ class DBConfig:
     @staticmethod
     def get_db_lead_path(patient_name, record_name, lead_name, details):
 
-        if not isinstance(details, ECGDataDetails):
-            raise InvalidECGDataDetails('details must be ECGDataDetails instance')
-
         db_path = DBConfig.get_db_path()
         if patient_name:
             path = db_path + '\\' + patient_name + '\\' + record_name + '\\' + lead_name + '\\' + details.name + ConfigParams['EXTENSION']
