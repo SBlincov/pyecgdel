@@ -11,7 +11,7 @@ class InvalidWaveletProcessing(Exception):
 
 class WaveSpecification(Enum):
     absence = 0
-    exist = 1
+    normal = 1
     biphasic = 2
     flexure = 3
     extra = 5
@@ -27,17 +27,6 @@ class WaveDelineation:
         self.onset_index = 0
         self.peak_index = 0
         self.offset_index = 0
+        self.special_points_indexes = []
         self.specification = specification
-
-
-class Morphology:
-
-    def __init__(self, del_id, points, degree, branch_id):
-        self.del_id = del_id
-        self.points = points
-        self.degree = degree
-        self.branch_id = branch_id
-
-
-
 

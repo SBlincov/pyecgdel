@@ -7,19 +7,13 @@
     window - окно поиска.
 """
 
-from Source.Model.main.zero_crossings.routines import *
+from Source.Model.main.params.p_default import *
+from Source.Model.main.ecg_lead.ecg_lead import *
+from Source.Model.main.modulus_maxima.routines import *
 from Source.Model.main.delineation.p.routines import *
 
 
 def get_p_zcs(ecg_lead, qrs_id, window):
-
-    """
-        Find all ZCSs for P delineation
-        :param ecg_lead: certain ECG lead
-        :param qrs_id: id of QRS, to the left of which we delineate P
-        :param window: special window, which limits MMs of ZCSs
-        :return zcs: list of ZCSs
-    """
 
     wdc_scale_id = get_p_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
@@ -30,4 +24,6 @@ def get_p_zcs(ecg_lead, qrs_id, window):
     zcs = get_zcs_with_special_mms(wdc, begin_index, end_index, window)
 
     return zcs
+
+
 

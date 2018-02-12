@@ -115,7 +115,7 @@ def init_params(data_dict=LOCAL_DB, params_type=ParamsType.config_params):
         raise InvalidECGData('Unknown params data')
 
 
-def load_data_local(ecg, details=ECGDataDetails.original):
+def load_ecg_data_local(ecg, details=ECGDataDetails.original):
 
     sampling_rate = float(ConfigParams['SAMPLING_RATE'])
     leads_names = ConfigParams['LEADS_NAMES']
@@ -131,14 +131,15 @@ def load_data_local(ecg, details=ECGDataDetails.original):
 
             data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, lead_name, details)
 
-            if os.path.exists(data_file_name):
+            if not os.path.exists(data_file_name):
+                raise InvalidECGData('Lead file is not exist')
 
-                data = np.loadtxt(data_file_name)
+            data = np.loadtxt(data_file_name)
 
-                lead = ECGLead(lead_name, data, sampling_rate)
-                leads.append(lead)
+            lead = ECGLead(lead_name, data, sampling_rate)
+            leads.append(lead)
 
-                print("Init " + str(lead_name) + " complete")
+            print("Init " + str(lead_name) + " complete")
 
         ecg.leads = leads
 

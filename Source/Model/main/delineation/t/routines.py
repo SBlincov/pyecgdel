@@ -26,33 +26,33 @@ def get_t_wdc_scale_id(ecg_lead):
 
 def get_window(ecg_lead, qrs_id):
 
-    qrs_dels = ecg_lead.qrs_dels
+    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
 
-    qrs_gap = qrs_dels[qrs_id].peak_index - qrs_dels[qrs_id - 1].peak_index
+    qrs_gap = cur_qrs_dels_seq[qrs_id].peak_index - cur_qrs_dels_seq[qrs_id - 1].peak_index
 
-    window = qrs_gap * float(TParams['ALPHA_QRS_GAP'])
+    window = qrs_gap * float(TParams['END_QRS_GAP_PROPORTION'])
 
     return window
 
 
 def get_t_begin_index(ecg_lead, qrs_id):
 
-    sampling_rate = ecg_lead.rate
-    qrs_dels = ecg_lead.qrs_dels
+    sampling_rate = ecg_lead.sampling_rate
+    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
 
-    shift = int(float(TParams['ALPHA_BEGIN_SHIFT']) * sampling_rate)
+    shift = int(float(TParams['BEGIN_SHIFT']) * sampling_rate)
 
-    begin_index = qrs_dels[qrs_id - 1].offset_index + shift
+    begin_index = cur_qrs_dels_seq[qrs_id - 1].offset_index + shift
 
     return begin_index
 
 
 def get_t_end_index(ecg_lead, qrs_id):
 
-    qrs_dels = ecg_lead.qrs_dels
+    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
 
     window = get_window(ecg_lead, qrs_id)
 
-    end_index = int(qrs_dels[qrs_id - 1].offset_index + window)
+    end_index = int(cur_qrs_dels_seq[qrs_id - 1].offset_index + window)
 
     return end_index
