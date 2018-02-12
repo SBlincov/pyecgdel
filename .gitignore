@@ -4,6 +4,7 @@
 
 Data/*
 !Data/*/*.txt
+!Data/*/*.txt
 
 presentation/*
 !presentation/**/*.pptx
@@ -12,7 +13,8 @@ presentation/*
 
 Report/*
 
-Script/**/*.asv
+Script/*
+!Script/**/*.m
 
 
 Source/**/*.dll
@@ -108,5 +110,3 @@ ENV/
 .ropeproject
 
 Source/CardioBase/test_cardiobase\.exe
-
-*.asv

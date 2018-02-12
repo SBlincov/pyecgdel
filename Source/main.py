@@ -9,11 +9,11 @@ cb.connect()
 
 params_hash = cb.get_hash(24)
 
-config_params_from_hash = params_hash['data'][params_hash['id'].index(0)]
-p_params_from_hash = params_hash['data'][params_hash['id'].index(1)]
-qrs_params_from_hash = params_hash['data'][params_hash['id'].index(2)]
-t_params_from_hash = params_hash['data'][params_hash['id'].index(3)]
-filter_params_from_hash = params_hash['data'][params_hash['id'].index(4)]
+config_params_from_hash = params_hash['data'][0]
+p_params_from_hash = params_hash['data'][1]
+qrs_params_from_hash = params_hash['data'][2]
+t_params_from_hash = params_hash['data'][3]
+filter_params_from_hash = params_hash['data'][4]
 
 init_params(config_params_from_hash, ParamsType.config_params)
 init_params(p_params_from_hash, ParamsType.p_params)
@@ -25,7 +25,7 @@ leads_names = ConfigParams['LEADS_NAMES']
 
 columns_names = []
 for lead_name in leads_names:
-    columns_names.append("json_" + lead_name + "_original")
+    columns_names.append(lead_name + "_original")
 
 data = cb.bulk_data_get(columns_names, "cardio_file.id=" + str(id_file))
 ecg_data = data['data']
@@ -40,21 +40,12 @@ for lead_name_id in range(0, len(leads_names)):
 
 ecg = ECG(ecg_input_data_dict)
 ecg.cwt_filtration()
-# For now the filtering used for delineation is internal to this module
-# and filtering for output is done separately later
+ecg.add_filtrated_data_to_dict(result_data_dict, result_columns_names, id_file)
 ecg.dwt()
 ecg.delineation()
 ecg.add_delineation_data_to_dict(result_data_dict, result_columns_names, id_file)
-ecg.add_morphology_data_to_dict(result_data_dict, result_columns_names, id_file)
-# Adaptive filtering
-ecg.adaptive_filtration()
-ecg.add_filter_data_to_dict(result_data_dict, result_columns_names, id_file)
-# Characteristics
 ecg.characteristics()
 ecg.add_characteristics_data_to_dict(result_data_dict, result_columns_names, id_file)
-# Plot data
-ecg.init_plot_data()
-ecg.add_plot_data_to_dict(result_data_dict, result_columns_names, id_file)
 
 cb.bulk_data_set(result_data_dict)
 cb.commit()

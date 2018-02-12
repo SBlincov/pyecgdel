@@ -6,9 +6,9 @@
     qrs_id - индекс текущего комплекса QRS.
 """
 
-from Source.Model.main.params.p import PParams
-from Source.Model.main.modulus_maxima.routines import find_left_mm, find_right_mm
-from Source.Model.main.threshold_crossings.routines import find_left_thc_index, find_right_thc_index
+from Source.Model.main.params.p import *
+from Source.Model.main.modulus_maxima.routines import *
+from Source.Model.main.threshold_crossings.routines import *
 
 
 class InvalidPProcessing(Exception):
@@ -16,12 +16,6 @@ class InvalidPProcessing(Exception):
 
 
 def get_p_wdc_scale_id(ecg_lead):
-
-    """
-        Define WDC scale id for P delineation
-        :param ecg_lead: certain ECG lead
-        :return wdc_scale_id: WDC scale id for P delineation
-    """
 
     num_wdc_scales = len(ecg_lead.wdc)
 
@@ -35,35 +29,28 @@ def get_p_wdc_scale_id(ecg_lead):
 
 def get_window(ecg_lead, qrs_id):
 
-    """
-        Define searching window for P delineation
-        :param ecg_lead: certain ECG lead
-        :param qrs_id: id of QRS, to the left of which we delineate P
-        :return window: window of P delineation
-    """
+    sampling_rate = ecg_lead.sampling_rate
 
-    rate = ecg_lead.rate
+    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
 
-    qrs_dels = ecg_lead.qrs_dels
+    qrs_gap = cur_qrs_dels_seq[qrs_id].onset_index - cur_qrs_dels_seq[qrs_id - 1].offset_index
 
-    qrs_gap = qrs_dels[qrs_id].onset_index - qrs_dels[qrs_id - 1].offset_index
-
-    window_candidate_1 = int(qrs_gap * float(PParams['ALPHA_ZCS_QRS_GAP']))
-    window_candidate_2 = int(rate * float(PParams['ALPHA_ZCS_WINDOW']))
+    window_candidate_1 = int(qrs_gap * float(PParams['BEGIN_QRS_GAP_PROPORTION']))
+    window_candidate_2 = int(sampling_rate * float(PParams['ZCS_SEARCHING_WINDOW']))
 
     window = min(window_candidate_1, window_candidate_2)
 
-    t_dels = ecg_lead.t_dels
+    cur_t_dels_seq = ecg_lead.cur_t_dels_seq
 
-    if t_dels:
+    if cur_t_dels_seq:
 
-        corr_t_id = min(qrs_id - 1, len(t_dels) - 1)
+        corr_t_id = min(qrs_id - 1, len(cur_t_dels_seq) - 1)
 
-        left_diff = qrs_dels[qrs_id].onset_index - t_dels[corr_t_id].offset_index
+        left_diff = cur_qrs_dels_seq[qrs_id].onset_index - cur_t_dels_seq[corr_t_id].offset_index
 
         while left_diff < 0 and corr_t_id > 0:
             corr_t_id -= 1
-            left_diff = qrs_dels[qrs_id].onset_index - t_dels[corr_t_id].offset_index
+            left_diff = cur_qrs_dels_seq[qrs_id].onset_index - cur_t_dels_seq[corr_t_id].offset_index
 
         if left_diff > 0:
             window_candidate_3 = left_diff
@@ -74,39 +61,25 @@ def get_window(ecg_lead, qrs_id):
 
 def get_p_begin_index(ecg_lead, qrs_id):
 
-    """
-        Define begin index for P delineation
-        :param ecg_lead: certain ECG lead
-        :param qrs_id: id of QRS, to the left of which we delineate P
-        :return begin_index: begin index for P delineation
-    """
-
-    qrs_dels = ecg_lead.qrs_dels
+    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
 
     window = get_window(ecg_lead, qrs_id)
-    begin_index = qrs_dels[qrs_id].onset_index - window
+    begin_index = cur_qrs_dels_seq[qrs_id].onset_index - window
 
     return begin_index
 
 
 def get_p_end_index(ecg_lead, qrs_id):
 
-    """
-        Define end index for P delineation
-        :param ecg_lead: certain ECG lead
-        :param qrs_id: id of QRS, to the left of which we delineate P
-        :return end_index: end index for P delineation
-    """
-
-    qrs_dels = ecg_lead.qrs_dels
+    cur_qrs_dels_seq = ecg_lead.cur_qrs_dels_seq
     wdc_scale_id = get_p_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
 
     window = get_window(ecg_lead, qrs_id)
-    begin_index = qrs_dels[qrs_id].onset_index - window
-    tmp_mm = find_left_mm(qrs_dels[qrs_id].onset_index, wdc)
+    begin_index = cur_qrs_dels_seq[qrs_id].onset_index - window
+    tmp_mm = find_left_mm(cur_qrs_dels_seq[qrs_id].onset_index, wdc)
     end_index_candidate_1 = tmp_mm.index
-    end_index_candidate_2 = find_left_thc_index(wdc, qrs_dels[qrs_id].onset_index, begin_index, 0.0)
+    end_index_candidate_2 = find_left_thc_index(wdc, cur_qrs_dels_seq[qrs_id].onset_index, begin_index, 0.0)
     end_index = max(end_index_candidate_1, end_index_candidate_2 - 1)
 
     return end_index

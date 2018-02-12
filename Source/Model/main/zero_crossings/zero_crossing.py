@@ -4,20 +4,10 @@
 
 import numpy as np
 from ..modulus_maxima.routines import *
-from enum import Enum
 
 
 class InvalidZeroCrossingData(Exception):
     pass
-
-
-class ExtremumSign(Enum):
-    negative = -1
-    positive = 1
-    unknown = 0
-
-    def __int__(self):
-        return self.value
 
 
 class ZeroCrossing:
@@ -26,7 +16,6 @@ class ZeroCrossing:
         self.right_mm = ModulusMaxima(index, wdc)
         self.left_mm = ModulusMaxima(index, wdc)
         self.mm_amplitude = 0.0
-        self.extremum_sign = ExtremumSign.unknown
 
     def init_global_mm_right(self, right_border_index, wdc):
         right_mm_index = self.index + np.argmax(np.abs(wdc[self.index:right_border_index]))
@@ -89,11 +78,3 @@ class ZeroCrossing:
             self.left_mm = candidate_mm
 
         self.mm_amplitude = abs(self.left_mm.value) + abs(self.right_mm.value)
-
-    def init_extremum_sign(self):
-
-        if self.left_mm.value < 0 and self.right_mm.value > 0:
-            self.extremum_sign = ExtremumSign.positive
-        else:
-            self.extremum_sign = ExtremumSign.negative
-
