@@ -17,8 +17,9 @@ def qrs_multi_lead_processing(leads):
     for g_id in range(0, len(all_leads_data.borders_counts)):
 
         qrs_count = 0
-        mean_qrs_on = 0
-        mean_qrs_off = 0
+        qrs_ons = []
+        qrs_peaks = []
+        qrs_offs = []
 
         for lead_id in range(0, num_leads):
 
@@ -26,23 +27,31 @@ def qrs_multi_lead_processing(leads):
 
             if mtx_id > -1:
                 qrs_count += 1
-                mean_qrs_on += del_data.ons[lead_id][mtx_id]
-                mean_qrs_off += del_data.offs[lead_id][mtx_id]
+                qrs_ons.append(del_data.ons[lead_id][mtx_id])
+                qrs_peaks.append(del_data.peaks[lead_id][mtx_id])
+                qrs_offs.append(del_data.offs[lead_id][mtx_id])
 
         if qrs_count > 0:
 
-            mean_qrs_on = int(mean_qrs_on / qrs_count)
-            mean_qrs_off = int(mean_qrs_off / qrs_count)
+            mean_qrs_on = np.mean(qrs_ons)
+            mean_qrs_peak = np.mean(qrs_peaks)
+            mean_qrs_off = np.mean(qrs_offs)
 
-            # Check for adding
-            if qrs_count >= int(QRSParams['DELTA_MIN_QRS_FOUND'] * num_leads):
-
-                add_complex(leads, corr_mtx, g_id, mean_qrs_on, mean_qrs_off)
+            std_qrs_on = np.std(qrs_ons)
+            std_qrs_peak = np.std(qrs_peaks)
+            std_qrs_off = np.std(qrs_offs)
 
             # Check for removing
             if qrs_count <= int(QRSParams['DELTA_MAX_QRS_LOST'] * num_leads):
 
                 remove_complex(leads, corr_mtx, g_id)
+
+
+
+            # Check for adding
+            if qrs_count >= int(QRSParams['DELTA_MIN_QRS_FOUND'] * num_leads):
+
+                add_complex(leads, corr_mtx, g_id, mean_qrs_on, mean_qrs_off)
 
     restore_morph_order(leads)
 
