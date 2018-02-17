@@ -1,4 +1,6 @@
 from Source.Model.main.delineation.qrs.delta.data import *
+from Source.Model.main.delineation.qrs.delta.matrix import *
+
 
 def remove_complex(leads, corr_mtx, g_id):
 
@@ -28,4 +30,8 @@ def delete_special(leads, del_data, all_leads_data):
             leads[del_list[0]].qrs_morphs.pop(del_list[1])
 
         # Refresh DelData
-        del_data = DelData(leads)
+        del_data.process(leads)
+
+        restore_morph_order(leads)
+
+
