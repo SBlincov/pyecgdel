@@ -65,6 +65,9 @@ class DelData:
         self.mean_qrs = mean_qrs
         self.mean_qrs_global = mean_qrs_global
 
+    def process(self, leads):
+        self.__init__(leads)
+
 
 class AllLeadsData:
 
@@ -193,4 +196,36 @@ class MinData:
         self.off_min = off_min
 
 
+class StatData:
+
+    def __init__(self, leads, all_leads_data, del_data, corr_mtx):
+
+        num_leads = len(leads)
+
+        self.counts = []
+        self.ons = []
+        self.peaks = []
+        self.offs = []
+
+        for g_id in range(0, len(all_leads_data.borders_counts)):
+
+            qrs_count = 0
+            qrs_ons = []
+            qrs_peaks = []
+            qrs_offs = []
+
+            for lead_id in range(0, num_leads):
+
+                mtx_id = corr_mtx[lead_id][g_id]
+
+                if mtx_id > -1:
+                    qrs_count += 1
+                    qrs_ons.append(del_data.ons[lead_id][mtx_id])
+                    qrs_peaks.append(del_data.peaks[lead_id][mtx_id])
+                    qrs_offs.append(del_data.offs[lead_id][mtx_id])
+
+            self.counts.append(qrs_count)
+            self.ons.append(qrs_ons)
+            self.peaks.append(qrs_peaks)
+            self.offs.append(qrs_offs)
 

@@ -1,108 +1,108 @@
 qrs_Se_mean =
 
-    0.9924
+    0.9945
 
 
 qrs_PPV_mean =
 
-    0.9990
+    0.9994
 
 
 p_Se_mean =
 
-    0.9692
+    0.9778
 
 
 p_PPV_mean =
 
-    0.8232
+    0.8487
 
 
 t_Se_mean =
 
-    0.9692
+    0.9762
 
 
 t_PPV_mean =
 
-    0.9880
+    0.9910
 
 
 qrs_peak_error_mean_avg =
 
-    0.0019
+    0.0022
 
 
 qrs_peak_error_std_avg =
 
-    0.0042
+    0.0037
 
 
 qrs_onset_error_mean_avg =
 
-   -0.0090
+   -0.0084
 
 
 qrs_onset_error_std_avg =
 
-    0.0094
+    0.0079
 
 
 qrs_offset_error_mean_avg =
 
-    0.0040
+    0.0038
 
 
 qrs_offset_error_std_avg =
 
-    0.0103
+    0.0090
 
 
 p_peak_error_mean_avg =
 
-  -2.8220e-05
+   1.0908e-04
 
 
 p_peak_error_std_avg =
 
-    0.0084
+    0.0073
 
 
 p_onset_error_mean_avg =
 
-   -0.0030
+   -0.0031
 
 
 p_onset_error_std_avg =
 
-    0.0120
+    0.0116
 
 
 p_offset_error_mean_avg =
 
-  -9.7010e-04
+  -5.9443e-05
 
 
 p_offset_error_std_avg =
 
-    0.0137
+    0.0129
 
 
 t_peak_error_mean_avg =
 
-    0.0044
+    0.0042
 
 
 t_peak_error_std_avg =
 
-    0.0091
+    0.0081
 
 
 t_offset_error_mean_avg =
 
-    0.0274
+    0.0278
 
 
 t_offset_error_std_avg =
 
-    0.0255
+    0.0240
