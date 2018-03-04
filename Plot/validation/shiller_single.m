@@ -10,7 +10,7 @@ tolerance = 0.15;
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 num_leads = size(leads, 2);
 
-records_ids = [1102566493];
+records_ids = [50464197];
 num_records = 1;
 
 qrs_num_docs = zeros(num_leads, 1);
