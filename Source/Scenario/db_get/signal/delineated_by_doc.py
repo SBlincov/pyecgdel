@@ -36,6 +36,10 @@ for file_name in files_names:
         if status[0][0] == 'done' or status[0][0] == 'only_delineation':
             correct_file_names.append(file_name)
 
+
+ecg_data_path = db_path + '\\delineated_by_doc_ids.txt'
+np.savetxt(ecg_data_path, np.transpose(np.array(correct_file_names)), fmt='%d')
+
 columns = ["json_lead_i_original",
            "json_lead_ii_original",
            "json_lead_iii_original",

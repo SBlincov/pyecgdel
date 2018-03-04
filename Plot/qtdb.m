@@ -3,13 +3,13 @@ clear all;
 base_name = 'qtdb';
 freq = 250.0;
 
-record = 4;
+record = 3;
 
 leads = {'lead_ii', 'lead_v5'};
 lead_ids = 1:2;
 
 is_filtered = 1;
-wdc_scales = [];
+wdc_scales = [1 2 3 4 5];
 x_axis_type = 1;
 
 markerWidth = 10;
