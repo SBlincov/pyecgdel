@@ -67,6 +67,9 @@ class DelData:
         self.mean_p_global = mean_p_global
         self.mean_rr_global = mean_rr_global
 
+    def process(self, leads):
+        self.__init__(leads)
+
 
 class AllLeadsData:
 

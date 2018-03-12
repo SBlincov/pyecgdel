@@ -1,4 +1,5 @@
 from Source.Model.main.delineation.p.delta.data import *
+from Source.Model.main.delineation.p.delta.matrix import *
 
 def remove_complex(leads, corr_mtx, g_id):
 
@@ -29,3 +30,8 @@ def delete_special(leads, del_data, all_leads_data):
 
         # Refresh DelData
         del_data = DelData(leads)
+
+        # Refresh DelData
+        del_data.process(leads)
+
+        restore_morph_order(leads)
