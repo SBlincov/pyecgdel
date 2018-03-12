@@ -20,5 +20,5 @@ init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
 
-record_name = 'record_50647195'
+record_name = 'record_1002010709'
 run_record(record_name)
