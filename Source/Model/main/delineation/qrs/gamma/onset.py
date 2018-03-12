@@ -44,8 +44,8 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
 
             # We check 2 options:
             # * zc in small window
-            # * zc left mm is big
-            # If at least one is passed, offset defines here
+            # * zc right mm is big
+            # If at least one is passed, onset defines here
 
             if len(onset_zcs_ids) > 0:
                 onset_zc_id = onset_zcs_ids[-1]
