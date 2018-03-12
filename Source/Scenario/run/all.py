@@ -26,3 +26,4 @@ for record_name in os.listdir(DBConfig.get_db_path()):
 
 for record_name in records_names:
    run_record(record_name)
+
