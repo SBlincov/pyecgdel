@@ -41,3 +41,11 @@ def get_com_matrix(del_data, all_leads_data):
 
     return corr_mtx
 
+def restore_morph_order(leads):
+
+    num_leads = len(leads)
+    for lead_id in range(0, num_leads):
+        lead = leads[lead_id]
+        for morph_id in range(0, len(lead.p_morphs)):
+            lead.p_morphs[morph_id].del_id = morph_id
+
