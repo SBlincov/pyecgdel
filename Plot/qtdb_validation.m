@@ -107,7 +107,7 @@ for record = start_record : start_record + num_records - 1
         qrs_peaks{lead_id} = qrs_peak;
         qrs_offsets{lead_id} = qrs_offset;
         
-        file_name_qrs_del = sprintf('%s%s%sqrs_doctor1_delineation.txt', db_path, record_path, lead_path);
+        file_name_qrs_del = sprintf('%s%s%sqrs_delineation_doc.txt', db_path, record_path, lead_path);
         qrs_del_doc = importdata(file_name_qrs_del);
         
         if size(qrs_del_doc, 1) == 0
@@ -175,7 +175,7 @@ for record = start_record : start_record + num_records - 1
         p_peaks{lead_id} = p_peak;
         p_offsets{lead_id} = p_offset;
         
-        file_name_p_del = sprintf('%s%s%sp_doctor1_delineation.txt', db_path, record_path, lead_path);
+        file_name_p_del = sprintf('%s%s%sp_delineation_doc.txt', db_path, record_path, lead_path);
         p_del_doc = importdata(file_name_p_del);
         
         if size(p_del_doc, 1) == 0
@@ -241,7 +241,7 @@ for record = start_record : start_record + num_records - 1
         t_peaks{lead_id} = t_peak;
         t_offsets{lead_id} = t_offset;
         
-        file_name_t_del = sprintf('%s%s%st_doctor1_delineation.txt', db_path, record_path, lead_path);
+        file_name_t_del = sprintf('%s%s%st_delineation_doc.txt', db_path, record_path, lead_path);
         t_del_doc = importdata(file_name_t_del);
         
         if size(t_del_doc, 1) == 0
