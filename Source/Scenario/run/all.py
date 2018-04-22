@@ -2,7 +2,7 @@ from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 from Source.Scenario.run.record import run_record
 
-DBConfig.name = 'qtdb'
+DBConfig.name = 'sarov'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
