@@ -30,6 +30,24 @@ for lead_name in leads_names:
 data = cb.bulk_data_get(columns_names, "cardio_file.id=" + str(id_file))
 ecg_data = data['data']
 
+if data['id_type'] == 3:
+
+    params_hash = cb.get_hash(25)
+
+    config_params_from_hash = params_hash['data'][params_hash['id'].index(0)]
+    p_params_from_hash = params_hash['data'][params_hash['id'].index(1)]
+    qrs_params_from_hash = params_hash['data'][params_hash['id'].index(2)]
+    t_params_from_hash = params_hash['data'][params_hash['id'].index(3)]
+    filter_params_from_hash = params_hash['data'][params_hash['id'].index(4)]
+
+    init_params(config_params_from_hash, ParamsType.config_params)
+    init_params(p_params_from_hash, ParamsType.p_params)
+    init_params(qrs_params_from_hash, ParamsType.qrs_params)
+    init_params(t_params_from_hash, ParamsType.t_params)
+    init_params(filter_params_from_hash, ParamsType.filter_params)
+
+    leads_names = ConfigParams['LEADS_NAMES']
+
 ecg_input_data_dict = dict()
 result_data_dict = dict()
 result_columns_names = []

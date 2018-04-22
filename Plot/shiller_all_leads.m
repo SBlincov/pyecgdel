@@ -1,9 +1,9 @@
 clear all;
 
-base_name = 'shiller';
-freq = 500.0;
+base_name = 'sarov';
+freq = 250.0;
 
-record = 50647135;
+record = 1002579835;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 lead_ids = 1:12;

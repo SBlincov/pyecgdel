@@ -3,7 +3,7 @@ from Source.Infrastructure.main.db_config_local import *
 from Source.Scenario.run.record import run_record
 
 
-DBConfig.name = 'shiller'
+DBConfig.name = 'sarov'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -20,5 +20,5 @@ init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 
 
-record_name = 'record_2492'
+record_name = 'record_1002579835'
 run_record(record_name)

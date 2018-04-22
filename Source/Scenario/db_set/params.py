@@ -3,7 +3,7 @@ import sys
 from Source.Model.main.ecg.ecg import *
 from Source.CardioBase.cardiobase import Cardiobase
 
-DBConfig.name = 'shiller'
+DBConfig.name = 'sarov'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -28,7 +28,7 @@ hash_data_qrs_params = QRSParams
 hash_data_t_params = TParams
 hash_data_filter_params = FilterParams
 
-id_hash_params = 24
+id_hash_params = 25
 num_inserted_rows_config_params = cb.update_hash_row_data(id_hash_params, 0, hash_data_config_params)
 num_inserted_rows_p_params = cb.update_hash_row_data(id_hash_params, 1, hash_data_p_params)
 num_inserted_rows_qrs_params = cb.update_hash_row_data(id_hash_params, 2, hash_data_qrs_params)

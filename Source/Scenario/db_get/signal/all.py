@@ -1,18 +1,6 @@
 from Source.CardioBase.cardiobase import Cardiobase
 from Source.Model.main.ecg.ecg import *
 
-DBConfig.name = 'shiller'
-DBConfig.root = 'pyecgdel'
-DBConfig.data_catalogue = 'Data'
-
-DBConfig.config_params = 'properties.txt'
-DBConfig.p_params = 'p_params.txt'
-DBConfig.qrs_params = 'qrs_params.txt'
-DBConfig.t_params = 't_params.txt'
-DBConfig.filter_params = 'filter_params.txt'
-
-db_path = DBConfig.get_db_path()
-
 cb = Cardiobase()
 cb.connect()
 
@@ -50,6 +38,34 @@ for column_id in range(0, len(columns)):
         #data = cb.bulk_data_get([column], "device_model='AT-101'")
         records_ids = data['id']
         ecg_data = data['data']
+
+        if data['id_type'] == 3:
+
+            DBConfig.name = 'sarov'
+            DBConfig.root = 'pyecgdel'
+            DBConfig.data_catalogue = 'Data'
+
+            DBConfig.config_params = 'properties.txt'
+            DBConfig.p_params = 'p_params.txt'
+            DBConfig.qrs_params = 'qrs_params.txt'
+            DBConfig.t_params = 't_params.txt'
+            DBConfig.filter_params = 'filter_params.txt'
+
+            db_path = DBConfig.get_db_path()
+
+        else:
+
+            DBConfig.name = 'shiller'
+            DBConfig.root = 'pyecgdel'
+            DBConfig.data_catalogue = 'Data'
+
+            DBConfig.config_params = 'properties.txt'
+            DBConfig.p_params = 'p_params.txt'
+            DBConfig.qrs_params = 'qrs_params.txt'
+            DBConfig.t_params = 't_params.txt'
+            DBConfig.filter_params = 'filter_params.txt'
+
+            db_path = DBConfig.get_db_path()
 
         for i in range(0, len(records_ids)):
 

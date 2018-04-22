@@ -44,6 +44,12 @@ def qrs_multi_lead_processing(leads):
 
     restore_morph_order(leads)
 
+    delete_nearest(leads)
+
+    restore_morph_order(leads)
+
+
+
 
 
 
