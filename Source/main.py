@@ -32,7 +32,7 @@ ecg_data = data['data']
 
 if data['id_type'] == 3:
 
-    params_hash = cb.get_hash(25)
+    params_hash = cb.get_hash(26)
 
     config_params_from_hash = params_hash['data'][params_hash['id'].index(0)]
     p_params_from_hash = params_hash['data'][params_hash['id'].index(1)]
