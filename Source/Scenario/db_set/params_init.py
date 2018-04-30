@@ -28,12 +28,12 @@ hash_data_qrs_params = QRSParams
 hash_data_t_params = TParams
 hash_data_filter_params = FilterParams
 
-id_hash_params = 656
-num_inserted_rows_config_params = cb.update_hash_row_data(id_hash_params, 0, hash_data_config_params)
-num_inserted_rows_p_params = cb.update_hash_row_data(id_hash_params, 1, hash_data_p_params)
-num_inserted_rows_qrs_params = cb.update_hash_row_data(id_hash_params, 2, hash_data_qrs_params)
-num_inserted_rows_t_params = cb.update_hash_row_data(id_hash_params, 3, hash_data_t_params)
-num_inserted_rows_filter_params = cb.update_hash_row_data(id_hash_params, 4, hash_data_filter_params)
+id_type_hash = cb.create_type_hash('sarov')
+num_inserted_rows_config_params = cb.insert_hash_row(id_type_hash, 0, 'config', hash_data_config_params)
+num_inserted_rows_p_params = cb.insert_hash_row(id_type_hash, 1, 'p', hash_data_p_params)
+num_inserted_rows_qrs_params = cb.insert_hash_row(id_type_hash, 2, 'qrs', hash_data_qrs_params)
+num_inserted_rows_t_params = cb.insert_hash_row(id_type_hash, 3, 't', hash_data_t_params)
+num_inserted_rows_filter_params = cb.insert_hash_row(id_type_hash, 4, 'filter', hash_data_filter_params)
 cb.commit()
 cb.disconnect()
 

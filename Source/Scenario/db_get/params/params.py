@@ -6,7 +6,7 @@ id_file = 1007
 cb = Cardiobase()
 cb.connect()
 
-params_hash = cb.get_hash(26)
+params_hash = cb.get_hash(656)
 
 config_params_from_hash = params_hash['data'][0]
 p_params_from_hash = params_hash['data'][1]
