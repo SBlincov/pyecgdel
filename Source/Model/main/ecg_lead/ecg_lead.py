@@ -13,6 +13,7 @@ from Source.Model.main.delineation.t.delineation import *
 from Source.Model.main.characteristics.qrs_characteristics import *
 from Source.Model.main.characteristics.p_characteristics import *
 from Source.Model.main.characteristics.t_characteristics import *
+from Source.Model.main.characteristics.flutter_characteristics import *
 from Source.Model.main.plot_data.qrs import QRSPlotData
 
 
@@ -50,6 +51,9 @@ class ECGLead:
         self.chars = []
 
         self.qrs_plot_data = []
+
+        self.flutter = 0.0
+        self.flutter_dels = []
 
     def cwt_filtration(self):
         self.filter = cwt_filtration(self.origin)
@@ -115,7 +119,8 @@ class ECGLead:
         qrs_chars = get_qrs_chars(self)
         p_chars = get_p_chars(self)
         t_chars = get_t_chars(self)
-        self.chars = qrs_chars + p_chars + t_chars
+        flutter_chars = get_flutter_chars(self)
+        self.chars = qrs_chars + p_chars + t_chars + flutter_chars
 
     def init_plot_data(self):
         self.qrs_plot_data = QRSPlotData(self)

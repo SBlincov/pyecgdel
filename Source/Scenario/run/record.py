@@ -24,6 +24,8 @@ def run_record(record_name):
     ecg.save_local(ECGDataDetails.p_delineation)
     ecg.save_local(ECGDataDetails.p_morphology)
 
+    ecg.save_local(ECGDataDetails.flutter_delineation)
+
     ecg.save_local(ECGDataDetails.adaptive_filtrated)
 
     ecg.save_local(ECGDataDetails.characteristics)

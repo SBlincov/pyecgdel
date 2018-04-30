@@ -51,11 +51,14 @@ if __name__ == "__main__":
     qrs_params_from_hash = params_hash['data'][params_hash['id'].index(2)]
     t_params_from_hash = params_hash['data'][params_hash['id'].index(3)]
     filter_params_from_hash = params_hash['data'][params_hash['id'].index(4)]
+    flutter_params_from_hash = params_hash['data'][params_hash['id'].index(5)]
+
     init_params(config_params_from_hash, ParamsType.config_params)
     init_params(p_params_from_hash, ParamsType.p_params)
     init_params(qrs_params_from_hash, ParamsType.qrs_params)
     init_params(t_params_from_hash, ParamsType.t_params)
     init_params(filter_params_from_hash, ParamsType.filter_params)
+    init_params(flutter_params_from_hash, ParamsType.flutter_params)
 
     ids_october = [50436612, 50436671, 50436730, 50436790, 50437115, 50436937, 50436996,
                    50437056, 50437173, 50437233, 1102526720, 1102526384, 1102526300,

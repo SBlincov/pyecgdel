@@ -82,4 +82,6 @@ class CharacteristicsNames(Enum):
     max_t_val = "max_t_val"
     min_t_val = "min_t_val"
 
+    flutter = "flutter"
+
 

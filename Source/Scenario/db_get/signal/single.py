@@ -10,6 +10,8 @@ DBConfig.p_params = 'p_params.txt'
 DBConfig.qrs_params = 'qrs_params.txt'
 DBConfig.t_params = 't_params.txt'
 DBConfig.filter_params = 'filter_params.txt'
+DBConfig.flutter_params = 'flutter_params.txt'
+
 
 db_path = DBConfig.get_db_path()
 
@@ -39,7 +41,7 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    file_name = "1002579835"
+    file_name = "61084087"
 
     data = cb.bulk_data_get([column], "cardio_file.id=" + str(file_name))
 

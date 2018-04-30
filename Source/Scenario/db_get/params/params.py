@@ -13,5 +13,6 @@ p_params_from_hash = params_hash['data'][1]
 qrs_params_from_hash = params_hash['data'][2]
 t_params_from_hash = params_hash['data'][3]
 filter_params_from_hash = params_hash['data'][4]
+flutter_params_from_hash = params_hash['data'][5]
 
 leads_names = ConfigParams['LEADS_NAMES']

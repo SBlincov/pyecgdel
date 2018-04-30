@@ -211,6 +211,16 @@ def save_data_local(ecg, details):
 
                 np.savetxt(data_file_name, morphology_info, fmt=fmt)
 
+            elif details is ECGDataDetails.flutter_delineation:
+                delineation_info = []
+                for delineation in ecg.leads[lead_id].flutter_dels:
+                    delineation_info.append([delineation.onset_index,
+                                             delineation.peak_index,
+                                             delineation.offset_index,
+                                             delineation.specification.value])
+
+                np.savetxt(data_file_name, delineation_info, fmt='%d')
+
             elif details is ECGDataDetails.characteristics:
                 characteristics = ecg.leads[lead_id].chars
                 names = [item[0].name for item in characteristics]

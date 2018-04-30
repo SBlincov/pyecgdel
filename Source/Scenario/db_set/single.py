@@ -14,13 +14,14 @@ DBConfig.p_params = 'p_params.txt'
 DBConfig.qrs_params = 'qrs_params.txt'
 DBConfig.t_params = 't_params.txt'
 DBConfig.filter_params = 'filter_params.txt'
+DBConfig.flutter_params = 'flutter_params.txt'
 
 init_params(params_type=ParamsType.config_params)
 init_params(params_type=ParamsType.p_params)
 init_params(params_type=ParamsType.qrs_params)
 init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
-
+init_params(params_type=ParamsType.flutter_params)
 record_name = "record_2321"
 
 cb = Cardiobase()

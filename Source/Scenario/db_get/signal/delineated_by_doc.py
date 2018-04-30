@@ -10,6 +10,7 @@ DBConfig.p_params = 'p_params.txt'
 DBConfig.qrs_params = 'qrs_params.txt'
 DBConfig.t_params = 't_params.txt'
 DBConfig.filter_params = 'filter_params.txt'
+DBConfig.flutter_params = 'flutter_params.txt'
 
 db_path = DBConfig.get_db_path()
 

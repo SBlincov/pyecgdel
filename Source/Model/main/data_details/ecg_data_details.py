@@ -23,5 +23,7 @@ class ECGDataDetails(Enum):
     characteristics = 'characteristics'
     qrs_plot_data = 'qrs_plot_data'
 
+    flutter_delineation = 'flutter_delineation'
+
     def __str__(self):
         return self.value

@@ -10,6 +10,7 @@ from Source.Infrastructure.main.save_ecg_data import *
 
 from Source.Model.main.delineation.qrs.delta.delta import qrs_multi_lead_processing
 from Source.Model.main.delineation.p.delta.delta import p_multi_lead_processing
+from Source.Model.main.delineation.flutter.flutter import *
 
 
 class InvalidECG(Exception):
@@ -99,6 +100,8 @@ class ECG:
         if len(self.leads) > 3:
             qrs_multi_lead_processing(self.leads)
 
+        flutter_analysis(self.leads)
+
         for lead_id in range(0, len(self.leads)):
             print("T delineation " + str(self.leads[lead_id].name) + " ...")
             self.leads[lead_id].t_del()
@@ -161,6 +164,8 @@ class ECG:
 
     def add_delineation_data_to_dict(self, data_dict, columns_names, id_file):
 
+        flutter_leads_names = FlutterParams['LEADS_NAMES']
+
         if not isinstance(data_dict, dict):
             raise InvalidECGData('data_dict must be dict instance')
 
@@ -186,6 +191,28 @@ class ECG:
             else:
                 data_dict[column_name] = [(id_file, np.asarray(p_dels_data, dtype=np.int32).tolist())]
             columns_names.append(column_name)
+
+            if self.leads[lead_id].name in flutter_leads_names:
+
+                column_name = "json_" + self.leads[lead_id].name + "_flutter_delineation"
+                flutter_dels_data = []
+                for delineation in self.leads[lead_id].flutter_dels:
+                    flutter_dels_data.append(np.asarray([int(delineation.onset_index),
+                                                   int(delineation.peak_index),
+                                                   int(delineation.offset_index),
+                                                   int(delineation.specification.value)], dtype=np.int32).tolist())
+
+                if len(flutter_dels_data) is 0:
+                    data_dict[column_name] = [(id_file, np.zeros((0, 4), dtype=np.int32).tolist())]
+                elif len(flutter_dels_data) is 1:
+                    flutter_dels_data = np.asarray(flutter_dels_data, dtype=np.int32)
+                    np.reshape(flutter_dels_data, (1, 4))
+                    flutter_dels_data = flutter_dels_data.tolist()
+                    data_dict[column_name] = [(id_file, flutter_dels_data)]
+                else:
+                    data_dict[column_name] = [(id_file, np.asarray(flutter_dels_data, dtype=np.int32).tolist())]
+                columns_names.append(column_name)
+
 
             column_name = "json_" + self.leads[lead_id].name + "_qrs_delineation"
             qrs_dels_data = []

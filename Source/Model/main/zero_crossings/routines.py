@@ -183,5 +183,3 @@ def init_zcs_with_special_mms(wdc, zcs, begin_index, end_index, window):
 
         for zc_id in range(0, len(zcs)):
             zcs[zc_id].init_extremum_sign()
-
-
