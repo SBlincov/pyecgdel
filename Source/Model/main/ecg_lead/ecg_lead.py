@@ -97,6 +97,9 @@ class ECGLead:
         self.p_dels = cur_p_dels_seq
         self.p_morphs = cur_p_morph_seq
 
+        fib_analysis_imbalance(self)
+        fib_analysis_shortage(self)
+
     def del_correction(self):
         filter = self.filter
 

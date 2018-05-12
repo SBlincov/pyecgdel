@@ -38,5 +38,7 @@ class PDefaultParams:
     LEGACY_FIB_NUM_ZCS = 4
     LEGACY_FIB_STD = 0.15
 
-
+    FIB_LEN_PART = 4.0
+    FIB_AMPL_PART = 4.0
+    FIB_DELS_PART = 0.6
 

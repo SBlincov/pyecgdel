@@ -8,6 +8,7 @@
 from Source.Model.main.delineation.wave_delineation import WaveSpecification
 from Source.Model.main.delineation.p.beta.beta import get_p_del
 from Source.Model.main.delineation.p.gamma.gamma import get_p_morph
+from Source.Model.main.delineation.p.fibrillation.fibrillation import *
 
 
 def get_p_dels(ecg_lead):

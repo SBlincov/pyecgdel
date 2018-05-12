@@ -39,4 +39,6 @@ PParams['BETA_PEAK_ZC_AMPL'] = PDefaultParams.BETA_PEAK_ZC_AMPL
 PParams['LEGACY_FIB_NUM_ZCS'] = PDefaultParams.LEGACY_FIB_NUM_ZCS
 PParams['LEGACY_FIB_STD'] = PDefaultParams.LEGACY_FIB_STD
 
-
+PParams['FIB_LEN_PART'] = PDefaultParams.FIB_LEN_PART
+PParams['FIB_AMPL_PART'] = PDefaultParams.FIB_AMPL_PART
+PParams['FIB_DELS_PART'] = PDefaultParams.FIB_DELS_PART

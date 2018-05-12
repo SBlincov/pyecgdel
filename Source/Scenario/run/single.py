@@ -20,5 +20,5 @@ init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 init_params(params_type=ParamsType.flutter_params)
 
-record_name = 'record_61084087'
+record_name = 'record_50894278'
 run_record(record_name)
