@@ -1,7 +1,7 @@
 from Source.CardioBase.cardiobase import Cardiobase
 from Source.Model.main.ecg.ecg import *
 
-DBConfig.name = 'sarov'
+DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -41,7 +41,7 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    file_name = "61084087"
+    file_name = "1003595829"
 
     data = cb.bulk_data_get([column], "cardio_file.id=" + str(file_name))
 

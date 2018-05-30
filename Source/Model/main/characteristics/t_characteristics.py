@@ -138,7 +138,7 @@ def get_t_chars(lead):
 
     else:
 
-        t_characteristics.append([CharacteristicsNames.presence_t, 'n'])
+        t_characteristics.append([CharacteristicsNames.presence_t, 0.0])
         t_characteristics.append([CharacteristicsNames.mean_t, 'n'])
         t_characteristics.append([CharacteristicsNames.std_t, 'n'])
         t_characteristics.append([CharacteristicsNames.mean_qt, 'n'])

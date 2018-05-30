@@ -128,7 +128,7 @@ def get_p_chars(lead):
 
     else:
 
-        p_characteristics.append([CharacteristicsNames.presence_p, 'n'])
+        p_characteristics.append([CharacteristicsNames.presence_p, 0.0])
         p_characteristics.append([CharacteristicsNames.mean_p, 'n'])
         p_characteristics.append([CharacteristicsNames.std_p, 'n'])
         p_characteristics.append([CharacteristicsNames.mean_pq, 'n'])
