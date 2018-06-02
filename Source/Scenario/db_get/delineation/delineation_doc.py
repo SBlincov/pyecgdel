@@ -1,7 +1,7 @@
 from Source.CardioBase.cardiobase import Cardiobase
 from Source.Model.main.ecg.ecg import *
 
-DBConfig.name = 'shiller'
+DBConfig.name = 'UNNCyberHeartDatabase'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
