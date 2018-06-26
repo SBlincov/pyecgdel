@@ -28,59 +28,63 @@ def flutter_analysis(leads):
 
             zcs = get_zcs_with_global_mms(wdc, begin_index, end_index)
 
-            # Special check for first zc
-            if (abs(zcs[0].left_mm.value) > abs(zcs[0].right_mm.value)):
-                zcs.pop(0)
+            if len(zcs) > 0:
 
-            # Special check for last zc
-            if (abs(zcs[-1].left_mm.value) < abs(zcs[-1].right_mm.value)):
-                zcs.pop()
+                # Special check for first zc
+                if (abs(zcs[0].left_mm.value) > abs(zcs[0].right_mm.value)):
+                    zcs.pop(0)
 
-            if len(zcs) > zcs_min_num:
+                if len(zcs) > 0:
 
-                ampls = []
+                    # Special check for last zc
+                    if (abs(zcs[-1].left_mm.value) < abs(zcs[-1].right_mm.value)):
+                        zcs.pop()
 
-                for zc_id in range(0, len(zcs)):
-                    zc = zcs[zc_id]
-                    ampls.append(zc.mm_amplitude)
+                    if len(zcs) > zcs_min_num:
 
-                mean = np.mean(np.asarray(ampls))
-                std = np.std(np.asarray(ampls))
+                        ampls = []
 
-                zc_ids_to_delete = []
+                        for zc_id in range(0, len(zcs)):
+                            zc = zcs[zc_id]
+                            ampls.append(zc.mm_amplitude)
 
-                for zc_id in range(0, len(zcs)):
-                    zc = zcs[zc_id]
-                    if abs(zc.mm_amplitude - mean) > std * max_std_ampl:
-                        zc_ids_to_delete.append(zc_id)
+                        mean = np.mean(np.asarray(ampls))
+                        std = np.std(np.asarray(ampls))
 
-                for zc_id in reversed(zc_ids_to_delete):
-                    zcs.pop(zc_id)
+                        zc_ids_to_delete = []
 
-                peaks_indexes = [zc.index for zc in zcs if zc.right_mm.value > 0.0]
+                        for zc_id in range(0, len(zcs)):
+                            zc = zcs[zc_id]
+                            if abs(zc.mm_amplitude - mean) > std * max_std_ampl:
+                                zc_ids_to_delete.append(zc_id)
 
-                if len(peaks_indexes) > peaks_min_num:
+                        for zc_id in reversed(zc_ids_to_delete):
+                            zcs.pop(zc_id)
 
-                    num_passed_segments += 1
+                        peaks_indexes = [zc.index for zc in zcs if zc.right_mm.value > 0.0]
 
-                    # Now we add flutter delineation
+                        if len(peaks_indexes) > peaks_min_num:
 
-                    for peak_index in peaks_indexes:
-                        flutter_del = WaveDelineation(WaveSpecification.exist)
+                            num_passed_segments += 1
 
-                        onset_index = find_left_thc_index(wdc, peak_index - 1, lead.qrs_dels[seg_id].offset_index, 0.0)
+                            # Now we add flutter delineation
 
-                        offset_cand_1 = find_right_thc_index(wdc, peak_index + 1, lead.qrs_dels[seg_id + 1].onset_index, 0.0)
-                        next_mm = find_right_mm(peak_index + 1, wdc)
-                        offset_cand_2 = find_right_mm(next_mm.index + 1, wdc).index
+                            for peak_index in peaks_indexes:
+                                flutter_del = WaveDelineation(WaveSpecification.exist)
 
-                        offset_index = min(offset_cand_1, offset_cand_2)
+                                onset_index = find_left_thc_index(wdc, peak_index - 1, lead.qrs_dels[seg_id].offset_index, 0.0)
 
-                        flutter_del.peak_index = peak_index
-                        flutter_del.onset_index = onset_index
-                        flutter_del.offset_index = offset_index
+                                offset_cand_1 = find_right_thc_index(wdc, peak_index + 1, lead.qrs_dels[seg_id + 1].onset_index, 0.0)
+                                next_mm = find_right_mm(peak_index + 1, wdc)
+                                offset_cand_2 = find_right_mm(next_mm.index + 1, wdc).index
 
-                        flutter_dels.append(flutter_del)
+                                offset_index = min(offset_cand_1, offset_cand_2)
+
+                                flutter_del.peak_index = peak_index
+                                flutter_del.onset_index = onset_index
+                                flutter_del.offset_index = offset_index
+
+                                flutter_dels.append(flutter_del)
 
         lead.flutter_dels = flutter_dels
         lead.flutter = float(num_passed_segments / num_total_segments)
