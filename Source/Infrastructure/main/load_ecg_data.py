@@ -141,14 +141,16 @@ def load_data_local(ecg, details=ECGDataDetails.original):
     sampling_rate = float(ConfigParams['SAMPLING_RATE'])
     leads_names = ConfigParams['LEADS_NAMES']
 
-    print("Init ecg from local database...")
+    if ecg.is_log:
+        print("Init ecg from local database...")
 
     if details is ECGDataDetails.original:
 
         leads = []
         for lead_name in leads_names:
 
-            print("Init " + str(lead_name) + "...")
+            if ecg.is_log:
+                print("Init " + str(lead_name) + "...")
 
             data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, lead_name, details)
 
@@ -159,7 +161,8 @@ def load_data_local(ecg, details=ECGDataDetails.original):
                 lead = ECGLead(lead_name, data, sampling_rate)
                 leads.append(lead)
 
-                print("Init " + str(lead_name) + " complete")
+                if ecg.is_log:
+                    print("Init " + str(lead_name) + " complete")
 
         ecg.leads = leads
 
@@ -195,6 +198,7 @@ def load_data_local(ecg, details=ECGDataDetails.original):
             else:
                 raise InvalidECGDataDetails('Error! Invalid ecg details')
 
-    print("Init ecg from local database complete")
-    print("")
+    if ecg.is_log:
+        print("Init ecg from local database complete")
+        print("")
 

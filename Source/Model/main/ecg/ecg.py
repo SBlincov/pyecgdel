@@ -19,26 +19,34 @@ class InvalidECG(Exception):
 
 class ECG:
 
-    def __init__(self, data=LOCAL_DB, name=None, record=None):
+    def __init__(self, data=LOCAL_DB, name=None, record=None, is_log=False):
 
         self.name = name
         self.record = record
         self.leads = []
+        self.is_log = is_log
 
-        print("================================")
-        print("Init ECG ...")
+        if self.is_log:
+            print("================================")
+            print("Init ECG ...")
 
         if data is LOCAL_DB:
             load_data_local(self)
 
         elif isinstance(data, dict):
             for lead_name in data:
-                print("Init " + str(lead_name) + " ...")
+
+                if self.is_log:
+                    print("Init " + str(lead_name) + " ...")
+
                 lead = ECGLead(lead_name, data[lead_name], float(ConfigParams['SAMPLING_RATE']))
                 self.leads.append(lead)
-                print("Init " + str(lead_name) + " complete")
 
-            print("Init ECG complete")
+                if self.is_log:
+                    print("Init " + str(lead_name) + " complete")
+
+            if self.is_log:
+                print("Init ECG complete")
 
     def load_local(self, details):
         load_data_local(self, details)
@@ -47,55 +55,90 @@ class ECG:
         save_data_local(self, details)
 
     def cwt_filtration(self):
-        print("ECG filtration ...")
+        if self.is_log:
+            print("ECG filtration ...")
 
         for lead_id in range(0, len(self.leads)):
-            print("Filtration " + str(self.leads[lead_id].name) + "...")
-            self.leads[lead_id].cwt_filtration()
-            print("Filtration " + str(self.leads[lead_id].name) + " complete")
+            if self.is_log:
+                print("Filtration " + str(self.leads[lead_id].name) + "...")
 
-        print("ECG filtration complete")
-        print("")
+            self.leads[lead_id].cwt_filtration()
+
+            if self.is_log:
+                print("Filtration " + str(self.leads[lead_id].name) + " complete")
+
+        if self.is_log:
+            print("ECG filtration complete")
+            print("")
 
     def common_filtration(self):
-        print("ECG filtration ...")
+        if self.is_log:
+            print("ECG filtration ...")
 
         for lead_id in range(0, len(self.leads)):
-            print("Filtration " + str(self.leads[lead_id].name) + "...")
+            if self.is_log:
+                print("Filtration " + str(self.leads[lead_id].name) + "...")
+
             self.leads[lead_id].common_filtration()
-            print("Filtration " + str(self.leads[lead_id].name) + " complete")
+
+            if self.is_log:
+                print("Filtration " + str(self.leads[lead_id].name) + " complete")
 
         print("ECG filtration complete")
         print("")
 
     def adaptive_filtration(self):
-        print("ECG filtration...")
+        if self.is_log:
+            print("ECG filtration...")
+
         for lead_id in range(0, len(self.leads)):
-            print("Filtration " + str(self.leads[lead_id].name) + "...")
+
+            if self.is_log:
+                print("Filtration " + str(self.leads[lead_id].name) + "...")
+
             self.leads[lead_id].adaptive_filtration()
-            print("Filtration " + str(self.leads[lead_id].name) + " complete")
-        print("ECG filtration complete")
-        print("")
+
+            if self.is_log:
+                print("Filtration " + str(self.leads[lead_id].name) + " complete")
+
+        if self.is_log:
+            print("ECG filtration complete")
+            print("")
 
     def dwt(self):
-        print("ECG DWT ...")
+        if self.is_log:
+            print("ECG DWT ...")
 
         for lead_id in range(0, len(self.leads)):
-            print("dwt " + str(self.leads[lead_id].name) + " ...")
-            self.leads[lead_id].dwt()
-            print("dwt " + str(self.leads[lead_id].name) + " complete")
+            if self.is_log:
+                print("dwt " + str(self.leads[lead_id].name) + " ...")
 
-        print("ECG DWT complete")
-        print("")
+            self.leads[lead_id].dwt()
+
+            if self.is_log:
+                print("dwt " + str(self.leads[lead_id].name) + " complete")
+
+        if self.is_log:
+            print("ECG DWT complete")
+            print("")
 
     def delineation(self):
-        print("ECG delineation ...")
+
+        if self.is_log:
+            print("ECG delineation ...")
 
         for lead_id in range(0, len(self.leads)):
-            print("QRS delineation " + str(self.leads[lead_id].name) + " ...")
+
+            if self.is_log:
+                print("QRS delineation " + str(self.leads[lead_id].name) + " ...")
+
             self.leads[lead_id].qrs_del()
-            print("QRS delineation " + str(self.leads[lead_id].name) + " complete")
-        print("")
+
+            if self.is_log:
+                print("QRS delineation " + str(self.leads[lead_id].name) + " complete")
+
+        if self.is_log:
+            print("")
 
         if len(self.leads) > 3:
             qrs_multi_lead_processing(self.leads)
@@ -103,34 +146,49 @@ class ECG:
         flutter_analysis(self.leads)
 
         for lead_id in range(0, len(self.leads)):
-            print("T delineation " + str(self.leads[lead_id].name) + " ...")
+            if self.is_log:
+                print("T delineation " + str(self.leads[lead_id].name) + " ...")
+
             self.leads[lead_id].t_del()
-            print("T delineation " + str(self.leads[lead_id].name) + " complete")
-        print("")
+
+            if self.is_log:
+                print("T delineation " + str(self.leads[lead_id].name) + " complete")
+        if self.is_log:
+            print("")
 
         for lead_id in range(0, len(self.leads)):
-            print("P delineation " + str(self.leads[lead_id].name) + " ...")
+            if self.is_log:
+                print("P delineation " + str(self.leads[lead_id].name) + " ...")
+
             self.leads[lead_id].p_del()
-            print("P delineation " + str(self.leads[lead_id].name) + " complete")
-        print("")
+
+            if self.is_log:
+                print("P delineation " + str(self.leads[lead_id].name) + " complete")
+
+        if self.is_log:
+            print("")
 
         if len(self.leads) > 3:
             p_multi_lead_processing(self.leads)
 
         for lead_id in range(0, len(self.leads)):
-            self.leads[lead_id].print_del_info()
+            if self.is_log:
+                self.leads[lead_id].print_del_info()
 
-        print("ECG delineation complete")
-        print("")
+        if self.is_log:
+            print("ECG delineation complete")
+            print("")
 
     def del_correction(self):
-        print("ECG del correction ...")
+        if self.is_log:
+            print("ECG del correction ...")
 
         for lead_id in range(0, len(self.leads)):
             self.leads[lead_id].del_correction()
 
-        print("ECG del correction complete")
-        print("")
+        if self.is_log:
+            print("ECG del correction complete")
+            print("")
 
     def init_plot_data(self):
         for lead_id in range(0, len(self.leads)):
@@ -305,16 +363,22 @@ class ECG:
             columns_names.append(column_name)
 
     def characteristics(self):
-        print("ECG calc characteristics...")
+        if self.is_log:
+            print("ECG calc characteristics...")
 
         for lead_id in range(0, len(self.leads)):
-            print("Calc characteristics " + str(self.leads[lead_id].name) + "...")
-            self.leads[lead_id].calc_characteristics()
-            print("Calc characteristics " + str(self.leads[lead_id].name) + " complete")
+            if self.is_log:
+                print("Calc characteristics " + str(self.leads[lead_id].name) + "...")
 
-        print("ECG calc characteristics complete")
-        print("=======================================================================================================")
-        print("")
+            self.leads[lead_id].calc_characteristics()
+
+            if self.is_log:
+                print("Calc characteristics " + str(self.leads[lead_id].name) + " complete")
+
+        if self.is_log:
+            print("ECG calc characteristics complete")
+            print("=======================================================================================================")
+            print("")
 
     def add_characteristics_data_to_dict(self, data_dict, columns_names, id_file):
 
