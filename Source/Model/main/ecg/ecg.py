@@ -21,9 +21,16 @@ class ECG:
 
     def __init__(self, data=LOCAL_DB, name=None, record=None, is_log=False):
 
+        self.leads = []
         self.name = name
         self.record = record
-        self.leads = []
+
+        self._is_dwt = False
+        self._is_delineation = False
+        self._is_adaptive_filtration = False
+        self._is_characteristics = False
+        self._is_init_plot_data = False
+
         self.is_log = is_log
 
         if self.is_log:
@@ -48,13 +55,13 @@ class ECG:
             if self.is_log:
                 print("Init ECG complete")
 
-    def load_local(self, details):
+    def _load_local(self, details):
         load_data_local(self, details)
 
-    def save_local(self, details):
+    def _save_local(self, details):
         save_data_local(self, details)
 
-    def cwt_filtration(self):
+    def _cwt_filtration(self):
         if self.is_log:
             print("ECG filtration ...")
 
@@ -71,7 +78,7 @@ class ECG:
             print("ECG filtration complete")
             print("")
 
-    def common_filtration(self):
+    def _common_filtration(self):
         if self.is_log:
             print("ECG filtration ...")
 
@@ -87,7 +94,11 @@ class ECG:
         print("ECG filtration complete")
         print("")
 
-    def adaptive_filtration(self):
+    def _adaptive_filtration(self):
+
+        if self._is_adaptive_filtration:
+            return
+
         if self.is_log:
             print("ECG filtration...")
 
@@ -105,7 +116,12 @@ class ECG:
             print("ECG filtration complete")
             print("")
 
-    def dwt(self):
+        self._is_adaptive_filtration = True
+
+    def _dwt(self):
+        if self._is_dwt:
+            return
+
         if self.is_log:
             print("ECG DWT ...")
 
@@ -122,7 +138,12 @@ class ECG:
             print("ECG DWT complete")
             print("")
 
-    def delineation(self):
+        self._is_dwt = True
+
+    def _delineation(self):
+
+        if self._is_delineation:
+            return
 
         if self.is_log:
             print("ECG delineation ...")
@@ -179,7 +200,9 @@ class ECG:
             print("ECG delineation complete")
             print("")
 
-    def del_correction(self):
+        self._is_delineation = True
+
+    def _del_correction(self):
         if self.is_log:
             print("ECG del correction ...")
 
@@ -190,11 +213,43 @@ class ECG:
             print("ECG del correction complete")
             print("")
 
-    def init_plot_data(self):
+    def _characteristics(self):
+        if self._is_characteristics:
+            return
+
+        if self.is_log:
+            print("ECG calc characteristics...")
+
+        for lead_id in range(0, len(self.leads)):
+            if self.is_log:
+                print("Calc characteristics " + str(self.leads[lead_id].name) + "...")
+
+            self.leads[lead_id].calc_characteristics()
+
+            if self.is_log:
+                print("Calc characteristics " + str(self.leads[lead_id].name) + " complete")
+
+        if self.is_log:
+            print("ECG calc characteristics complete")
+            print(
+                "=======================================================================================================")
+            print("")
+
+        self._is_characteristics = True
+
+    def _init_plot_data(self):
+
+        if self._is_init_plot_data:
+            return
+
+        self._characteristics()
+
         for lead_id in range(0, len(self.leads)):
             self.leads[lead_id].init_plot_data()
 
-    def add_origin_data_to_dict(self, data_dict, cols_names, id_file):
+        self._is_init_plot_data = True
+
+    def _add_origin_data_to_dict(self, data_dict, cols_names, id_file):
 
         if not isinstance(data_dict, dict):
             raise InvalidECGData('data_dict must be dict instance')
@@ -207,7 +262,7 @@ class ECG:
             data_dict[column_name] = [(id_file, self.leads[lead_id].origin.tolist())]
             cols_names.append(column_name)
 
-    def add_filter_data_to_dict(self, data_dict, columns_names, id_file):
+    def _add_filter_data_to_dict(self, data_dict, columns_names, id_file):
 
         if not isinstance(data_dict, dict):
             raise InvalidECGData('data_dict must be dict instance')
@@ -220,7 +275,7 @@ class ECG:
             data_dict[column_name] = [(id_file, self.leads[lead_id].filter.tolist())]
             columns_names.append(column_name)
 
-    def add_delineation_data_to_dict(self, data_dict, columns_names, id_file):
+    def _add_delineation_data_to_dict(self, data_dict, columns_names, id_file):
 
         flutter_leads_names = FlutterParams['LEADS_NAMES']
 
@@ -310,7 +365,7 @@ class ECG:
                 data_dict[column_name] = [(id_file, np.asarray(t_dels_data, dtype=np.int32).tolist())]
             columns_names.append(column_name)
 
-    def add_morphology_data_to_dict(self, data_dict, columns_names, id_file):
+    def _add_morphology_data_to_dict(self, data_dict, columns_names, id_file):
 
         if not isinstance(data_dict, dict):
             raise InvalidECGData('data_dict must be dict instance')
@@ -362,25 +417,7 @@ class ECG:
             data_dict[column_name] = [(id_file, t_morphs_data)]
             columns_names.append(column_name)
 
-    def characteristics(self):
-        if self.is_log:
-            print("ECG calc characteristics...")
-
-        for lead_id in range(0, len(self.leads)):
-            if self.is_log:
-                print("Calc characteristics " + str(self.leads[lead_id].name) + "...")
-
-            self.leads[lead_id].calc_characteristics()
-
-            if self.is_log:
-                print("Calc characteristics " + str(self.leads[lead_id].name) + " complete")
-
-        if self.is_log:
-            print("ECG calc characteristics complete")
-            print("=======================================================================================================")
-            print("")
-
-    def add_characteristics_data_to_dict(self, data_dict, columns_names, id_file):
+    def _add_characteristics_data_to_dict(self, data_dict, columns_names, id_file):
 
         if not isinstance(data_dict, dict):
             raise InvalidECGData('data_dict must be dict instance')
@@ -403,8 +440,7 @@ class ECG:
             data_dict[column_name] = [(id_file, [characteristics_data_names, characteristics_data_values])]
             columns_names.append(column_name)
 
-
-    def add_plot_data_to_dict(self, data_dict, columns_names, id_file):
+    def _add_plot_data_to_dict(self, data_dict, columns_names, id_file):
 
         if not isinstance(data_dict, dict):
             raise InvalidECGData('data_dict must be dict instance')
@@ -419,4 +455,91 @@ class ECG:
                 column_name = "json_" + self.leads[lead_id].name + "_" + plot_data_key.name
                 data_dict[column_name] = [(id_file, self.leads[lead_id].qrs_plot_data.dict[plot_data_key])]
                 columns_names.append(column_name)
+
+    def get_filtrated(self):
+        self._adaptive_filtration()
+        return {lead.name:lead.filter for lead in self.leads}
+
+    def _two_dimensions_delineation(self, array):
+        if len(array) is 0:
+            return np.zeros((0, 4), dtype=np.int32).tolist()
+        elif len(array) is 1:
+            result = np.asarray(array, dtype=np.int32)
+            np.reshape(result, (1, 4))
+            return result.tolist()
+        else:
+            return np.asarray(array, dtype=np.int32).tolist()
+
+    def _create_array_from_delineation(self, dels):
+        result = []
+        for delineation in dels:
+            result.append(np.asarray(
+                [int(delineation.onset_index),
+                 int(delineation.peak_index),
+                 int(delineation.offset_index),
+                 int(delineation.specification.value)], dtype=np.int32).tolist())
+        return self._two_dimensions_delineation(result)
+
+    def get_delineation(self):
+        self._delineation()
+        data_dict = dict()
+        flutter_leads_names = FlutterParams['LEADS_NAMES']
+
+        for lead in self.leads:
+            lead_name = lead.name
+            data_dict[lead_name] = dict()
+            data_dict[lead_name]["p"] = self._create_array_from_delineation(lead.p_dels)
+            data_dict[lead_name]["qrs"] = self._create_array_from_delineation(lead.qrs_dels)
+            data_dict[lead_name]["t"] = self._create_array_from_delineation(lead.t_dels)
+            if lead_name in flutter_leads_names:
+                data_dict[lead_name]["flutter"] = self._create_array_from_delineation(lead.flutter_dels)
+
+        return data_dict
+
+    def _create_array_from_morphology(self, morphs):
+        result = []
+        for morphology in morphs:
+            for morphology_point in morphology.points:
+                result.append([
+                    int(morphology.del_id),
+                    str(morphology_point.name),
+                    int(morphology_point.index),
+                    float(morphology_point.value),
+                    int(morphology_point.sign),
+                    int(morphology.degree)])
+        return result
+
+    def get_morphology(self):
+        self._delineation()
+        data_dict = dict()
+        for lead in self.leads:
+            lead_name = lead.name
+            data_dict[lead_name] = dict()
+            data_dict[lead_name]["p"] = self._create_array_from_morphology(lead.p_morphs)
+            data_dict[lead_name]["qrs"] = self._create_array_from_morphology(lead.qrs_morphs)
+            data_dict[lead_name]["t"] = self._create_array_from_morphology(lead.t_morphs)
+        return data_dict
+
+    def get_characteristics(self):
+        self._characteristics()
+        data_dict = dict()
+        for lead in self.leads:
+            characteristics_data_names = []
+            characteristics_data_values = []
+            for characteristic in lead.chars:
+                characteristics_data_names.append(characteristic[0].name)
+                if characteristic[1] != 'n':
+                    characteristics_data_values.append(characteristic[1])
+                else:
+                    characteristics_data_values.append(None)
+            data_dict[lead.name] = dict(zip(characteristics_data_names, characteristics_data_values))
+        return data_dict
+
+    def get_plot_data(self):
+        self._init_plot_data()
+        data_dict = dict()
+        for lead in self.leads:
+            for plot_data_key in lead.qrs_plot_data.dict:
+                data_dict[lead.name] = lead.qrs_plot_data.dict[plot_data_key]
+        return data_dict
 

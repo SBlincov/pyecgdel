@@ -1,14 +1,13 @@
 import sys
 
-from Source.CardioBase.cardiobase import Cardiobase
+sys.path.append('..\\..\\libs\\cardiobase')
+from cardiobase import Cardiobase
 from Source.Model.main.ecg.ecg import *
 
 cb = Cardiobase()
 cb.connect()
 
 params_hash = cb.get_hash(24)
-
-id_file = 2321
 
 config_params_from_hash = params_hash['data'][params_hash['id'].index(0)]
 p_params_from_hash = params_hash['data'][params_hash['id'].index(1)]
@@ -24,9 +23,7 @@ init_params(t_params_from_hash, ParamsType.t_params)
 init_params(filter_params_from_hash, ParamsType.filter_params)
 init_params(flutter_params_from_hash, ParamsType.flutter_params)
 
-# leads_names = ConfigParams['LEADS_NAMES']
-
-leads_names = ["lead_i"]
+leads_names = ConfigParams['LEADS_NAMES']
 
 columns_names = []
 for lead_name in leads_names:
@@ -34,6 +31,26 @@ for lead_name in leads_names:
 
 data = cb.bulk_data_get(columns_names, "cardio_file.id=" + str(id_file))
 ecg_data = data['data']
+
+if data['id_type'] == 3:
+
+    params_hash = cb.get_hash(656)
+
+    config_params_from_hash = params_hash['data'][params_hash['id'].index(0)]
+    p_params_from_hash = params_hash['data'][params_hash['id'].index(1)]
+    qrs_params_from_hash = params_hash['data'][params_hash['id'].index(2)]
+    t_params_from_hash = params_hash['data'][params_hash['id'].index(3)]
+    filter_params_from_hash = params_hash['data'][params_hash['id'].index(4)]
+    flutter_params_from_hash = params_hash['data'][params_hash['id'].index(5)]
+
+    init_params(config_params_from_hash, ParamsType.config_params)
+    init_params(p_params_from_hash, ParamsType.p_params)
+    init_params(qrs_params_from_hash, ParamsType.qrs_params)
+    init_params(t_params_from_hash, ParamsType.t_params)
+    init_params(filter_params_from_hash, ParamsType.filter_params)
+    init_params(flutter_params_from_hash, ParamsType.flutter_params)
+
+    leads_names = ConfigParams['LEADS_NAMES']
 
 ecg_input_data_dict = dict()
 result_data_dict = dict()
@@ -60,3 +77,10 @@ ecg._add_characteristics_data_to_dict(result_data_dict, result_columns_names, id
 # Plot data
 ecg._init_plot_data()
 ecg._add_plot_data_to_dict(result_data_dict, result_columns_names, id_file)
+
+cb.bulk_data_set(result_data_dict)
+cb.commit()
+
+cb.cardio_event("FEATURES", "DELINEATION_DONE", id_file)
+
+cb.disconnect()

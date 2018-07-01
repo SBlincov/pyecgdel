@@ -23,16 +23,16 @@ def _main(cb, id_file):
             ecg_input_data_dict[leads_names[lead_name_id]] = ecg_data[0][lead_name_id]
 
     ecg = ECG(ecg_input_data_dict)
-    ecg.cwt_filtration()
-    ecg.dwt()
-    ecg.delineation()
+    ecg._cwt_filtration()
+    ecg._dwt()
+    ecg._delineation()
     ##ecg.add_delineation_data_to_dict(result_data_dict, result_columns_names, id_file)
     ##ecg.add_morphology_data_to_dict(result_data_dict, result_columns_names, id_file)
     #ecg.characteristics()
     ##ecg.add_characteristics_data_to_dict(result_data_dict, result_columns_names, id_file)
 
-    ecg.adaptive_filtration()
-    ecg.add_filter_data_to_dict(result_data_dict, result_columns_names, id_file)
+    ecg._adaptive_filtration()
+    ecg._add_filter_data_to_dict(result_data_dict, result_columns_names, id_file)
     for lead_name in leads_names:
         cb.delete(id_file, "json_" + lead_name + "_filtrated")
     cb.commit()
