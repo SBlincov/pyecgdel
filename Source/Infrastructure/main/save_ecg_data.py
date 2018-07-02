@@ -17,8 +17,8 @@ def save_data_local(ecg, details):
 
     for lead_id in range(len(leads_names)):
 
-        test_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, leads_names[lead_id], ECGDataDetails.original)
-        data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, leads_names[lead_id], details)
+        test_file_name = DBConfig.get_db_lead_path(ecg._name, ecg._record, leads_names[lead_id], ECGDataDetails.original)
+        data_file_name = DBConfig.get_db_lead_path(ecg._name, ecg._record, leads_names[lead_id], details)
 
         if os.path.exists(test_file_name):
 
@@ -242,7 +242,7 @@ def save_data_local(ecg, details):
             elif details is ECGDataDetails.qrs_plot_data:
 
                 for plot_data_key in ecg.leads[lead_id].qrs_plot_data.dict:
-                    data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, leads_names[lead_id], plot_data_key)
+                    data_file_name = DBConfig.get_db_lead_path(ecg._name, ecg._record, leads_names[lead_id], plot_data_key)
                     np.savetxt(data_file_name, ecg.leads[lead_id].qrs_plot_data.dict[plot_data_key], fmt='%.3e')
 
             else:

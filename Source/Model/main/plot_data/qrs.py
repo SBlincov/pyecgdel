@@ -125,7 +125,7 @@ class QRSPlotData:
         self.dict = plot_data_dict
 
 
-class QRSPlotDataNames:
+class QRSPlotDataNames(Enum):
     rr_dist = 'rr_dist'
     rr_bins_centers = 'rr_bins_centers'
     rr_hist = 'rr_hist'

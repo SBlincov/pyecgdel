@@ -22,8 +22,8 @@ class ECG:
     def __init__(self, data=LOCAL_DB, name=None, record=None, is_log=False):
 
         self.leads = []
-        self.name = name
-        self.record = record
+        self._name = name
+        self._record = record
 
         self._is_dwt = False
         self._is_delineation = False

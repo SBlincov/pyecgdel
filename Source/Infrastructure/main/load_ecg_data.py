@@ -152,7 +152,7 @@ def load_data_local(ecg, details=ECGDataDetails.original):
             if ecg.is_log:
                 print("Init " + str(lead_name) + "...")
 
-            data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, lead_name, details)
+            data_file_name = DBConfig.get_db_lead_path(ecg._name, ecg._record, lead_name, details)
 
             if os.path.exists(data_file_name):
 
