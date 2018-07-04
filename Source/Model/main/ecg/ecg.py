@@ -145,6 +145,8 @@ class ECG:
         if self._is_delineation:
             return
 
+        self._dwt()
+
         if self.is_log:
             print("ECG delineation ...")
 
