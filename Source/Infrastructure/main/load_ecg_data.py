@@ -11,6 +11,7 @@ from ...Model.main.params.common import *
 from ...Model.main.params.p import *
 from ...Model.main.params.qrs import *
 from ...Model.main.params.t import *
+from ...Model.main.params.flutter import *
 
 
 def init_params(data_dict=LOCAL_DB, params_type=ParamsType.config_params):
@@ -30,6 +31,8 @@ def init_params(data_dict=LOCAL_DB, params_type=ParamsType.config_params):
                 raise InvalidECGData('T params file is not exist')
             elif params_type is ParamsType.filter_params:
                 raise InvalidECGData('Filter params file is not exist')
+            elif params_type is ParamsType.flutter_params:
+                raise InvalidECGData('Flutter params file is not exist')
             else:
                 raise InvalidECGData('Unknown params type')
 
@@ -74,6 +77,18 @@ def init_params(data_dict=LOCAL_DB, params_type=ParamsType.config_params):
                 else:
                     raise InvalidECGData('Unknown filter params keys')
 
+            elif params_type is ParamsType.flutter_params:
+                if param[0] in FlutterParams:
+                    if len(param) > 2:
+                        FlutterParams[param[0]] = param[1:]
+                    else:
+                        if param[0] == 'LEADS_NAMES':
+                            FlutterParams[param[0]] = [param[1]]
+                        else:
+                            FlutterParams[param[0]] = param[1]
+                else:
+                    raise InvalidECGData('Unknown flutter params keys')
+
     elif isinstance(data_dict, dict):
 
         for data_dict_key in data_dict:
@@ -108,6 +123,12 @@ def init_params(data_dict=LOCAL_DB, params_type=ParamsType.config_params):
                 else:
                     raise InvalidECGData('Unknown filter params keys')
 
+            elif params_type is ParamsType.flutter_params:
+                if data_dict_key in FlutterParams:
+                    FlutterParams[data_dict_key] = data_dict[data_dict_key]
+                else:
+                    raise InvalidECGData('Unknown flutter params keys')
+
             else:
                 raise InvalidECGData('Unknown params type')
 
@@ -115,31 +136,33 @@ def init_params(data_dict=LOCAL_DB, params_type=ParamsType.config_params):
         raise InvalidECGData('Unknown params data')
 
 
-def load_ecg_data_local(ecg, details=ECGDataDetails.original):
+def load_data_local(ecg, details=ECGDataDetails.original):
 
     sampling_rate = float(ConfigParams['SAMPLING_RATE'])
     leads_names = ConfigParams['LEADS_NAMES']
 
-    print("Init ecg from local database...")
+    if ecg.is_log:
+        print("Init ecg from local database...")
 
     if details is ECGDataDetails.original:
 
         leads = []
         for lead_name in leads_names:
 
-            print("Init " + str(lead_name) + "...")
+            if ecg.is_log:
+                print("Init " + str(lead_name) + "...")
 
-            data_file_name = DBConfig.get_db_lead_path(ecg.name, ecg.record, lead_name, details)
+            data_file_name = DBConfig.get_db_lead_path(ecg._name, ecg._record, lead_name, details)
 
-            if not os.path.exists(data_file_name):
-                raise InvalidECGData('Lead file is not exist')
+            if os.path.exists(data_file_name):
 
-            data = np.loadtxt(data_file_name)
+                data = np.loadtxt(data_file_name)
 
-            lead = ECGLead(lead_name, data, sampling_rate)
-            leads.append(lead)
+                lead = ECGLead(lead_name, data, sampling_rate)
+                leads.append(lead)
 
-            print("Init " + str(lead_name) + " complete")
+                if ecg.is_log:
+                    print("Init " + str(lead_name) + " complete")
 
         ecg.leads = leads
 
@@ -165,14 +188,17 @@ def load_ecg_data_local(ecg, details=ECGDataDetails.original):
             if details == ECGDataDetails.wdc:
                 ecg.leads[lead_id].wdc = data
             elif details == ECGDataDetails.qrs_delineation:
-                ecg.leads[lead_id].qrs_delineations = data
+                ecg.leads[lead_id].qrs_dels = data
             elif details == ECGDataDetails.p_delineation:
-                ecg.leads[lead_id].p_delineations = data
+                ecg.leads[lead_id].p_dels = data
             elif details == ECGDataDetails.t_delineation:
-                ecg.leads[lead_id].t_delineations = data
+                ecg.leads[lead_id].t_dels = data
+            elif details == ECGDataDetails.flutter_delineation:
+                ecg.leads[lead_id].flutter_dels = data
             else:
                 raise InvalidECGDataDetails('Error! Invalid ecg details')
 
-    print("Init ecg from local database complete")
-    print("")
+    if ecg.is_log:
+        print("Init ecg from local database complete")
+        print("")
 

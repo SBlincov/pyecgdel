@@ -10,6 +10,7 @@ class ParamsType(Enum):
     qrs_params = 2
     t_params = 3
     filter_params = 4
+    flutter_params = 5
 
 
 class DBConfig:
@@ -23,6 +24,7 @@ class DBConfig:
     qrs_params = 'qrs_params.txt'
     t_params = 't_params.txt'
     filter_params = 'filter_params.txt'
+    flutter_params = 'flutter_params.txt'
 
     @staticmethod
     def get_db_path():
@@ -48,14 +50,13 @@ class DBConfig:
             path += DBConfig.t_params
         elif params_type is ParamsType.filter_params:
             path += DBConfig.filter_params
+        elif params_type is ParamsType.flutter_params:
+            path += DBConfig.flutter_params
 
         return path
 
     @staticmethod
     def get_db_lead_path(patient_name, record_name, lead_name, details):
-
-        if not isinstance(details, ECGDataDetails):
-            raise InvalidECGDataDetails('details must be ECGDataDetails instance')
 
         db_path = DBConfig.get_db_path()
         if patient_name:

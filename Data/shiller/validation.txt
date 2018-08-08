@@ -1,0 +1,108 @@
+qrs_Se_mean =
+
+    0.9961
+
+
+qrs_PPV_mean =
+
+    0.9987
+
+
+p_Se_mean =
+
+    0.9546
+
+
+p_PPV_mean =
+
+    0.9341
+
+
+t_Se_mean =
+
+    0.9803
+
+
+t_PPV_mean =
+
+    0.9884
+
+
+qrs_peak_error_mean_avg =
+
+    0.0022
+
+
+qrs_peak_error_std_avg =
+
+    0.0035
+
+
+qrs_onset_error_mean_avg =
+
+   -0.0081
+
+
+qrs_onset_error_std_avg =
+
+    0.0077
+
+
+qrs_offset_error_mean_avg =
+
+    0.0038
+
+
+qrs_offset_error_std_avg =
+
+    0.0088
+
+
+p_peak_error_mean_avg =
+
+  -3.2040e-04
+
+
+p_peak_error_std_avg =
+
+    0.0062
+
+
+p_onset_error_mean_avg =
+
+   -0.0027
+
+
+p_onset_error_std_avg =
+
+    0.0102
+
+
+p_offset_error_mean_avg =
+
+   4.9032e-04
+
+
+p_offset_error_std_avg =
+
+    0.0114
+
+
+t_peak_error_mean_avg =
+
+    0.0040
+
+
+t_peak_error_std_avg =
+
+    0.0074
+
+
+t_offset_error_mean_avg =
+
+    0.0057
+
+
+t_offset_error_std_avg =
+
+    0.0155

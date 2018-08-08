@@ -15,6 +15,7 @@ class Cardiobase():
 
     _id_columns_hash = 20
     _id_columns_hash_json = 27
+    _id_ml_info_hash_json = 29
 
 
     #   Конструктор
@@ -150,7 +151,10 @@ class Cardiobase():
     def get_hash(self, id_type_hash):
         hash_table = self._cardiobase.get_hash(id_type_hash)
         for i, info in enumerate(hash_table['data']):
-            hash_table['data'][i] = loads(info.encode('ISO-8859-1'))
+            if id_type_hash != self._id_ml_info_hash_json and id_type_hash != self._id_columns_hash_json:
+                hash_table['data'][i] = loads(info.encode('ISO-8859-1'))
+            else:
+                hash_table['data'][i] = json.loads(info)
         return hash_table
 
 
@@ -177,5 +181,20 @@ class Cardiobase():
     #   Получить диагноз по файлу
     def get_diagnosis(self, id_file):
         return self._cardiobase.get_diagnosis(id_file)
+
+
+    #   Записать диагноз по файлу
+    def set_diagnosis(self, id_file, diagnosis):
+        self._cardiobase.set_diagnosis(id_file, diagnosis)
+
+
+    #   Получить предварительный диагноз по файлу
+    def get_preliminary_diagnosis(self, id_file):
+        return self._cardiobase.get_preliminary_diagnosis(id_file)
+
+
+    #   Записать предварительный диагноз по файлу
+    def set_preliminary_diagnosis(self, id_file, diagnosis):
+        self._cardiobase.set_preliminary_diagnosis(id_file, diagnosis)
 
 

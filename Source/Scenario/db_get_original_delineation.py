@@ -10,6 +10,14 @@ DBConfig.p_params = 'p_params.txt'
 DBConfig.qrs_params = 'qrs_params.txt'
 DBConfig.t_params = 't_params.txt'
 DBConfig.filter_params = 'filter_params.txt'
+DBConfig.flutter_params = 'flutter_params.txt'
+
+init_params(params_type=ParamsType.config_params)
+init_params(params_type=ParamsType.p_params)
+init_params(params_type=ParamsType.qrs_params)
+init_params(params_type=ParamsType.t_params)
+init_params(params_type=ParamsType.filter_params)
+init_params(params_type=ParamsType.flutter_params)
 
 db_path = DBConfig.get_db_path()
 
@@ -27,8 +35,7 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    #data = cb.bulk_data_get([column], "device_model='AT-101' AND id_file>" + str(max_id_file))
-    data = cb.bulk_data_get([column], "device_model='AT-101'")
+    data = cb.bulk_data_get([column], "device_model='AT-101' AND cardio_file.id>=3066")
     records_ids = data['id']
     ecg_data = data['data']
 

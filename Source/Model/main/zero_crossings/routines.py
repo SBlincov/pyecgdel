@@ -49,7 +49,7 @@ def get_zcs_only_indexes(wdc, begin_index, end_index):
         next_wdc = wdc[signal_index + 1]
 
         if current_wdc * next_wdc < 0:
-            zc = ZeroCrossing(signal_index, wdc)
+            zc = ZeroCrossing(signal_index + 1, wdc)
             zcs.append(zc)
             signal_index += 1
 
@@ -97,14 +97,17 @@ def init_zcs_with_global_mms(wdc, zcs, begin_index, end_index):
                 zcs[0].init_global_mm_left(begin_index, wdc)
             zcs[0].init_global_mm_right(zcs[1].index, wdc)
 
-            for zero_crossing_id in range(1, len(zcs) - 1):
-                zcs[zero_crossing_id].init_global_mm_left(zcs[zero_crossing_id - 1].index, wdc)
-                zcs[zero_crossing_id].init_global_mm_right(zcs[zero_crossing_id + 1].index, wdc)
+            for zc_id in range(1, len(zcs) - 1):
+                zcs[zc_id].init_global_mm_left(zcs[zc_id - 1].index, wdc)
+                zcs[zc_id].init_global_mm_right(zcs[zc_id + 1].index, wdc)
 
             if zcs[-1].index is not end_index:
                 zcs[-1].init_global_mm_right(end_index, wdc)
 
             zcs[-1].init_global_mm_left(zcs[-2].index, wdc)
+
+        for zc_id in range(0, len(zcs)):
+            zcs[zc_id].init_extremum_sign()
 
 
 def init_zcs_with_local_mms(wdc, zcs, begin_index, end_index):
@@ -132,14 +135,17 @@ def init_zcs_with_local_mms(wdc, zcs, begin_index, end_index):
                 zcs[0].init_local_mm_left(begin_index, wdc)
             zcs[0].init_local_mm_right(zcs[1].index, wdc)
 
-            for zero_crossing_id in range(1, len(zcs) - 1):
-                zcs[zero_crossing_id].init_local_mm_left(zcs[zero_crossing_id - 1].index, wdc)
-                zcs[zero_crossing_id].init_local_mm_right(zcs[zero_crossing_id + 1].index, wdc)
+            for zc_id in range(1, len(zcs) - 1):
+                zcs[zc_id].init_local_mm_left(zcs[zc_id - 1].index, wdc)
+                zcs[zc_id].init_local_mm_right(zcs[zc_id + 1].index, wdc)
 
             if zcs[-1].index is not end_index:
                 zcs[-1].init_local_mm_right(end_index, wdc)
 
             zcs[-1].init_local_mm_left(zcs[-2].index, wdc)
+
+        for zc_id in range(0, len(zcs)):
+            zcs[zc_id].init_extremum_sign()
 
 
 def init_zcs_with_special_mms(wdc, zcs, begin_index, end_index, window):
@@ -167,12 +173,13 @@ def init_zcs_with_special_mms(wdc, zcs, begin_index, end_index, window):
                 zcs[0].init_special_mm_left(max(begin_index, zcs[0].index - window), wdc)
             zcs[0].init_special_mm_right(min(zcs[1].index, zcs[0].index + window), wdc)
 
-            for zero_crossing_id in range(1, len(zcs) - 1):
-                zcs[zero_crossing_id].init_special_mm_left(max(zcs[zero_crossing_id - 1].index, zcs[zero_crossing_id].index - window), wdc)
-                zcs[zero_crossing_id].init_special_mm_right(min(zcs[zero_crossing_id + 1].index, zcs[zero_crossing_id].index + window), wdc)
+            for zc_id in range(1, len(zcs) - 1):
+                zcs[zc_id].init_special_mm_left(max(zcs[zc_id - 1].index, zcs[zc_id].index - window), wdc)
+                zcs[zc_id].init_special_mm_right(min(zcs[zc_id + 1].index, zcs[zc_id].index + window), wdc)
 
             if zcs[-1].index is not end_index:
                 zcs[-1].init_special_mm_right(min(end_index, zcs[-1].index + window), wdc)
             zcs[-1].init_special_mm_left(max(zcs[-2].index, zcs[-1].index - window), wdc)
 
-
+        for zc_id in range(0, len(zcs)):
+            zcs[zc_id].init_extremum_sign()

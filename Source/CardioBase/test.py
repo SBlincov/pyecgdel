@@ -23,7 +23,7 @@ columns = cb.get_columns()
 
 #Получаем характеристики отведения v1 и диагноз по всех измерениям,
 #где есть хотя бы один из запрашиваемых столбцов 
-data = cb.bulk_data_get(["lead_v1_characteristics", "diagnosis"])
+data = cb.bulk_data_get(["diagnosis"], "cardio_file.id < 2000")
 
 #Отключаемся от базы
 cb.disconnect()
