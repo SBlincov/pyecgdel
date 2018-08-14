@@ -129,12 +129,12 @@ class ECGLead:
         self.qrs_plot_data = QRSPlotData(self)
 
 
-    def print_del_info(self):
+    def print_del_info(self, name):
 
         num_qrs_dels = len(self.qrs_dels)
         num_t_dels = len(self.t_dels)
         num_p_dels = len(self.p_dels)
 
-        print(str(self.name) + ": \t QRS: " + str(num_qrs_dels) + " T: " + str(num_t_dels) + " P: " + str(num_p_dels))
+        print(str(name) + ' ' + str(self.name) + ' ' + str(num_qrs_dels) + ' ' + str(num_t_dels) + ' ' + str(num_p_dels))
 
 

@@ -84,4 +84,6 @@ class CharacteristicsNames(Enum):
 
     flutter = "flutter"
 
+    max_sub_min_NN = 'max_sub_min_NN'
+
 

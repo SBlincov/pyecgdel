@@ -8,7 +8,8 @@ from Source.Model.main.params.filter import FilterParams
 
 def cwt_filtration(signal):
     mother_wavelet = wavelet.DOG(2)
-    wave, scales, _, _, _, _ = wavelet.cwt(signal, 0.25, 0.25, 0.5, int(FilterParams['SCALE_COUNT']), mother_wavelet)
+    scale_count = int(FilterParams['SCALE_COUNT'])
+    wave, scales, _, _, _, _ = wavelet.cwt(signal, 0.25, 0.25, 0.5, scale_count, mother_wavelet)
 
     for j in range(0, len(signal)):
         for i in range(0, int(FilterParams['LOW_LIMIT_SCALE_ID'])):
