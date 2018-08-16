@@ -194,8 +194,9 @@ class ECG:
         if len(self.leads) > 3:
             p_multi_lead_processing(self.leads)
 
-        for lead_id in range(0, len(self.leads)):
-            self.leads[lead_id].print_del_info(self._record)
+        if self.is_log:
+            for lead_id in range(0, len(self.leads)):
+                self.leads[lead_id].print_del_info(self._record)
 
         if self.is_log:
             print("ECG delineation complete")
