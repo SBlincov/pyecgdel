@@ -1,0 +1,1425 @@
+50436612
+    Sinus bradycardia. 
+    Electric axis of the heart: left axis deviation. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Non-specific repolarization abnormalities: posterior wall. 
+
+50436671
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: posterior wall. 
+
+50436730
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: lateral wall. 
+    Ischemia: inferior wall. 
+
+50436790
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: inferior wall. 
+    Scar formation: inferior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: inferior wall. 
+
+50436937
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    Left atrial hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50436996
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: anterior wall. 
+    Ischemia: septal. 
+    Ischemia: apical. 
+
+50437056
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    Atrial extrasystole: SA-nodal extrasystole. 
+    Atrial extrasystole, type: single PAC. 
+    Left atrial hypertrophy. 
+    Right atrial overload. 
+    Left ventricular hypertrophy. 
+    STEMI: anterior wall. 
+    STEMI: lateral wall. 
+    STEMI: septal. 
+    STEMI: apical. 
+
+50437173
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: septal. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+    Pacemaker presence, undefined. 
+    UNIpolar ventricular pacing. 
+
+50437233
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Non-specific repolarization abnormalities: lateral wall. 
+
+50438357
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Complete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Scar formation: inferior wall. 
+
+50440535
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: inferior wall. 
+
+50441792
+    Sinus bradycardia. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+
+50441851
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    I degree AV block. 
+    Incomplete left bundle branch block. 
+    Left atrial hypertrophy. 
+    Scar formation: inferior wall. 
+    Scar formation: apical. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+
+50442000
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50444877
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    I degree AV block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: anterior wall. 
+    Ischemia: lateral wall. 
+    Ischemia: septal. 
+    Ischemia: apical. 
+
+50444937
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: anterior wall. 
+
+50448183
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Right ventricular hypertrophy. 
+
+50448422
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: inferior wall. 
+
+50448540
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete left bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: posterior wall. 
+
+50448599
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    I degree AV block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Ischemia: lateral wall. 
+    Ischemia: inferior wall. 
+
+50448710
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    STEMI: anterior wall. 
+    STEMI: lateral wall. 
+    STEMI: septal. 
+    STEMI: apical. 
+
+50448859
+    Sinus arrhythmia. 
+    Electric axis of the heart: horizontal. 
+    Incomplete right bundle branch block. 
+    Atrial extrasystole: undefined. 
+    Left atrial hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: lateral wall. 
+
+50451655
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Complete right bundle branch block. 
+    Left atrial hypertrophy. 
+
+50451714
+    Sinus bradycardia. 
+    Electric axis of the heart: horizontal. 
+    Complete left bundle branch block. 
+    Left atrial hypertrophy. 
+    STEMI: anterior wall. 
+    STEMI: lateral wall. 
+    STEMI: septal. 
+    STEMI: apical. 
+
+50455137
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: septal. 
+    Non-specific repolarization abnormalities: apical. 
+
+50455332
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+    Scar formation: anterior wall. 
+    Scar formation: lateral wall. 
+    Scar formation: septal. 
+    Scar formation: apical. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+50464197
+    Sinus bradycardia. 
+    Electric axis of the heart: horizontal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50476664
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Scar formation: anterior wall. 
+    Scar formation: septal. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: posterior wall. 
+
+50476723
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: posterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+50483780
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: septal. 
+
+50488092
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Left ventricular hypertrophy. 
+    Ischemia: lateral wall. 
+    Ischemia: inferior wall. 
+    Ischemia: apical. 
+
+50488175
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50488236
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    STEMI: anterior wall. 
+    STEMI: lateral wall. 
+    STEMI: septal. 
+    STEMI: apical. 
+
+50488354
+    Sinus rhythm. 
+    III degree AV-block. 
+    Pacemaker presence, undefined. 
+    UNIpolar ventricular pacing. 
+
+50488538
+    Atrial flutter, typical. 
+    Electric axis of the heart: vertical. 
+    Right ventricular hypertrophy. 
+
+50488600
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50488810
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50489244
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Ventricular extrasystole, localisation: RVOT, anterior wall. 
+    Ventricular extrasystole, type: single PVC. 
+    Ventricular extrasystole, type: intercalary PVC. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Ischemia: lateral wall. 
+    Ischemia: apical. 
+
+50489659
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: posterior wall. 
+
+50489713
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50489775
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Incomplete right bundle branch block. 
+
+50489942
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+
+50490004
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50490066
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Complete left bundle branch block. 
+    Scar formation: anterior wall. 
+    Scar formation: septal. 
+    Scar formation: apical. 
+
+50490190
+    Sinus rhythm. 
+    Ventricular extrasystole, localisation: RVOT, anterior wall. 
+    Ventricular extrasystole, type: single PVC. 
+    Pacemaker presence, undefined. 
+    UNIpolar atrial pacing. 
+    UNIpolar ventricular pacing. 
+
+50494292
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+50494469
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50501116
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50519494
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left ventricular hypertrophy. 
+
+50519553
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Non-specific intravintricular conduction delay. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50519665
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Complete left bundle branch block. 
+    Right ventricular hypertrophy. 
+
+50523854
+    Atrial flutter, typical. 
+    Electric axis of the heart: vertical. 
+    Left ventricular hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+50527370
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50527435
+    Sinus bradycardia. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete left bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: septal. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+50527500
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Right atrial overload. 
+    Left ventricular hypertrophy. 
+    STEMI: anterior wall. 
+    STEMI: lateral wall. 
+    STEMI: septal. 
+    Ischemia: posterior wall. 
+    Scar formation: anterior wall. 
+    Scar formation: septal. 
+
+50531390
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+
+50531676
+    Sinus rhythm. 
+    Electric axis of the heart: right axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Scar formation: posterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+
+50531877
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+
+50532221
+    Sinus bradycardia. 
+    Electric axis of the heart: vertical. 
+    Non-specific intravintricular conduction delay. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50532286
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Left anterior hemiblock. 
+    Atrial extrasystole: undefined. 
+    Atrial extrasystole: left atrial. 
+    Atrial extrasystole, type: single PAC. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50551705
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    I degree AV block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: septal. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+50585461
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+
+50585526
+    Sinus arrhythmia. 
+    Electric axis of the heart: vertical. 
+
+50585753
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    STEMI: anterior wall. 
+    STEMI: lateral wall. 
+    STEMI: septal. 
+    STEMI: inferior wall. 
+    Scar formation: anterior wall. 
+    Scar formation: lateral wall. 
+    Scar formation: septal. 
+
+50585818
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+
+50585948
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Atrial extrasystole: low atrial. 
+    Atrial extrasystole, type: single PAC. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: septal. 
+
+50589779
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50589890
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50590047
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    STEMI: anterior wall. 
+    STEMI: lateral wall. 
+    STEMI: septal. 
+    Undefined ischemia/scar/supp.NSTEMI: posterior wall. 
+
+50612805
+    Sinus tachycardia. 
+    Incomplete right bundle branch block. 
+    Left atrial overload. 
+
+50612873
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Right atrial overload. 
+    Left atrial overload. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50612941
+    Sinus rhythm. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    P-synchrony. 
+
+50613188
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: septal. 
+
+50613638
+    Sinus rhythm. 
+    III degree AV-block. 
+    Pacemaker presence, undefined. 
+    UNIpolar ventricular pacing. 
+
+50613774
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+
+50613834
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: lateral wall. 
+
+50613962
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    I degree AV block. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50614226
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    I degree AV block. 
+    Incomplete right bundle branch block. 
+    Atrial extrasystole: SA-nodal extrasystole. 
+    Atrial extrasystole, type: single PAC. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50614294
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: inferior wall. 
+
+50623837
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+50628511
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Incomplete right bundle branch block. 
+    Right atrial overload. 
+    Left ventricular hypertrophy. 
+    Ischemia: anterior wall. 
+    Ischemia: septal. 
+    Ischemia: inferior wall. 
+    Ischemia: apical. 
+
+50628578
+    Sinus bradycardia. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: inferior wall. 
+
+50634701
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Complete left bundle branch block. 
+    Ventricular extrasystole, morphology: polymorphic. 
+    Ventricular extrasystole, localisation: LVOT, LVS. 
+    Ventricular extrasystole, type: single PVC. 
+    Ventricular extrasystole, type: couplet. 
+    Scar formation: anterior wall. 
+    Scar formation: septal. 
+    Scar formation: posterior wall. 
+
+50634769
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+    Ischemia: inferior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+
+50634940
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: septal. 
+    Non-specific repolarization abnormalities: inferior wall. 
+    Non-specific repolarization abnormalities: apical. 
+
+50635008
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    STEMI: anterior wall. 
+    STEMI: septal. 
+    STEMI: apical. 
+
+50635563
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Left atrial overload. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50645937
+    Atrial fibrillation. 
+    Electric axis of the heart: normal. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: septal. 
+    Non-specific repolarization abnormalities: apical. 
+
+50646073
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50646141
+    Sinus rhythm. 
+    III degree AV-block. 
+    Pacemaker presence, undefined. 
+    BIpolar ventricular pacing. 
+
+50646337
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Non-specific intravintricular conduction delay. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50646405
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50647075
+    Atrial fibrillation. 
+    Pacemaker presence, undefined. 
+    Biventricular pacing. 
+
+50647135
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50647195
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Left ventricular hypertrophy. 
+    Ischemia: lateral wall. 
+    Ischemia: septal. 
+    Ischemia: inferior wall. 
+    Ischemia: apical. 
+    UNIpolar ventricular pacing. 
+
+50647399
+    Atrial fibrillation. 
+    Electric axis of the heart: normal. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50647587
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+50653411
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Ischemia: inferior wall. 
+
+50653582
+    Sinus arrhythmia. 
+    Electric axis of the heart: right axis deviation. 
+    Incomplete right bundle branch block. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: septal. 
+
+50653650
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left atrial overload. 
+    Left ventricular hypertrophy. 
+    Ischemia: anterior wall. 
+    Ischemia: lateral wall. 
+
+50653718
+    Atrial fibrillation. 
+    Electric axis of the heart: vertical. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: septal. 
+    Non-specific repolarization abnormalities: apical. 
+
+50653786
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Incomplete right bundle branch block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50656252
+    Atrial flutter, typical. 
+    Electric axis of the heart: horizontal. 
+    Non-specific intravintricular conduction delay. 
+    Left ventricular hypertrophy. 
+
+50656363
+    Sinus rhythm. 
+    III degree AV-block. 
+    Pacemaker presence, undefined. 
+    UNIpolar ventricular pacing. 
+    P-synchrony. 
+
+50665250
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Ventricular extrasystole, localisation: IVS, middle part. 
+    Ventricular extrasystole, type: single PVC. 
+    Ventricular extrasystole, type: intercalary PVC. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+50665484
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Ventricular extrasystole, localisation: RVOT, antero-septal part. 
+    Ventricular extrasystole, type: single PVC. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Scar formation: posterior wall. 
+    Non-specific repolarization abnormalities: lateral wall. 
+
+50665800
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    I degree AV block. 
+    Incomplete right bundle branch block. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: posterior wall. 
+
+50666019
+    Irregular sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Complete right bundle branch block. 
+    Atrial extrasystole: left atrial. 
+    Atrial extrasystole, type: quadrigemini. 
+    Left atrial hypertrophy. 
+    Non-specific repolarization abnormalities: septal. 
+    Non-specific repolarization abnormalities: apical. 
+
+50691683
+    Atrial fibrillation. 
+    Aberrant conduction. 
+    Electric axis of the heart: left axis deviation. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+50691821
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Ventricular extrasystole, localisation: LVOT, LVS. 
+    Ventricular extrasystole, type: single PVC. 
+    Scar formation: lateral wall. 
+    Scar formation: apical. 
+
+50695322
+    Sinus rhythm. 
+    III degree AV-block. 
+    Pacemaker presence, undefined. 
+    BIpolar ventricular pacing. 
+
+50695395
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete left bundle branch block. 
+    Left ventricular hypertrophy. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: septal. 
+    Undefined ischemia/scar/supp.NSTEMI: posterior wall. 
+
+60714227
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+60721804
+    Sinus tachycardia. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Scar formation: posterior wall. 
+
+60721857
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+60724775
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Complete right bundle branch block. 
+    Left atrial hypertrophy. 
+
+60727209
+    Sinus tachycardia. 
+    Electric axis of the heart: vertical. 
+    Incomplete right bundle branch block. 
+
+60727262
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Early repolarization syndrome. 
+
+60755396
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+60755510
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    I degree AV block. 
+    Incomplete left bundle branch block. 
+    Right atrial hypertrophy. 
+    Left atrial hypertrophy. 
+    Right atrial overload. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+
+60756898
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left ventricular hypertrophy. 
+
+60756955
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Incomplete left bundle branch block. 
+
+60757195
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+60760148
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial overload. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: apical. 
+
+60760262
+    Sinus bradycardia. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Left anterior hemiblock. 
+    Ventricular extrasystole, morphology: polymorphic. 
+    Ventricular extrasystole, localisation: RVOT, anterior wall. 
+    Ventricular extrasystole, localisation: LV, undefined. 
+    Ventricular extrasystole, type: couplet. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+
+60760319
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Non-specific repolarization abnormalities: lateral wall. 
+
+60760376
+    Sinus bradycardia. 
+    Wandering atrial pacemaker. 
+    Electric axis of the heart: horizontal. 
+    Left atrial hypertrophy. 
+    Left atrial overload. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Scar formation: posterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+60760489
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Early repolarization syndrome. 
+
+60760690
+    Atrial fibrillation. 
+    Electric axis of the heart: left axis deviation. 
+    Left ventricular hypertrophy. 
+    Scar formation: anterior wall. 
+    Scar formation: septal. 
+
+60760873
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: septal. 
+    Non-specific repolarization abnormalities: apical. 
+
+60760929
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    I degree AV block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+60761020
+    Irregular sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Atrial extrasystole: SA-nodal extrasystole. 
+    Atrial extrasystole, type: bigemini. 
+    Atrial extrasystole, type: allorhythmic pattern. 
+    Right atrial overload. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: septal. 
+
+60761076
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: apical. 
+
+60761278
+    Sinus bradycardia. 
+    Electric axis of the heart: left axis deviation. 
+    I degree AV block. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Scar formation: septal. 
+    Scar formation: posterior wall. 
+    Scar formation: apical. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
+    Undefined ischemia/scar/supp.NSTEMI: septal. 
+    Undefined ischemia/scar/supp.NSTEMI: apical. 
+
+1102526216
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102526300
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Right atrial overload. 
+
+1102526552
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102526636
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: septal. 
+    Non-specific repolarization abnormalities: inferior wall. 
+    Non-specific repolarization abnormalities: apical. 
+
+1102526720
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: posterior wall. 
+
+1102527868
+    Sinus rhythm. 
+    Wandering atrial pacemaker. 
+    Electric axis of the heart: normal. 
+    Early repolarization syndrome. 
+
+1102527952
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Incomplete right bundle branch block. 
+    Right atrial overload. 
+
+1102528207
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102528291
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Left atrial hypertrophy. 
+
+1102528627
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+1102530574
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Early repolarization syndrome. 
+
+1102530745
+    Sinus bradycardia. 
+    Electric axis of the heart: vertical. 
+
+1102530830
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Non-specific repolarization abnormalities: lateral wall. 
+    Non-specific repolarization abnormalities: posterior wall. 
+    Non-specific repolarization abnormalities: apical. 
+
+1102530906
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Right atrial overload. 
+
+1102531056
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102531245
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102531329
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102544880
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102544964
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+1102545048
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+
+1102545132
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102545216
+    Sinus arrhythmia. 
+    Electric axis of the heart: normal. 
+    Incomplete right bundle branch block. 
+
+1102545384
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102545554
+    Sinus arrhythmia. 
+    Electric axis of the heart: vertical. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+1102545725
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Early repolarization syndrome. 
+
+1102545893
+    Sinus bradycardia. 
+    Electric axis of the heart: vertical. 
+    Early repolarization syndrome. 
+
+1102545977
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102546565
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102546649
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Right atrial overload. 
+    Left atrial overload. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+1102546733
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left anterior hemiblock. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Scar formation: anterior wall. 
+    Scar formation: septal. 
+    Non-specific repolarization abnormalities: posterior wall. 
+
+1102546817
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102546901
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102547513
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Early repolarization syndrome. 
+
+1102547808
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+
+1102554690
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102555026
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Left ventricular hypertrophy. 
+
+1102555468
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Early repolarization syndrome. 
+
+1102555618
+    Sinus bradycardia. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: septal. 
+    Non-specific repolarization abnormalities: apical. 
+
+1102555723
+    Atrial fibrillation. 
+    Electric axis of the heart: horizontal. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: inferior wall. 
+
+1102556149
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Right atrial overload. 
+
+1102566409
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Sinoatrial blockade, undefined. 
+
+1102576926
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    Electric axis of the heart: severe left axis deviation. 
+    Incomplete right bundle branch block. 
+    Right atrial overload. 
+    Non-specific repolarization abnormalities: posterior wall. 
+
+1102583725
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+
+1102592386
+    Sinus arrhythmia. 
+    Electric axis of the heart: normal. 
+    Right atrial overload. 
+    Left atrial overload. 
+
+1102592489
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102592687
+    Sinus rhythm. 
+    Electric axis of the heart: right axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102592776
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102592865
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102593101
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left atrial overload. 
+    Left ventricular hypertrophy. 
+    Left ventricular overload. 
+    Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
+    Undefined ischemia/scar/supp.NSTEMI: posterior wall. 
+
+1102593306
+    Sinus arrhythmia. 
+    Wandering atrial pacemaker. 
+    Electric axis of the heart: normal. 
+
+1102593395
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Incomplete right bundle branch block. 
+    Right atrial overload. 
+    Left atrial overload. 
+
+1102593484
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+    Right atrial overload. 
+    Left atrial overload. 
+
+1102608647
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102609003
+    Sinus tachycardia. 
+    Electric axis of the heart: horizontal. 
+    Right atrial overload. 
+
+1102609092
+    Sinus bradycardia. 
+    Electric axis of the heart: horizontal. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: septal. 
+
+1102609268
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+
+1102609357
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Early repolarization syndrome. 
+
+1102609446
+    Sinus rhythm. 
+    Electric axis of the heart: left axis deviation. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+
+1102609638
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102609727
+    Sinus rhythm. 
+    Electric axis of the heart: vertical. 
+
+1102609816
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102625369
+    Sinus rhythm. 
+    Electric axis of the heart: horizontal. 
+    Left atrial hypertrophy. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
+    Non-specific repolarization abnormalities: septal. 
+
+1102625537
+    Sinus arrhythmia. 
+    Electric axis of the heart: normal. 
+    Right atrial overload. 
+
+1102625626
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102625826
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+
+1102625915
+    Sinus rhythm. 
+    Electric axis of the heart: normal. 
+    Left ventricular hypertrophy. 
+    Non-specific repolarization abnormalities: anterior wall. 
