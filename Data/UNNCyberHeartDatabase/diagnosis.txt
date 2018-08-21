@@ -60,12 +60,10 @@
 
 50437173
     Atrial fibrillation. 
-    Electric axis of the heart: left axis deviation. 
     Undefined ischemia/scar/supp.NSTEMI: anterior wall. 
     Undefined ischemia/scar/supp.NSTEMI: lateral wall. 
     Undefined ischemia/scar/supp.NSTEMI: septal. 
     Undefined ischemia/scar/supp.NSTEMI: apical. 
-    Pacemaker presence, undefined. 
     UNIpolar ventricular pacing. 
 
 50437233
@@ -279,7 +277,6 @@
 50488354
     Sinus rhythm. 
     III degree AV-block. 
-    Pacemaker presence, undefined. 
     UNIpolar ventricular pacing. 
 
 50488538
@@ -356,7 +353,6 @@
     Sinus rhythm. 
     Ventricular extrasystole, localisation: RVOT, anterior wall. 
     Ventricular extrasystole, type: single PVC. 
-    Pacemaker presence, undefined. 
     UNIpolar atrial pacing. 
     UNIpolar ventricular pacing. 
 
@@ -550,6 +546,7 @@
 
 50612805
     Sinus tachycardia. 
+    Electric axis of the heart: normal. 
     Incomplete right bundle branch block. 
     Left atrial overload. 
 
@@ -579,7 +576,6 @@
 50613638
     Sinus rhythm. 
     III degree AV-block. 
-    Pacemaker presence, undefined. 
     UNIpolar ventricular pacing. 
 
 50613774
@@ -717,7 +713,6 @@
 50646141
     Sinus rhythm. 
     III degree AV-block. 
-    Pacemaker presence, undefined. 
     BIpolar ventricular pacing. 
 
 50646337
@@ -735,7 +730,6 @@
 
 50647075
     Atrial fibrillation. 
-    Pacemaker presence, undefined. 
     Biventricular pacing. 
 
 50647135
@@ -746,7 +740,6 @@
 
 50647195
     Atrial fibrillation. 
-    Electric axis of the heart: left axis deviation. 
     Left ventricular hypertrophy. 
     Ischemia: lateral wall. 
     Ischemia: septal. 
@@ -815,7 +808,6 @@
 50656363
     Sinus rhythm. 
     III degree AV-block. 
-    Pacemaker presence, undefined. 
     UNIpolar ventricular pacing. 
     P-synchrony. 
 
@@ -879,7 +871,6 @@
 50695322
     Sinus rhythm. 
     III degree AV-block. 
-    Pacemaker presence, undefined. 
     BIpolar ventricular pacing. 
 
 50695395
@@ -1288,7 +1279,6 @@
 1102576926
     Sinus rhythm. 
     Electric axis of the heart: horizontal. 
-    Electric axis of the heart: severe left axis deviation. 
     Incomplete right bundle branch block. 
     Right atrial overload. 
     Non-specific repolarization abnormalities: posterior wall. 
