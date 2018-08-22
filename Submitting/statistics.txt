@@ -16,10 +16,39 @@ Gender representation: 85 females and 115 males.
 
 Each record has complex hierarchial diagnosis, поставленный врачом-кардиологом.
 
-Таблицы ниже демонстрируют diagnosis representation с разных сторон:
+Сначала представлены две таблицы с типом ритма и типом электрической оси сердца. Данная информация представлена для всех записей в базе
 
-Rhythm 										Number of subjects
-Sinus rhythm
-Sinus bradycardia
+Rhythm:										Number of subjects:
+Sinus rhythm								145
+Sinus bradycardia							25
+Sinus tachycardia							4
+Sinus arrhythmia							8
+Irregular sinus rhythm						1
+Other non-sinus rhythm						17
+Total										200
+
+Electric axis of the heart:					Number of subjects:
+Normal										75
+Left axis deviation							66
+Vertical									26
+Horizontal									20
+Right axis deviation						3
+Undefined (pacemaker)						10
+Total										200
+
+В следующей таблице представлены основные нарушения сердечного ритма и их количество в базе. Возможны перекрытия, так как у некоторых поциентов может встречаться несколько нарушений. 
+
+Left ventricular hypertrophy										108
+Left ventricular overload 											11
+Non-specific repolarization abnormalities: posterior wall 			9
+Left atrial hypertrophy												102
+Ischemia: anterior wall												5
+Ischemia: lateral wall												8
+Ischemia: inferior wall												10
+Incomplete right bundle branch block								29
+Scar formation: inferior wall										3
+Undefined ischemia/scar/supp.NSTEMI: inferior wall					3
+Non-specific repolarization abnormalities: inferior wall			19
+
 
 
