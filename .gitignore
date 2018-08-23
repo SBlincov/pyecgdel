@@ -114,3 +114,7 @@ Source/CardioBase/test_cardiobase\.exe
 *.exe
 
 Submitting/
+
+unndb/unndb/
+
+unndb/diagnosis/\.idea/
