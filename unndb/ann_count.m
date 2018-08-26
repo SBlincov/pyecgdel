@@ -14,6 +14,9 @@ leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'l
 num_leads = size(leads, 2);
 
 total_num = 0;
+qrs_num = 0;
+t_num = 0;
+p_num = 0;
 
 for record_id = 1:num_records 
     
@@ -34,14 +37,17 @@ for record_id = 1:num_records
         fn = sprintf('%s/%s/%s/qrs_delineation_doc.txt', origin_path, record_name, lead);
         data = importdata(fn);
         total_num = total_num + size(data, 1);
+        qrs_num = qrs_num + size(data, 1);
         
         fn = sprintf('%s/%s/%s/t_delineation_doc.txt', origin_path, record_name, lead);
         data = importdata(fn); 
         total_num = total_num + size(data, 1);
+        t_num = t_num + size(data, 1);
         
         fn = sprintf('%s/%s/%s/p_delineation_doc.txt', origin_path, record_name, lead);
         data = importdata(fn);
         total_num = total_num + size(data, 1);
+        p_num = p_num + size(data, 1);
         
     end
 end
