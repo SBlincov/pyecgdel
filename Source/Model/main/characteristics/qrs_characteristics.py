@@ -143,7 +143,7 @@ def get_qrs_chars(lead):
             qrs_characteristics.append([CharacteristicsNames.pNN50, float(pNN50)])
 
             # Geometry
-            bins = np.arange(0.0, 3.0, 0.0078125).tolist()
+            bins = np.arange(0.0, 3.0, 0.05).tolist()
             hist = np.histogram(rr_distribution, bins)
             triangular_index = np.max(hist[0]) / len(rr_distribution)
             qrs_characteristics.append([CharacteristicsNames.triangular_index, float(triangular_index)])
@@ -209,13 +209,19 @@ def get_qrs_chars(lead):
                 qrs_characteristics.append([CharacteristicsNames.HFnorm, 'n'])
 
             # Additional
-            Mo = np.max(hist[0])
-            AMo = Mo / sum(hist[0])
-            X = max_sub_min_NN
-            IVR = AMo / X
-            VPR = 1.0 / Mo * X
+            mo_index = np.argmax(hist[0])
+            Mo = hist[1][mo_index]
+            AMo = np.max(hist[0]) / sum(hist[0]) * 100.0
             PAPR = AMo / Mo
-            IN = AMo / (2.0 * X * Mo)
+            X = max_sub_min_NN
+            if X > 1.0e-10:
+                IVR = AMo / X
+                VPR = 1.0 / (Mo * X)
+                IN = AMo / (2.0 * X * Mo)
+            else:
+                IVR = 0
+                VPR = 0
+                IN = 0
 
             qrs_characteristics.append([CharacteristicsNames.Mo, float(Mo)])
             qrs_characteristics.append([CharacteristicsNames.AMo, float(AMo)])
