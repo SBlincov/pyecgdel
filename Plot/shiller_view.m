@@ -3,7 +3,7 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 2687;
+record = 50691683;
 is_doc_del = 0;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
@@ -15,9 +15,9 @@ y_total = 0.9;
 y_size = 0.074;
 y_shift = 0.001;
 
-is_filtered = 1;
+is_filtered = 0;
 
-x_axis_type = 0;
+x_axis_type = 1;
 
 width_marker = 8;
 width_marker_doc = 5;
