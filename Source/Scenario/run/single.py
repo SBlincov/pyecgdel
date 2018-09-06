@@ -2,7 +2,7 @@ from Source.Model.main.ecg.ecg import *
 from Source.Infrastructure.main.db_config_local import *
 from Source.Scenario.run.record import run_record
 
-DBConfig.name = 'shiller'
+DBConfig.name = 'shiller_long'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -20,5 +20,5 @@ init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 init_params(params_type=ParamsType.flutter_params)
 
-record_name = 'record_1004923335'
+record_name = 'long_record_2319'
 run_record(record_name)
