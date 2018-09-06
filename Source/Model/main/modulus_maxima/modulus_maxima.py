@@ -6,8 +6,9 @@ import numpy as np
 
 class ModulusMaxima:
 
-    def __init__(self, index, wdc):
+    def __init__(self, index, id, wdc):
         self.index = index
+        self.id = id
         self.set_value(wdc)
         self.set_correctness(wdc)
 

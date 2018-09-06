@@ -1,7 +1,7 @@
 from Source.Model.main.params.qrs import QRSParams
 
 
-def get_candidates_qrs_zcs_ids(ecg_lead, qrs_zcs):
+def get_candidates_qrs_zcs_ids(ecg_lead, zcs):
 
     rate = ecg_lead.rate
 
@@ -13,11 +13,11 @@ def get_candidates_qrs_zcs_ids(ecg_lead, qrs_zcs):
 
     next_zc_id = current_zc_id + 1
 
-    while next_zc_id < len(qrs_zcs):
+    while next_zc_id < len(zcs):
 
-        while qrs_zcs[next_zc_id].index - qrs_zcs[current_zc_id].index < window and next_zc_id < len(qrs_zcs) - 1:
+        while zcs[next_zc_id].index - zcs[current_zc_id].index < window and next_zc_id < len(zcs) - 1:
 
-            if qrs_zcs[next_zc_id].mm_amplitude > qrs_zcs[current_zc_id].mm_amplitude:
+            if zcs[next_zc_id].mm_amplitude > zcs[current_zc_id].mm_amplitude:
 
                 current_zc_id = next_zc_id
                 next_zc_id = current_zc_id + 1

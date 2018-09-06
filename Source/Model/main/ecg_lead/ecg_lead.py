@@ -39,6 +39,9 @@ class ECGLead:
         self.rate = rate
         self.wdc = []
 
+        self.mms = []
+        self.zcs = []
+
         self.qrs_dels = []
         self.qrs_morphs = []
 
@@ -52,7 +55,6 @@ class ECGLead:
 
         self.qrs_plot_data = []
 
-        self.flutter = 0.0
         self.flutter_dels = []
 
     def cwt_filtration(self):
@@ -66,6 +68,18 @@ class ECGLead:
 
     def dwt(self):
         self.wdc = get_wdc(self.filter)
+
+    def calc_mms(self):
+        self.mms = []
+        for id in range(0, len(self.wdc)):
+            curr_mms = get_mms(self.wdc[id])
+            self.mms.append(curr_mms)
+
+    def calc_zcs(self):
+        self.zcs = []
+        for id in range(0, len(self.wdc)):
+            curr_zcs = get_zcs(self.wdc[id], self.mms[id])
+            self.zcs.append(curr_zcs)
 
     def qrs_del(self):
         cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, 0, len(self.wdc[0]))
@@ -128,13 +142,10 @@ class ECGLead:
     def init_plot_data(self):
         self.qrs_plot_data = QRSPlotData(self)
 
-
     def print_del_info(self, name):
-
         num_qrs_dels = len(self.qrs_dels)
         num_t_dels = len(self.t_dels)
         num_p_dels = len(self.p_dels)
-
         print(str(name) + ' ' + str(self.name) + ' ' + str(num_qrs_dels) + ' ' + str(num_t_dels) + ' ' + str(num_p_dels))
 
 

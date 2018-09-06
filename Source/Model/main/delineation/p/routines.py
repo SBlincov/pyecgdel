@@ -7,7 +7,7 @@
 """
 
 from Source.Model.main.params.p import PParams
-from Source.Model.main.modulus_maxima.routines import find_left_mm, find_right_mm
+from Source.Model.main.modulus_maxima.routines import *
 from Source.Model.main.threshold_crossings.routines import find_left_thc_index, find_right_thc_index
 
 

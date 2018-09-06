@@ -5,13 +5,14 @@ from Source.Model.main.zero_crossings.routines import *
 
 def alpha_processing(ecg_lead, begin_index, end_index):
 
+
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc_scale_id_aux = get_qrs_aux_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
     wdc_aux = ecg_lead.wdc[wdc_scale_id_aux]
 
     # Main scale
-    zcs = get_zcs_with_global_mms(wdc, begin_index, end_index)
+    zcs = [zc for zc in ecg_lead.zcs[wdc_scale_id] if begin_index <= zc.index < end_index]
     zcs_ids = get_candidates_qrs_zcs_ids(ecg_lead, zcs)
     zcs_ids = get_confirmed_qrs_zcs_ids(ecg_lead, zcs, zcs_ids, wdc)
 

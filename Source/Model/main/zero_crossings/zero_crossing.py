@@ -21,79 +21,56 @@ class ExtremumSign(Enum):
 
 
 class ZeroCrossing:
-    def __init__(self, index, wdc):
+    def __init__(self, index, id, l_mms, r_mms):
         self.index = index
-        self.right_mm = ModulusMaxima(index, wdc)
-        self.left_mm = ModulusMaxima(index, wdc)
-        self.mm_amplitude = 0.0
+        self.id = id
+
+        self.l_mms = l_mms
+        self.r_mms = r_mms
+
+        # Global mms
+        self.g_l_mm = None
+        self.g_r_mm = None
+        self.g_ampl = 0.0
+
+        # Local mms
+        self.l_l_mm = None
+        self.l_r_mm = None
+        self.l_ampl = 0.0
+
+        # Special mms
+        self.s_l_mm = None
+        self.s_r_mm = None
+        self.s_ampl = 0.0
+
         self.extremum_sign = ExtremumSign.unknown
 
-    def init_global_mm_right(self, right_border_index, wdc):
-        right_mm_index = self.index + np.argmax(np.abs(wdc[self.index:right_border_index]))
-        self.right_mm = ModulusMaxima(right_mm_index, wdc)
+        self.zc_proc()
 
-        self.mm_amplitude = abs(self.left_mm.value) + abs(self.right_mm.value)
+    def zc_proc(self):
+        self.g_l_mm = self.l_mms[np.argmax(abs(mm.value) for mm in self.l_mms)] if len(self.l_mms) > 0 else None
+        self.g_r_mm = self.r_mms[np.argmax(abs(mm.value) for mm in self.r_mms)] if len(self.r_mms) > 0 else None
+        if self.g_l_mm is not None and self.g_r_mm is not None:
+            self.g_ampl = abs(self.g_l_mm.value) + abs(self.g_r_mm.value)
 
-    def init_global_mm_left(self, left_border_index, wdc):
-        left_mm_index = left_border_index + np.argmax(np.abs(wdc[left_border_index:self.index]))
-        self.left_mm = ModulusMaxima(left_mm_index, wdc)
+            if self.g_l_mm.value < 0 and self.g_r_mm.value > 0:
+                self.extremum_sign = ExtremumSign.positive
+            else:
+                self.extremum_sign = ExtremumSign.negative
 
-        self.mm_amplitude = abs(self.left_mm.value) + abs(self.right_mm.value)
+        self.l_l_mm = self.l_mms[0] if len(self.l_mms) > 0 else None
+        self.l_r_mm = self.r_mms[0] if len(self.r_mms) > 0 else None
+        if self.l_l_mm is not None and self.l_r_mm is not None:
+            self.l_ampl = abs(self.l_l_mm.value) + abs(self.l_r_mm.value)
 
-    def init_local_mm_right(self, right_border_index, wdc):
-        candidate_mm = find_right_mm(self.index, wdc)
-        if candidate_mm.index < right_border_index:
-            self.right_mm = candidate_mm
-        else:
-            self.right_mm = ModulusMaxima(right_border_index, wdc)
 
-        self.mm_amplitude = abs(self.left_mm.value) + abs(self.right_mm.value)
 
-    def init_local_mm_left(self, left_border_index, wdc):
-        candidate_mm = find_left_mm(self.index, wdc)
-        if candidate_mm.index > left_border_index:
-            self.left_mm = candidate_mm
-        else:
-            self.left_mm = ModulusMaxima(left_border_index, wdc)
+    def special(self, l_window, r_window):
+        l_mms = [mm for mm in self.l_mms if mm.index > self.index - l_window]
+        r_mms = [mm for mm in self.r_mms if mm.index < self.index + r_window]
 
-        self.mm_amplitude = abs(self.left_mm.value) + abs(self.right_mm.value)
-
-    def init_special_mm_right(self, right_border_index, wdc):
-        current_mm = find_right_mm(self.index, wdc)
-        if current_mm.index >= right_border_index - 1:
-            right_mm_index = self.index + np.argmax(np.abs(wdc[self.index:right_border_index]))
-            self.right_mm = ModulusMaxima(right_mm_index, wdc)
-        else:
-            candidate_mm = current_mm
-            while current_mm.index < right_border_index - 1:
-                if abs(current_mm.value) > abs(candidate_mm.value):
-                    candidate_mm = current_mm
-                current_mm = find_right_mm(current_mm.index + 1, wdc)
-
-            self.right_mm = candidate_mm
-
-        self.mm_amplitude = abs(self.left_mm.value) + abs(self.right_mm.value)
-
-    def init_special_mm_left(self, left_border_index, wdc):
-        current_mm = find_left_mm(self.index, wdc)
-        if current_mm.index <= left_border_index + 1:
-            left_mm_index = left_border_index + np.argmax(np.abs(wdc[left_border_index:self.index]))
-            self.left_mm = ModulusMaxima(left_mm_index, wdc)
-        else:
-            candidate_mm = current_mm
-            while current_mm.index > left_border_index + 1:
-                if abs(current_mm.value) > abs(candidate_mm.value):
-                    candidate_mm = current_mm
-                current_mm = find_left_mm(current_mm.index - 1, wdc)
-
-            self.left_mm = candidate_mm
-
-        self.mm_amplitude = abs(self.left_mm.value) + abs(self.right_mm.value)
-
-    def init_extremum_sign(self):
-
-        if self.left_mm.value < 0 and self.right_mm.value > 0:
-            self.extremum_sign = ExtremumSign.positive
-        else:
-            self.extremum_sign = ExtremumSign.negative
+        self.s_l_mm = l_mms[np.argmax(abs(mm.value) for mm in l_mms)] if len(l_mms) > 0 else None
+        self.s_r_mm = r_mms[np.argmax(abs(mm.value) for mm in r_mms)] if len(r_mms) > 0 else None
+        if self.s_l_mm is not None and self.s_r_mm is not None:
+            self.s_ampl = abs(self.s_l_mm.value) + abs(self.s_r_mm.value)
 
