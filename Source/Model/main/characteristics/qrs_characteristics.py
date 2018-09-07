@@ -98,6 +98,9 @@ def get_qrs_chars(lead):
             qrs_characteristics.append([CharacteristicsNames.mean_NN, float(mean_NN)])
             max_sub_min_NN = np.max(rr_dist_mod) - np.min(rr_dist_mod)
 
+            max_rr = np.max(rr_dist_mod)
+            min_rr = np.min(rr_dist_mod)
+
             # Statistics
             SDNN = np.std(rr_dist_mod)
             qrs_characteristics.append([CharacteristicsNames.SDNN, float(SDNN)])
