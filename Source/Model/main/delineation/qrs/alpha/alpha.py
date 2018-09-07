@@ -4,8 +4,6 @@ from Source.Model.main.zero_crossings.routines import *
 
 
 def alpha_processing(ecg_lead, begin_index, end_index):
-
-
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc_scale_id_aux = get_qrs_aux_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]

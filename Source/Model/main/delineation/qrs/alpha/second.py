@@ -4,15 +4,12 @@ from Source.Model.main.params.qrs import QRSParams
 
 
 def get_confirmed_qrs_zcs_ids(ecg_lead, qrs_zcs, candidates_zcs_ids, wdc):
-
     rate = ecg_lead.rate
 
     confirmed_zcs_ids = []
-
     if len(candidates_zcs_ids) > 1:
 
         qrs_len = qrs_zcs[candidates_zcs_ids[-1]].index - qrs_zcs[candidates_zcs_ids[0]].index
-
         if qrs_len <= int(2.0 * float(QRSParams['ALPHA_TRAINING_WINDOW']) * rate):
             training_window = qrs_len / rate * 0.5
             training_deltas_count = max(int(training_window * 0.5), 1)
@@ -24,7 +21,6 @@ def get_confirmed_qrs_zcs_ids(ecg_lead, qrs_zcs, candidates_zcs_ids, wdc):
 
         deltas = []
         training_deltas = []
-
         for candidate_zc_id in candidates_zcs_ids:
             delta = get_delta(wdc, qrs_zcs[candidate_zc_id], window)
             deltas.append(delta)
@@ -46,7 +42,6 @@ def get_confirmed_qrs_zcs_ids(ecg_lead, qrs_zcs, candidates_zcs_ids, wdc):
                 epsilon = float(QRSParams['ALPHA_THRESHOLD']) * np.sum(correct_training_deltas) / training_deltas_count
 
         reversed_correct_training_deltas = []
-
         for i in range(min(training_deltas_count, len(confirmed_zcs_ids))):
             reversed_correct_training_deltas.append(get_delta(wdc, qrs_zcs[confirmed_zcs_ids[i]], window))
 
@@ -63,8 +58,6 @@ def get_confirmed_qrs_zcs_ids(ecg_lead, qrs_zcs, candidates_zcs_ids, wdc):
 
 
 def get_delta(wdc, qrs_zc, window):
-
     max_wdc = np.max(wdc[qrs_zc.index - np.min([window, qrs_zc.index]):qrs_zc.index + np.min([window, len(wdc) - qrs_zc.index])])
     min_wdc = np.min(wdc[qrs_zc.index - np.min([window, qrs_zc.index]):qrs_zc.index + np.min([window, len(wdc) - qrs_zc.index])])
-
     return max_wdc - min_wdc

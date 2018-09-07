@@ -19,25 +19,25 @@ from Source.Model.main.modulus_maxima.routines import *
 
 
 def define_qrs_offset_index(ecg_lead, delineation, qrs_zc):
-
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
     wdc = ecg_lead.wdc[wdc_scale_id]
     rate = ecg_lead.rate
     window = int(float(QRSParams['BETA_OFFSET_WINDOW']) * rate)
+    mms = ecg_lead.mms[wdc_scale_id]
 
     zc = qrs_zc
-    mms = get_qrs_offset_mms(ecg_lead, zc)
+    offset_mms = get_qrs_offset_mms(ecg_lead, zc)
 
-    offset_mm_id = get_qrs_offset_mm_id(ecg_lead, zc, mms, 0)
-    offset_mm_id_wide_morphology = get_complex_mm_id(ecg_lead, zc, mms, offset_mm_id)
+    offset_mm_id = get_qrs_offset_mm_id(ecg_lead, zc, offset_mms, 0)
+    offset_mm_id_wide_morphology = get_complex_mm_id(ecg_lead, zc, offset_mms, offset_mm_id)
 
     if offset_mm_id != offset_mm_id_wide_morphology:
-        offset_mm_id = get_qrs_offset_mm_id(ecg_lead, zc, mms, offset_mm_id_wide_morphology)
+        offset_mm_id = get_qrs_offset_mm_id(ecg_lead, zc, offset_mms, offset_mm_id_wide_morphology)
 
-    threshold = mms[offset_mm_id].value * float(QRSParams['BETA_OFFSET_THRESHOLD'])
+    threshold = offset_mms[offset_mm_id].value * float(QRSParams['BETA_OFFSET_THRESHOLD'])
 
-    first_mm = mms[offset_mm_id]
-    next_mm = find_right_mm(first_mm.index + 1, wdc)
+    first_mm = offset_mms[offset_mm_id]
+    next_mm = mms[first_mm.id + 1]
 
     if not next_mm.correctness:
         if next_mm.index < zc.right_mm.index + window:
@@ -53,33 +53,24 @@ def define_qrs_offset_index(ecg_lead, delineation, qrs_zc):
 
 
 def get_qrs_offset_mms(ecg_lead, qrs_zc):
-
     wdc_scale_id = get_qrs_wdc_scale_id(ecg_lead)
-    wdc = ecg_lead.wdc[wdc_scale_id]
     rate = ecg_lead.rate
     window = int(float(QRSParams['BETA_OFFSET_WINDOW']) * rate)
+    mms = ecg_lead.mms[wdc_scale_id]
 
-    current_mm = ModulusMaxima(qrs_zc.right_mm.index, wdc)
-    next_mm = find_right_mm(current_mm.index + 1, wdc)
-
-    mms = [current_mm]
-
-    while (next_mm.index - qrs_zc.right_mm.index) <= window \
-            and next_mm.index < len(wdc) \
-            and abs(current_mm.index - next_mm.index) > 0:
-        current_mm = next_mm
-        next_mm = find_right_mm(current_mm.index + 1, wdc)
-        mms.append(current_mm)
+    mm_id = qrs_zc.right_mm.id + 1
+    offset_mms = [qrs_zc.right_mm]
+    while mm_id < len(mms) and mms[mm_id].index - qrs_zc.right_mm.index <= window:
+        offset_mms.append(mms[mm_id])
+        mm_id += 1
 
     return mms
 
 
 def get_qrs_offset_mm_id(ecg_lead, qrs_zc, mms, offset_mm_id):
-    
     threshold = max(abs(qrs_zc.left_mm.value), abs(qrs_zc.right_mm.value)) * float(QRSParams['BETA_OFFSET_MM_LOW_LIM'])
 
     qrs_offset_mm_id = offset_mm_id
-
     if offset_mm_id + 1 < len(mms):
         for mm_id in range(offset_mm_id + 1, len(mms)):
             if mms[mm_id].correctness:
