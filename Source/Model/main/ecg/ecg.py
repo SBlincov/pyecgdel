@@ -541,7 +541,8 @@ class ECG:
         self._init_plot_data()
         data_dict = dict()
         for lead in self.leads:
+            data_dict[lead.name] = dict()
             for plot_data_key in lead.qrs_plot_data.dict:
-                data_dict[lead.name] = lead.qrs_plot_data.dict[plot_data_key]
+                data_dict[lead.name][plot_data_key.name] = lead.qrs_plot_data.dict[plot_data_key]
         return data_dict
 
