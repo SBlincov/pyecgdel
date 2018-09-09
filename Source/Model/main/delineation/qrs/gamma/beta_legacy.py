@@ -1,14 +1,14 @@
 from Source.Model.main.params.qrs import *
 
 
-def origin_scale_analysis(ecg_lead, qrs_morphology_data):
+def origin_scale_analysis(ecg_lead, morph_data):
 
     # Init data for original wdc scale
     scale_id_origin = int(QRSParams['WDC_SCALE_ID'])
-    wdc_origin = qrs_morphology_data.wdc[scale_id_origin]
-    zcs_origin = qrs_morphology_data.zcs[scale_id_origin]
-    peak_zc_id_origin = qrs_morphology_data.peak_zcs_ids[scale_id_origin]
-    dels_zcs_ids_origin = qrs_morphology_data.dels_zcs_ids[scale_id_origin]
+    wdc_origin = morph_data.wdc[scale_id_origin]
+    zcs_origin = morph_data.zcs[scale_id_origin]
+    peak_zc_id_origin = morph_data.peak_zcs_ids[scale_id_origin]
+    dels_zcs_ids_origin = morph_data.dels_zcs_ids[scale_id_origin]
 
     # Init zcs, which correspond to begin and end
     del_begin_zc_id_origin = dels_zcs_ids_origin[0]

@@ -5,28 +5,27 @@ from Source.Model.main.params.qrs import *
 from Source.Model.main.zero_crossings.zero_crossing import *
 
 
-def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
-
+def right_qrs_morphology(ecg_lead, delineation, morph_data):
     rate = ecg_lead.rate
 
     # Init data for target wdc scale
-    scale_id = qrs_morphology_data.scale_id
-    wdc = qrs_morphology_data.wdc[scale_id]
-    zcs = qrs_morphology_data.zcs[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    dels_zcs_ids = qrs_morphology_data.dels_zcs_ids[scale_id]
+    scale_id = morph_data.scale_id
+    wdc = morph_data.wdc[scale_id]
+    zcs = morph_data.zcs[scale_id]
+    peak_zc_id = morph_data.peak_zcs_ids[scale_id]
+    zcs_all = ecg_lead.zcs[scale_id]
 
     # Init data for original wdc scale
     scale_id_origin = int(QRSParams['WDC_SCALE_ID'])
-    wdc_origin = qrs_morphology_data.wdc[scale_id_origin]
-    zcs_origin = qrs_morphology_data.zcs[scale_id_origin]
-    peak_zc_id_origin = qrs_morphology_data.peak_zcs_ids[scale_id_origin]
-    dels_zcs_ids_origin = qrs_morphology_data.dels_zcs_ids[scale_id_origin]
+    wdc_origin = morph_data.wdc[scale_id_origin]
+    zcs_origin = morph_data.zcs[scale_id_origin]
+    peak_zc_id_origin = morph_data.peak_zcs_ids[scale_id_origin]
+    zcs_all_origin = ecg_lead.zcs[scale_id_origin]
 
     offset_index_beta = delineation.offset_index
 
     # Analysis of zcs count in original wdc
-    dels_zcs_ids_origin = origin_scale_analysis(ecg_lead, qrs_morphology_data)
+    dels_zcs_ids_origin = origin_scale_analysis(ecg_lead, morph_data)
 
     # Init result data
     is_s_exist = False
@@ -35,19 +34,19 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
     last_zc_id = 0
 
     right_zc_id_origin = dels_zcs_ids_origin[-1]
-
+    right_zc_origin = zcs_origin[right_zc_id_origin]
     # If there is no zc on original scale,
     # which explicit corresponds to S
     if right_zc_id_origin == peak_zc_id_origin:
 
         # Init left border
-        left_index = zcs_origin[right_zc_id_origin].index
+        left_index = right_zc_origin.index
 
         # Init right border
-        r_ind_1 = find_right_thc_index(wdc_origin, left_index + 1, qrs_morphology_data.end_index, 0.0)
-        mms_origin = get_lr_mms_in(left_index, offset_index_beta, wdc_origin)
+        r_ind_1 = min(zcs_all_origin[right_zc_origin.id + 1].index, morph_data.end_index)
+        mms_origin = get_lr_mms_in(ecg_lead, scale_id_origin, left_index, offset_index_beta)
         incorrect_mms_ids_origin = get_incorrect_mms_ids(mms_origin)
-        incorrect_mm_limit = zcs_origin[peak_zc_id_origin].mm_amplitude * float(QRSParams['GAMMA_RIGHT_ORIGIN_INCORRECT'])
+        incorrect_mm_limit = zcs_origin[peak_zc_id_origin].g_ampl * float(QRSParams['GAMMA_RIGHT_ORIGIN_INCORRECT'])
         r_ind_2 = r_ind_1
         for mm_id in incorrect_mms_ids_origin:
             if mms_origin[mm_id].value < incorrect_mm_limit:
@@ -56,7 +55,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
         right_index = min(r_ind_1, r_ind_2, offset_index_beta)
 
         # Form mms array in searching interval
-        mms = get_lr_mms_in(left_index, right_index, wdc)
+        mms = get_lr_mms_in(ecg_lead, scale_id, left_index, right_index)
 
         # Define list, which contains correct mms ids
         correct_mms_ids = get_correct_mms_ids(mms)
@@ -87,11 +86,11 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                 xtd_zcs_ids.pop()
 
             s_zc_id = xtd_zcs_ids[0]
-            s_zc_amplitude = zcs[s_zc_id].mm_amplitude
+            s_zc_amplitude = zcs[s_zc_id].g_ampl
             for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] + len(xtd_zcs_ids), 2):
-                if zcs[zc_id].mm_amplitude > s_zc_amplitude:
+                if zcs[zc_id].g_ampl > s_zc_amplitude:
                     s_zc_id = zc_id
-                    s_zc_amplitude = zcs[s_zc_id].mm_amplitude
+                    s_zc_amplitude = zcs[s_zc_id].g_ampl
 
     # There is zc on original scale,
     # which explicit corresponds to S
@@ -135,18 +134,18 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
             if is_s_exist:
 
                 max_zc_id = xtd_zcs_ids[0]
-                max_zc_amplitude = zcs[max_zc_id].mm_amplitude
+                max_zc_amplitude = zcs[max_zc_id].g_ampl
                 for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] + len(xtd_zcs_ids), 2):
-                    if zcs[zc_id].mm_amplitude > max_zc_amplitude:
+                    if zcs[zc_id].g_ampl > max_zc_amplitude:
                         max_zc_id = zc_id
-                        max_zc_amplitude = zcs[s_zc_id].mm_amplitude
+                        max_zc_amplitude = zcs[s_zc_id].g_ampl
 
                 s_zc_id = xtd_zcs_ids[0]
-                s_zc_amplitude = zcs[s_zc_id].mm_amplitude
+                s_zc_amplitude = zcs[s_zc_id].g_ampl
                 for zc_id in range(xtd_zcs_ids[0], xtd_zcs_ids[0] + len(xtd_zcs_ids), 2):
-                    if zcs[zc_id].mm_amplitude > max_zc_amplitude * float(QRSParams['GAMMA_RIGHT_S_PART']):
+                    if zcs[zc_id].g_ampl > max_zc_amplitude * float(QRSParams['GAMMA_RIGHT_S_PART']):
                         s_zc_id = zc_id
-                        s_zc_amplitude = zcs[s_zc_id].mm_amplitude
+                        s_zc_amplitude = zcs[s_zc_id].g_ampl
 
                 # Check zcs after S-zc
                 if xtd_zcs_ids[-1] > s_zc_id:
@@ -162,7 +161,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                     is_zcs_valid = True
                     odd_shift = int(float(QRSParams['GAMMA_RIGHT_ODD_XTD_ZCS_SHIFT']) * rate)
                     even_shift = int(float(QRSParams['GAMMA_RIGHT_EVEN_XTD_ZCS_SHIFT']) * rate)
-                    mm_ampl = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_RIGHT_XTD_ZCS_MM_PART'])
+                    mm_ampl = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_RIGHT_XTD_ZCS_MM_PART'])
 
                     for zc_id in after_s_zcs_ids[0:-1:2]:
 
@@ -170,7 +169,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
                             is_zcs_valid = False
                         if abs(zcs[zc_id + 1].index - zcs[zc_id].index) > even_shift:
                             is_zcs_valid = False
-                        if abs(zcs[zc_id + 1].right_mm.value) < mm_ampl:
+                        if abs(zcs[zc_id + 1].g_r_mm.value) < mm_ampl:
                             is_zcs_valid = False
 
                     if is_zcs_valid:
@@ -183,7 +182,7 @@ def right_qrs_morphology(ecg_lead, delineation, qrs_morphology_data):
     for xtd_point_zc_id in xtd_zcs_ids:
 
         if xtd_point_zc_id == s_zc_id and is_s_exist:
-            s_zc_sign = qrs_morphology_data.s_signs[scale_id]
+            s_zc_sign = morph_data.s_signs[scale_id]
             s_index = zcs[s_zc_id].index
             s_value = ecg_lead.filter[s_index]
             if s_zc_sign is ExtremumSign.positive:

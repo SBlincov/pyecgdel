@@ -18,3 +18,32 @@ def get_mms(wdc):
     return mms
 
 
+def get_lr_mms_in(ecg_lead, scale_id, left, right):
+    mms = [mm for mm in ecg_lead.mms[scale_id] if left <= mm.index < right]
+    return mms
+
+
+def get_rl_mms_in(ecg_lead, scale_id, left, right):
+    mms = get_lr_mms_in(ecg_lead, scale_id, left, right)
+    mms.reverse()
+    return mms
+
+
+def get_correct_mms_ids(mms):
+    correct_mms_ids = []
+
+    for mm_id in range(0, len(mms)):
+        if mms[mm_id].correctness:
+            correct_mms_ids.append(mm_id)
+
+    return correct_mms_ids
+
+
+def get_incorrect_mms_ids(mms):
+    incorrect_mms_ids = []
+
+    for mm_id in range(0, len(mms)):
+        if not mms[mm_id].correctness:
+            incorrect_mms_ids.append(mm_id)
+
+    return incorrect_mms_ids

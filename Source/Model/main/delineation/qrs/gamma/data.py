@@ -43,33 +43,32 @@ class QRSMorphologyData:
         s_signs = []
 
         for scale_id in range(0, aux_wdc_scale_id + 1):
-            wdc_on_scale = wdc[scale_id]
+            curr_wdc = wdc[scale_id]
+            curr_zcs = get_zcs_in_window(ecg_lead, scale_id, begin_index, end_index)
+            zcs.append(curr_zcs)
 
-            zcs_on_scale = get_zcs_with_global_mms(wdc_on_scale, begin_index, end_index)
-            zcs.append(zcs_on_scale)
-
-            current_dels_zcs_ids = []
+            curr_dels_zcs_ids = []
             peak_zc_id = 0
-            min_dist = len(wdc_on_scale)
-            for zc_id in range(0, len(zcs_on_scale)):
-                if onset_index <= zcs_on_scale[zc_id].index <= offset_index:
-                    current_dels_zcs_ids.append(zc_id)
-                    current_dist = abs(zcs_on_scale[zc_id].index - peak_index)
+            min_dist = len(curr_wdc)
+            for zc_id in range(0, len(curr_zcs)):
+                if onset_index <= curr_zcs[zc_id].index <= offset_index:
+                    curr_dels_zcs_ids.append(zc_id)
+                    current_dist = abs(curr_zcs[zc_id].index - peak_index)
                     if current_dist < min_dist:
                         min_dist = current_dist
                         peak_zc_id = zc_id
 
-            if len(current_dels_zcs_ids) > 0 \
-                    and peak_zc_id > current_dels_zcs_ids[0] \
-                    and zcs_on_scale[peak_zc_id - 1].mm_amplitude >= zcs_on_scale[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_R_NEG_PART']) \
-                    and zcs_on_scale[peak_zc_id].extremum_sign is ExtremumSign.negative:
+            if len(curr_dels_zcs_ids) > 0 \
+                    and peak_zc_id > curr_dels_zcs_ids[0] \
+                    and curr_zcs[peak_zc_id - 1].g_ampl >= curr_zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_R_NEG_PART']) \
+                    and curr_zcs[peak_zc_id].extremum_sign is ExtremumSign.negative:
                 peak_zc_id -= 1
 
-            dels_zcs_ids.append(current_dels_zcs_ids)
+            dels_zcs_ids.append(curr_dels_zcs_ids)
             peak_zcs_ids.append(peak_zc_id)
 
-            if len(zcs_on_scale) > 0:
-                if zcs_on_scale[peak_zc_id].extremum_sign is ExtremumSign.positive:
+            if len(curr_zcs) > 0:
+                if curr_zcs[peak_zc_id].extremum_sign is ExtremumSign.positive:
                     q_signs.append(ExtremumSign.negative)
                     r_signs.append(ExtremumSign.positive)
                     s_signs.append(ExtremumSign.negative)

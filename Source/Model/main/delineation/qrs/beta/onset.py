@@ -60,7 +60,7 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc):
 
     # Compromise
     compromise_window = int(float(QRSParams['BETA_ONSET_COMPROMISE_WINDOW']) * rate)
-    compromise_mm_lim = float(QRSParams['BETA_ONSET_COMPROMISE_MM_LIM']) * min(abs(zc.left_mm.value), abs(zc.right_mm.value))
+    compromise_mm_lim = float(QRSParams['BETA_ONSET_COMPROMISE_MM_LIM']) * min(abs(zc.g_l_mm.value), abs(zc.g_r_mm.value))
     if (right_zc_index - left_zc_index) > compromise_window \
             and abs(first_mm.value) < compromise_mm_lim:
         onset_index = first_mm.index
@@ -76,9 +76,9 @@ def get_qrs_onset_mms(ecg_lead, qrs_zc):
     window = int(float(QRSParams['BETA_ONSET_WINDOW']) * rate)
     mms = ecg_lead.mms[wdc_scale_id]
 
-    onset_mms = [qrs_zc.left_mm]
-    mm_id = qrs_zc.left_mm.id - 1
-    while mm_id > 0 and qrs_zc.left_mm.index - mms[mm_id].index <= window:
+    onset_mms = [qrs_zc.g_l_mm]
+    mm_id = qrs_zc.g_l_mm.id - 1
+    while mm_id > 0 and qrs_zc.g_l_mm.index - mms[mm_id].index <= window:
         onset_mms.append(mms[mm_id])
         mm_id -= 1
 
@@ -89,9 +89,9 @@ def get_qrs_onset_mm_id(ecg_lead, qrs_zc, mms, onset_mm_id):
     rate = ecg_lead.rate
     window = int(float(QRSParams['BETA_ONSET_WINDOW']) * rate)
 
-    mm_val = max(abs(qrs_zc.left_mm.value), abs(qrs_zc.right_mm.value)) * float(QRSParams['BETA_ONSET_MM_LOW_LIM'])
+    mm_val = max(abs(qrs_zc.g_l_mm.value), abs(qrs_zc.g_r_mm.value)) * float(QRSParams['BETA_ONSET_MM_LOW_LIM'])
 
-    start_index = qrs_zc.left_mm.index
+    start_index = qrs_zc.g_l_mm.index
     qrs_onset_mm_id = onset_mm_id
     if onset_mm_id + 1 < len(mms):
         for mm_id in range(onset_mm_id + 1, len(mms)):
@@ -108,16 +108,16 @@ def get_qrs_onset_mm_id(ecg_lead, qrs_zc, mms, onset_mm_id):
 
 
 def get_complex_mm_id(ecg_lead, qrs_zc, mms, onset_mm_id):
-    mm_val = max(abs(qrs_zc.left_mm.value), abs(qrs_zc.right_mm.value)) * float(QRSParams['BETA_ONSET_MM_LOW_LIM'])
+    mm_val = max(abs(qrs_zc.g_l_mm.value), abs(qrs_zc.g_r_mm.value)) * float(QRSParams['BETA_ONSET_MM_LOW_LIM'])
 
     if onset_mm_id != len(mms) - 1:
 
         begin_mm_id = onset_mm_id + 1
         candidate_mm_id = onset_mm_id
         for mm_id in range(begin_mm_id, len(mms)):
-            if abs(mms[mm_id].value) > float(QRSParams['BETA_COMPLEX_ZC_AMPL']) * abs(qrs_zc.mm_amplitude) \
-                    or abs(mms[mm_id].value) > float(QRSParams['BETA_COMPLEX_MM_VAL']) * abs(qrs_zc.left_mm.value) \
-                    or abs(mms[mm_id].value) > float(QRSParams['BETA_COMPLEX_MM_VAL']) * abs(qrs_zc.right_mm.value):
+            if abs(mms[mm_id].value) > float(QRSParams['BETA_COMPLEX_ZC_AMPL']) * abs(qrs_zc.g_ampl) \
+                    or abs(mms[mm_id].value) > float(QRSParams['BETA_COMPLEX_MM_VAL']) * abs(qrs_zc.g_l_mm.value) \
+                    or abs(mms[mm_id].value) > float(QRSParams['BETA_COMPLEX_MM_VAL']) * abs(qrs_zc.g_r_mm.value):
                 candidate_mm_id = mm_id
                 break
 

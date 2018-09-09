@@ -2,13 +2,13 @@ from Source.Model.main.zero_crossings.zero_crossing import *
 from Source.Model.main.delineation.morfology_point import *
 
 
-def processing_default_morphology(ecg_lead, delineation, qrs_morphology_data):
+def processing_default_morphology(ecg_lead, delineation, morph_data):
 
     points = []
 
-    scale_id = qrs_morphology_data.scale_id
-    zcs = qrs_morphology_data.zcs[scale_id]
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
+    scale_id = morph_data.scale_id
+    zcs = morph_data.zcs[scale_id]
+    peak_zc_id = morph_data.peak_zcs_ids[scale_id]
 
     onset_index = delineation.onset_index
     offset_index = delineation.offset_index

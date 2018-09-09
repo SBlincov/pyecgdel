@@ -3,33 +3,33 @@ from Source.Model.main.modulus_maxima.routines import *
 from Source.Model.main.params.qrs import *
 
 
-def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
-
+def offset_processing(last_zc_id, ecg_lead, delineation, morph_data, points, direction):
     rate = ecg_lead.rate
 
     # Init necessary data
-    scale_id = qrs_morphology_data.scale_id
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    wdc = qrs_morphology_data.wdc[scale_id]
-    zcs = qrs_morphology_data.zcs[scale_id]
-    end_index = qrs_morphology_data.end_index
+    scale_id = morph_data.scale_id
+    peak_zc_id = morph_data.peak_zcs_ids[scale_id]
+    wdc = morph_data.wdc[scale_id]
+    zcs = morph_data.zcs[scale_id]
+    end_index = morph_data.end_index
     offset_index_beta = delineation.offset_index
+    all_mms = ecg_lead.mms[scale_id]
 
     # Init offset index
     qrs_offset_index = offset_index_beta
 
     if last_zc_id < len(zcs):
 
-        last_zc_index = zcs[last_zc_id].index
+        last_zc = zcs[last_zc_id]
 
         # Begin of allowed interval
-        right_lim = last_zc_index + int(float(QRSParams['GAMMA_RIGHT_WINDOW']) * rate)
+        right_lim = last_zc.index + int(float(QRSParams['GAMMA_RIGHT_WINDOW']) * rate)
 
         # Offset searching
         is_offset_found = False
 
         # Threshold for M-morphology
-        mm_ampl = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_RIGHT_XTD_ZCS_MM_PART'])
+        mm_ampl = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_RIGHT_XTD_ZCS_MM_PART'])
 
         # 1.  First check:
         #     If exist zc before offset, defined at the step beta,
@@ -39,7 +39,7 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
 
             offset_zcs_ids = []
             for zc_id in range(0, len(zcs)):
-                if last_zc_index < zcs[zc_id].index <= offset_index_beta:
+                if last_zc.index < zcs[zc_id].index <= offset_index_beta:
                     offset_zcs_ids.append(zc_id)
 
             # We check 2 options:
@@ -52,7 +52,7 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
                 if zcs[offset_zc_id].index <= right_lim:
                     qrs_offset_index = zcs[offset_zc_id].index
                     is_offset_found = True
-                if abs(zcs[offset_zc_id].left_mm.value) > mm_ampl:
+                if abs(zcs[offset_zc_id].g_l_mm.value) > mm_ampl:
                     qrs_offset_index = zcs[offset_zc_id].index
                     is_offset_found = True
 
@@ -62,12 +62,12 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
         if not is_offset_found:
 
             mms = []
-            mm_curr = find_right_mm(last_zc_index, wdc)
+            mm_curr = last_zc.r_mms[0]
             mm_next = mm_curr
             while mm_next.index < end_index:
                 mm_curr = mm_next
                 mms.append(mm_curr)
-                mm_next = find_right_mm(mm_curr.index + 1, wdc)
+                mm_next = all_mms[mm_curr.id + 1]
 
             mms_ids_incorrect = []
             for mm_id in range(0, len(mms)):
@@ -92,8 +92,8 @@ def offset_processing(last_zc_id, ecg_lead, delineation, qrs_morphology_data, po
         #     and define its index as onset
         if not is_offset_found:
             scale_id_bord = int(QRSParams['GAMMA_BORD_SCALE'])
-            wdc_bord = qrs_morphology_data.wdc[scale_id_bord]
-            mm_bord = find_right_mm(last_zc_index, wdc_bord)
+            tmp_zc = ecg_lead.zcs[scale_id_bord][last_zc.keys[scale_id_bord]]
+            mm_bord = tmp_zc.r_mms[0]
             qrs_offset_index = mm_bord.index
             is_offset_found = True
 

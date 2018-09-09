@@ -7,7 +7,7 @@ import numpy as np
 
 
 def get_zcs(wdc, mms):
-    indexes = np.where(np.diff(np.sign(wdc)))[0]
+    indexes = np.where(np.diff(np.sign(wdc)))[0] + 1
 
     zcs = []
     r_mms = []
@@ -37,4 +37,7 @@ def get_zcs(wdc, mms):
 
     return zcs
 
-def get_zcs_in_window(wdc, )
+
+def get_zcs_in_window(ecg_lead, scale_id, begin_index, end_index):
+    zcs = [zc for zc in ecg_lead.zcs[scale_id] if begin_index <= zc.index < end_index]
+    return zcs

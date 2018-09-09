@@ -3,33 +3,33 @@ from Source.Model.main.modulus_maxima.routines import *
 from Source.Model.main.params.qrs import *
 
 
-def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, points, direction):
-
+def onset_processing(first_zc_id, ecg_lead, delineation, morph_data, points, direction):
     rate = ecg_lead.rate
 
     # Init necessary data
-    scale_id = qrs_morphology_data.scale_id
-    peak_zc_id = qrs_morphology_data.peak_zcs_ids[scale_id]
-    wdc = qrs_morphology_data.wdc[scale_id]
-    zcs = qrs_morphology_data.zcs[scale_id]
-    begin_index = qrs_morphology_data.begin_index
+    scale_id = morph_data.scale_id
+    peak_zc_id = morph_data.peak_zcs_ids[scale_id]
+    wdc = morph_data.wdc[scale_id]
+    zcs = morph_data.zcs[scale_id]
+    begin_index = morph_data.begin_index
     onset_index_beta = delineation.onset_index
+    all_mms = ecg_lead.mms[scale_id]
 
     # Init onset index
     qrs_onset_index = onset_index_beta
 
     if first_zc_id >= 0:
 
-        first_zc_index = zcs[first_zc_id].index
+        first_zc = zcs[first_zc_id]
 
         # Begin of allowed interval
-        left_lim = first_zc_index - int(float(QRSParams['GAMMA_LEFT_WINDOW']) * rate)
+        left_lim = first_zc.index - int(float(QRSParams['GAMMA_LEFT_WINDOW']) * rate)
 
         # Onset searching
         is_onset_found = False
 
         # Threshold for M-morphology
-        mm_ampl = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_LEFT_XTD_ZCS_MM_PART'])
+        mm_ampl = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_LEFT_XTD_ZCS_MM_PART'])
 
         # 1.  First check:
         #     If exist zc before onset (move from right to left), defined at the step beta,
@@ -39,7 +39,7 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
 
             onset_zcs_ids = []
             for zc_id in range(0, len(zcs)):
-                if onset_index_beta <= zcs[zc_id].index < first_zc_index:
+                if onset_index_beta <= zcs[zc_id].index < first_zc.index:
                     onset_zcs_ids.append(zc_id)
 
             # We check 2 options:
@@ -52,7 +52,7 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
                 if zcs[onset_zc_id].index >= left_lim:
                     qrs_onset_index = zcs[onset_zc_id].index
                     is_onset_found = True
-                if abs(zcs[onset_zc_id].right_mm.value) > mm_ampl:
+                if abs(zcs[onset_zc_id].g_r_mm.value) > mm_ampl:
                     qrs_onset_index = zcs[onset_zc_id].index
                     is_onset_found = True
 
@@ -62,12 +62,12 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
         if not is_onset_found:
 
             mms = []
-            mm_curr = find_left_mm(first_zc_index, wdc)
+            mm_curr = first_zc.l_mms[0]
             mm_next = mm_curr
             while mm_next.index > begin_index:
                 mm_curr = mm_next
                 mms.append(mm_curr)
-                mm_next = find_left_mm(mm_curr.index - 1, wdc)
+                mm_next = all_mms[mm_curr.id - 1]
 
             mms_ids_incorrect = []
             for mm_id in range(0, len(mms)):
@@ -76,7 +76,7 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
 
             if len(mms) > 0:
                 if len(mms_ids_incorrect) > 0:
-                    if abs(zcs[first_zc_id].left_mm.value) > mm_ampl:
+                    if abs(zcs[first_zc_id].g_l_mm.value) > mm_ampl:
                         mm_id_incorrect = mms_ids_incorrect[0]
                         qrs_onset_index = mms[mm_id_incorrect].index
                         is_onset_found = True
@@ -92,8 +92,8 @@ def onset_processing(first_zc_id, ecg_lead, delineation, qrs_morphology_data, po
         #     and define its index as onset
         if not is_onset_found:
             scale_id_bord = int(QRSParams['GAMMA_BORD_SCALE'])
-            wdc_bord = qrs_morphology_data.wdc[scale_id_bord]
-            mm_bord = find_left_mm(first_zc_index, wdc_bord)
+            tmp_zc = ecg_lead.zcs[scale_id_bord][first_zc.keys[scale_id_bord]]
+            mm_bord = tmp_zc.l_mms[0]
             qrs_onset_index = mm_bord.index
             is_onset_found = True
 

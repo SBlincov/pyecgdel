@@ -10,7 +10,7 @@ def get_candidates_qrs_zcs_ids(ecg_lead, zcs):
     next_zc_id = current_zc_id + 1
     while next_zc_id < len(zcs):
         while zcs[next_zc_id].index - zcs[current_zc_id].index < window and next_zc_id < len(zcs) - 1:
-            if zcs[next_zc_id].mm_amplitude > zcs[current_zc_id].mm_amplitude:
+            if zcs[next_zc_id].g_ampl > zcs[current_zc_id].g_ampl:
                 current_zc_id = next_zc_id
                 next_zc_id = current_zc_id + 1
             else:

@@ -244,7 +244,7 @@ def is_extra_zcs_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_left = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
 
     if len(real_dels_zcs_ids) > 2 \
             and real_r_zc_id_index == len(real_dels_zcs_ids) - 1 \
@@ -252,7 +252,7 @@ def is_extra_zcs_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
             and zcs[r_zc_id].extremum_sign is r_sign:
 
         if q_zc_id - 1 >= dels_zcs_ids[0]:
-            mm_left = find_left_mm(zcs[q_zc_id - 1].index, wdc)
+            mm_left = zcs[q_zc_id - 1].l_mms[0]
             if abs(mm_left.value) < mm_small_left:
                 return True
 
@@ -287,7 +287,7 @@ def is_p_zcs_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_left = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
 
     if len(real_dels_zcs_ids) > 2 \
             and real_r_zc_id_index == len(real_dels_zcs_ids) - 1 \
@@ -295,7 +295,7 @@ def is_p_zcs_q_r_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
             and zcs[r_zc_id].extremum_sign is r_sign:
 
         if q_zc_id - 1 >= dels_zcs_ids[0]:
-            mm_left = find_left_mm(zcs[q_zc_id - 1].index, wdc)
+            mm_left = zcs[q_zc_id - 1].l_mms[0]
             if abs(mm_left.value) > mm_small_left:
                 return True
 
@@ -330,7 +330,7 @@ def is_extra_zcs_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_left = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
 
     if len(real_dels_zcs_ids) > 3 \
             and real_r_zc_id_index == len(real_dels_zcs_ids) - 2 \
@@ -339,7 +339,7 @@ def is_extra_zcs_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if q_zc_id - 1 >= dels_zcs_ids[0]:
-            mm_left = find_left_mm(zcs[q_zc_id - 1].index, wdc)
+            mm_left = zcs[q_zc_id - 1].l_mms[0]
             if abs(mm_left.value) < mm_small_left:
                 return True
 
@@ -374,7 +374,7 @@ def is_p_zcs_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_left = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
 
     if len(real_dels_zcs_ids) > 3 \
             and real_r_zc_id_index == len(real_dels_zcs_ids) - 2 \
@@ -383,7 +383,7 @@ def is_p_zcs_q_r_s_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if q_zc_id - 1 >= dels_zcs_ids[0]:
-            mm_left = find_left_mm(zcs[q_zc_id - 1].index, wdc)
+            mm_left = zcs[q_zc_id - 1].l_mms[0]
             if abs(mm_left.value) > mm_small_left:
                 return True
 
@@ -418,7 +418,7 @@ def is_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
+    mm_small_right = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 2 \
             and real_r_zc_id_index == 0 \
@@ -426,7 +426,7 @@ def is_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if s_zc_id + 1 < dels_zcs_ids[0] + len(dels_zcs_ids):
-            mm_right = find_right_mm(zcs[s_zc_id + 1].index, wdc)
+            mm_right = zcs[s_zc_id + 1].r_mms[0]
             if abs(mm_right.value) < mm_small_right:
                 return True
 
@@ -461,7 +461,7 @@ def is_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
+    mm_small_right = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 2 \
             and real_r_zc_id_index == 0 \
@@ -469,7 +469,7 @@ def is_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if s_zc_id + 1 < dels_zcs_ids[0] + len(dels_zcs_ids):
-            mm_right = find_right_mm(zcs[s_zc_id + 1].index, wdc)
+            mm_right = zcs[s_zc_id + 1].r_mms[0]
             if abs(mm_right.value) > mm_small_right:
                 return True
 
@@ -504,7 +504,7 @@ def is_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
+    mm_small_right = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 3 \
             and real_r_zc_id_index == 1 \
@@ -513,7 +513,7 @@ def is_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if s_zc_id + 1 < dels_zcs_ids[0] + len(dels_zcs_ids):
-            mm_right = find_right_mm(zcs[s_zc_id + 1].index, wdc)
+            mm_right = zcs[s_zc_id + 1].r_mms[0]
             if abs(mm_right.value) < mm_small_right:
                 return True
 
@@ -548,7 +548,7 @@ def is_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
+    mm_small_right = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 3 \
             and real_r_zc_id_index == 1 \
@@ -557,7 +557,7 @@ def is_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff):
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if s_zc_id + 1 < dels_zcs_ids[0] + len(dels_zcs_ids):
-            mm_right = find_right_mm(zcs[s_zc_id + 1].index, wdc)
+            mm_right = zcs[s_zc_id + 1].r_mms[0]
             if abs(mm_right.value) > mm_small_right:
                 return True
 
@@ -592,8 +592,8 @@ def is_extra_zcs_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
+    mm_small_left = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 4 \
             and 2 <= real_r_zc_id_index < len(real_dels_zcs_ids) - 2 \
@@ -602,8 +602,8 @@ def is_extra_zcs_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if q_zc_id - 1 >= dels_zcs_ids[0] and s_zc_id + 1 < dels_zcs_ids[0] + len(dels_zcs_ids):
-            mm_left = find_left_mm(zcs[q_zc_id - 1].index, wdc)
-            mm_right = find_right_mm(zcs[s_zc_id + 1].index, wdc)
+            mm_left = zcs[q_zc_id - 1].l_mms[0]
+            mm_right = zcs[s_zc_id + 1].r_mms[0]
             if abs(mm_left.value) < mm_small_left and abs(mm_right.value) < mm_small_right:
                 return True
 
@@ -638,8 +638,8 @@ def is_p_zcs_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_d
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
+    mm_small_left = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 4 \
             and 2 <= real_r_zc_id_index < len(real_dels_zcs_ids) - 2 \
@@ -648,8 +648,8 @@ def is_p_zcs_q_r_s_extra_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_d
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if q_zc_id - 1 >= dels_zcs_ids[0] and s_zc_id + 1 < dels_zcs_ids[0] + len(dels_zcs_ids):
-            mm_left = find_left_mm(zcs[q_zc_id - 1].index, wdc)
-            mm_right = find_right_mm(zcs[s_zc_id + 1].index, wdc)
+            mm_left = zcs[q_zc_id - 1].l_mms[0]
+            mm_right = zcs[s_zc_id + 1].r_mms[0]
             if abs(mm_left.value) > mm_small_left and abs(mm_right.value) < mm_small_right:
                 return True
 
@@ -684,8 +684,8 @@ def is_extra_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_d
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
+    mm_small_left = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 4 \
             and 2 <= real_r_zc_id_index < len(real_dels_zcs_ids) - 2 \
@@ -694,8 +694,8 @@ def is_extra_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_d
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if q_zc_id - 1 >= dels_zcs_ids[0] and s_zc_id + 1 < dels_zcs_ids[0] + len(dels_zcs_ids):
-            mm_left = find_left_mm(zcs[q_zc_id - 1].index, wdc)
-            mm_right = find_right_mm(zcs[s_zc_id + 1].index, wdc)
+            mm_left = zcs[q_zc_id - 1].l_mms[0]
+            mm_right = zcs[s_zc_id + 1].r_mms[0]
             if abs(mm_left.value) < mm_small_left and abs(mm_right.value) > mm_small_right:
                 return True
 
@@ -730,8 +730,8 @@ def is_p_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff)
     real_q_zc_id_index = real_r_zc_id_index - 1
     real_s_zc_id_index = real_r_zc_id_index + 1
 
-    mm_small_left = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
-    mm_small_right = zcs[peak_zc_id].mm_amplitude * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
+    mm_small_left = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_LEFT'])
+    mm_small_right = zcs[peak_zc_id].g_ampl * float(QRSParams['GAMMA_MM_SMALL_PART_RIGHT'])
 
     if len(real_dels_zcs_ids) > 4 \
             and 2 <= real_r_zc_id_index < len(real_dels_zcs_ids) - 2 \
@@ -740,8 +740,8 @@ def is_p_zcs_q_r_s_t_zcs_in_del(qrs_morphology_data, q_zc_id_diff, s_zc_id_diff)
             and zcs[s_zc_id].extremum_sign is s_sign:
 
         if q_zc_id - 1 >= dels_zcs_ids[0] and s_zc_id + 1 < dels_zcs_ids[0] + len(dels_zcs_ids):
-            mm_left = find_left_mm(zcs[q_zc_id - 1].index, wdc)
-            mm_right = find_right_mm(zcs[s_zc_id + 1].index, wdc)
+            mm_left = zcs[q_zc_id - 1].l_mms[0]
+            mm_right = zcs[s_zc_id + 1].r_mms[0]
             if abs(mm_left.value) > mm_small_left and abs(mm_right.value) > mm_small_right:
                 return True
 

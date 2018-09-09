@@ -24,6 +24,7 @@ class ZeroCrossing:
     def __init__(self, index, id, l_mms, r_mms):
         self.index = index
         self.id = id
+        self.keys = []
 
         self.l_mms = l_mms
         self.r_mms = r_mms
