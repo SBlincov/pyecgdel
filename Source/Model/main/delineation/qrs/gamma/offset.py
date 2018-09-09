@@ -76,7 +76,7 @@ def offset_processing(last_zc_id, ecg_lead, delineation, morph_data, points, dir
 
             if len(mms) > 0:
                 if len(mms_ids_incorrect) > 0:
-                    if abs(zcs[last_zc_id].right_mm.value) > mm_ampl:
+                    if abs(zcs[last_zc_id].g_r_mm.value) > mm_ampl:
                         mm_id_incorrect = mms_ids_incorrect[-1]
                         qrs_offset_index = mms[mm_id_incorrect].index
                         is_offset_found = True

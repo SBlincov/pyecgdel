@@ -5,7 +5,6 @@ import warnings
 class DelData:
 
     def __init__(self, leads):
-
         num_leads = len(leads)
 
         ons = []

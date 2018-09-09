@@ -119,12 +119,6 @@ class ECGLead:
                     else:
                         last_filled += 1
 
-
-
-
-        ololo = 5
-
-
     def qrs_del(self):
         cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, 0, len(self.wdc[0]))
         self.qrs_dels = cur_qrs_dels

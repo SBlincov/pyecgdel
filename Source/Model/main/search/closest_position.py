@@ -3,20 +3,23 @@ import numpy as np
 
 
 def get_closest(num_list, num):
-    pos = np.searchsorted(num_list, num)
+    pos = np.searchsorted(num_list, num, side='right')
 
-    if pos < len(num_list) - 1:
-        before = num_list[pos]
-        after = num_list[pos + 1]
-        if num <= before:
-            return pos
-        elif num >= after:
-            return pos + 1
-        else:
-            if after - num < num - before:
-               return pos
-            else:
-               return pos + 1
+    if pos > len(num_list) - 1:
+        return pos - 1
     else:
-        return pos
+        if pos == 0:
+            if abs(num_list[pos] - num) < abs(num_list[pos + 1] - num):
+                return pos
+            else:
+                return pos + 1
+        elif pos == len(num_list) - 1:
+            if abs(num_list[pos] - num) < abs(num_list[pos - 1] - num):
+                return pos
+            else:
+                return pos - 1
+        else:
+            indexes = [pos - 1, pos, pos + 1]
+            cands = [abs(num_list[indexes[0]] - num), abs(num_list[indexes[1]] - num), abs(num_list[indexes[2]] - num)]
+            return indexes[np.argmin(cands)]
 

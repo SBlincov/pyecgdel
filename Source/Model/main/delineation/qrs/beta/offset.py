@@ -45,7 +45,7 @@ def define_qrs_offset_index(ecg_lead, delineation, qrs_zc):
             offset_index_candidate_2 = find_right_thc_index(wdc, first_mm.index, zc.g_r_mm.index + window, threshold)
             offset_index = min(offset_index_candidate_1, offset_index_candidate_2)
         else:
-            offset_index = find_right_thc_index(wdc, first_mm.index, zc.right_mm.index + window, threshold)
+            offset_index = find_right_thc_index(wdc, first_mm.index, zc.g_r_mm.index + window, threshold)
     else:
         offset_index = find_right_thc_index(wdc, first_mm.index, next_mm.index, threshold)
 
