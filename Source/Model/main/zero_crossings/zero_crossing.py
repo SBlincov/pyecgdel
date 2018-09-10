@@ -74,4 +74,7 @@ class ZeroCrossing:
         self.s_r_mm = r_mms[np.argmax(abs(mm.value) for mm in r_mms)] if len(r_mms) > 0 else None
         if self.s_l_mm is not None and self.s_r_mm is not None:
             self.s_ampl = abs(self.s_l_mm.value) + abs(self.s_r_mm.value)
-
+        else:
+            self.s_l_mm = self.g_l_mm
+            self.s_r_mm = self.g_r_mm
+            self.s_ampl = self.g_ampl

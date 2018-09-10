@@ -1,6 +1,6 @@
 clear all;
 
-base_name = 'shiller_long';
+base_name = 'shiller';
 freq = 500.0;
 
 record = 2517;
@@ -9,7 +9,7 @@ leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'l
 lead_ids = 1:12;
 
 is_filtered = 0;
-is_del = 0;
+is_del = 1;
 wdc_scales = [1 3 4 5];
 x_axis_type = 0;
 

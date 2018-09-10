@@ -41,8 +41,8 @@ def get_t_peak_zc_id(ecg_lead, qrs_id, zcs):
 
         amplitude_part = 1.0 - pow(shift_percentage, float(TParams['ALPHA_PEAK_ZC_AMPL_DEC_POW'])) * float(TParams['ALPHA_PEAK_ZC_AMPL_DEC_COEFF'])
 
-        if zcs[candidate_zc_id].mm_amplitude * amplitude_part >= peak_zc_mm_amplitude:
+        if zcs[candidate_zc_id].s_ampl * amplitude_part >= peak_zc_mm_amplitude:
             peak_zc_id = candidate_zc_id
-            peak_zc_mm_amplitude = zcs[candidate_zc_id].mm_amplitude * amplitude_part
+            peak_zc_mm_amplitude = zcs[candidate_zc_id].s_ampl * amplitude_part
 
     return peak_zc_id
