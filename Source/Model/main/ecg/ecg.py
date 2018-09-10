@@ -145,6 +145,7 @@ class ECG:
         if self._is_delineation:
             return
 
+        self._cwt_filtration()
         self._dwt()
 
         if self.is_log:
@@ -460,6 +461,7 @@ class ECG:
 
     def get_filtrated(self):
         self._adaptive_filtration()
+        self._del_correction()
         return {lead.name:lead.filter for lead in self.leads}
 
     def _two_dimensions_delineation(self, array):
