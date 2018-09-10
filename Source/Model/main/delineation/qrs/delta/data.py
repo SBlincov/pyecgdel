@@ -78,8 +78,6 @@ class AllLeadsData:
 
         # Computing lead id with maximum number of dels
         max_dels_lead_id = np.argmax(np.asarray(del_data.len_of_dels))
-        if max_dels_lead_id.size > 1:
-            max_dels_lead_id = max_dels_lead_id[0]
 
         # Creating arrays with all complexes:
         ons_sum = []  # sum of onset values
@@ -90,7 +88,7 @@ class AllLeadsData:
             offs_sum.append(del_data.offs[max_dels_lead_id][del_id])
             borders_counts.append(1)
 
-        del_candidates = []  # array with special candidates for deletion
+        del_candidates = {}  # array with special candidates for deletion
 
         # Filling arrays with all complexes:
         for lead_id in range(0, del_data.num_leads):
@@ -139,10 +137,11 @@ class AllLeadsData:
                                 offs_sum.insert(argmin + 1, off_curr)
                                 borders_counts.insert(argmin + 1, 1)
                             else:
-                                del_candidates.append([lead_id, del_id])
-
+                                if lead_id in del_candidates:
+                                    del_candidates[lead_id].append(del_id)
+                                else:
+                                    del_candidates[lead_id] = [del_id]
                     else:
-
                         warnings.warn("Onset and offset out of correspondence", UserWarning)
 
         self.ons_sum = ons_sum
@@ -157,14 +156,10 @@ class MinData:
 
         # Finding global onset closest to current onset
         on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))
-        if on_argmin.size > 1:
-            on_argmin = on_argmin[0]
         on_min = on_diffs[on_argmin]
 
         # Finding global offset closest to current offset
         off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
-        if off_argmin.size > 1:
-            off_argmin = off_argmin[0]
         off_min = off_diffs[off_argmin]
 
         # Additional checking:

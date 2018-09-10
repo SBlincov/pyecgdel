@@ -24,10 +24,16 @@ def remove_complex(leads, corr_mtx, g_id):
 def delete_special(leads, del_data, all_leads_data):
 
     # Delete special cases from original leads
+
     if len(all_leads_data.del_candidates) > 0:
-        for del_list in all_leads_data.del_candidates:
-            leads[del_list[0]].qrs_dels.pop(del_list[1])
-            leads[del_list[0]].qrs_morphs.pop(del_list[1])
+
+        for lead_id in all_leads_data.del_candidates:
+
+            tmp_qrs_dels = [leads[lead_id].qrs_dels[x] for x in range(0, len(leads[lead_id].qrs_dels)) if x not in all_leads_data.del_candidates[lead_id]]
+            tmp_qrs_morphs = [leads[lead_id].qrs_morphs[x] for x in range(0, len(leads[lead_id].qrs_morphs)) if x not in all_leads_data.del_candidates[lead_id]]
+
+            leads[lead_id].qrs_dels = tmp_qrs_dels
+            leads[lead_id].qrs_morphs = tmp_qrs_morphs
 
         # Refresh DelData
         del_data.process(leads)
