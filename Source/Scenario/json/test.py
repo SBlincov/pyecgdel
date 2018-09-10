@@ -36,33 +36,3 @@ morphology = ecg.get_morphology()
 filtrated = ecg.get_filtrated()
 characteristics = ecg.get_characteristics()
 plot_data = ecg.get_plot_data()
-
-# ecg._cwt_filtration()
-# ecg._save_local(ECGDataDetails.filtrated)
-# ecg._dwt()
-# ecg._save_local(ECGDataDetails.wdc)
-# ecg._delineation()
-# ecg._adaptive_filtration()
-# ecg._del_correction()
-# ecg._characteristics()
-# ecg._init_plot_data()
-#
-# ecg._save_local(ECGDataDetails.qrs_delineation)
-# ecg._save_local(ECGDataDetails.qrs_morphology)
-#
-# ecg._save_local(ECGDataDetails.t_delineation)
-# ecg._save_local(ECGDataDetails.t_morphology)
-#
-# ecg._save_local(ECGDataDetails.p_delineation)
-# ecg._save_local(ECGDataDetails.p_morphology)
-#
-# ecg._save_local(ECGDataDetails.flutter_delineation)
-#
-# ecg._save_local(ECGDataDetails.adaptive_filtrated)
-#
-# ecg._save_local(ECGDataDetails.characteristics)
-#
-# ecg._save_local(ECGDataDetails.qrs_plot_data)
-
-
-print('Done')
