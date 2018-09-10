@@ -122,3 +122,5 @@ unndb/diagnosis/\.idea/
 ludb/diagnosis/\.idea/
 
 ludb/ludb/
+
+*.json

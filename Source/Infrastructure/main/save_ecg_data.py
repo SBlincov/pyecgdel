@@ -22,7 +22,7 @@ def save_data_local(ecg, details):
 
         if os.path.exists(test_file_name):
 
-            if leads_names[lead_id] != ecg.leads[lead_id].name:
+            if ecg.leads[lead_id].name not in leads_names:
                 raise InvalidECGData('ECG lead names must be agree with database')
 
             if details is ECGDataDetails.filtrated:
