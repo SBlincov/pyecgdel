@@ -1,6 +1,6 @@
 clear all;
 
-db_path = '../../Data/shiller';
+db_path = '../../../Data/shiller';
 
 bd_name = 'shiller';
 rate = 500.0;
