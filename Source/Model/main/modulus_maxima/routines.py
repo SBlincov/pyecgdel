@@ -31,7 +31,10 @@ def find_left_mm(start_index, wdc):
             while prev_id >= 0 and abs(prev_diff) < EPSILON:
                 constant_period += 1
                 prev_id -= 1
-                prev_diff = wdc[prev_id] - wdc[center_id]
+                if prev_id >= 0:
+                    prev_diff = wdc[prev_id] - wdc[center_id]
+                else:
+                    prev_diff = wdc[0] - wdc[center_id]
             center_id = prev_id + 1
         else:
             prev_id -= 1
@@ -64,7 +67,10 @@ def find_right_mm(start_index, wdc):
             while next_id <= len(wdc) - 1 and abs(next_diff) < EPSILON:
                 constant_period += 1
                 next_id += 1
-                next_diff = wdc[next_id] - wdc[center_id]
+                if next_id <= len(wdc) - 1:
+                    next_diff = wdc[next_id] - wdc[center_id]
+                else:
+                    next_diff = wdc[len(wdc) - 1] - wdc[center_id]
             center_id = next_id - 1
         else:
             prev_id += 1
