@@ -16,7 +16,7 @@ def origin_scale_analysis(ecg_lead, qrs_morphology_data):
 
     # Defining zcs, which correspond to begin and end:
     # Leave only one first zc on each side
-    if del_begin_zc_id_origin <= peak_zc_id_origin <= del_end_zc_id_origin:
+    if del_begin_zc_id_origin <= peak_zc_id_origin < del_end_zc_id_origin:
 
         begin_zc_id = peak_zc_id_origin
         if begin_zc_id > del_begin_zc_id_origin:
