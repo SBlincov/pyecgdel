@@ -59,9 +59,9 @@ def get_right_zc(zcs, index):
 def get_zcs_in_window(zcs, begin_index, end_index):
     indexes = [x.index for x in zcs]
     begin_id = get_closest(indexes, begin_index)
-    if zcs[id].index < begin_index:
+    if zcs[begin_id].index < begin_index:
         begin_id += 1
     end_id = get_closest(indexes, end_index)
-    if zcs[id].index >= end_index:
+    if zcs[end_id].index >= end_index:
         end_id -= 1
-    return zcs[begin_id:end_id+1]
+    return zcs[begin_id : end_id + 1]

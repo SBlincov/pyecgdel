@@ -19,7 +19,13 @@ def get_closest(num_list, num):
             else:
                 return pos - 1
         else:
-            indexes = [pos - 1, pos, pos + 1]
-            cands = [abs(num_list[indexes[0]] - num), abs(num_list[indexes[1]] - num), abs(num_list[indexes[2]] - num)]
-            return indexes[np.argmin(cands)]
+            left = abs(num_list[pos - 1] - num)
+            center = abs(num_list[pos] - num)
+            right = abs(num_list[pos + 1] - num)
 
+            if left <= min(center, right):
+                return pos - 1
+            if center <= min(left, right):
+                return pos
+            if right <= min(left, center):
+                return pos + 1
