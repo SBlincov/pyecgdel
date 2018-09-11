@@ -29,13 +29,13 @@ def get_p_del(ecg_lead, qrs_id):
     if not zcs:
         return delineation
 
-    if ((zcs[-1].right_mm.index - zcs[-1].index) > int(float(PParams['ALPHA_RIGHT_MM_DIST']) * rate)) or (abs(zcs[-1].right_mm.value) / abs(zcs[-1].left_mm.value) > float(PParams['ALPHA_OFFSET_MM_SHARP'])):
+    if ((zcs[-1].s_r_mm.index - zcs[-1].index) > int(float(PParams['ALPHA_RIGHT_MM_DIST']) * rate)) or (abs(zcs[-1].s_r_mm.value) / abs(zcs[-1].s_l_mm.value) > float(PParams['ALPHA_OFFSET_MM_SHARP'])):
         zcs.pop(-1)
 
     if not zcs:
         return delineation
 
-    if ((zcs[0].index - zcs[0].left_mm.index) > int(float(PParams['ALPHA_LEFT_MM_DIST']) * rate)) or (abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(PParams['ALPHA_ONSET_MM_SHARP'])):
+    if ((zcs[0].index - zcs[0].s_l_mm.index) > int(float(PParams['ALPHA_LEFT_MM_DIST']) * rate)) or (abs(zcs[0].s_l_mm.value) / abs(zcs[0].s_r_mm.value) > float(PParams['ALPHA_ONSET_MM_SHARP'])):
         zcs.pop(0)
 
     if not zcs:

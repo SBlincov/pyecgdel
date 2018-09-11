@@ -1,6 +1,6 @@
 clear all;
 
-base_name = 'shiller_long';
+base_name = 'shiller';
 freq = 500.0;
 
 record = 2517;
@@ -15,8 +15,8 @@ y_total = 0.9;
 y_size = 0.074;
 y_shift = 0.001;
 
-is_filtered = 0;
-is_del = 0;
+is_filtered = 1;
+is_del = 1;
 
 x_axis_type = 1;
 

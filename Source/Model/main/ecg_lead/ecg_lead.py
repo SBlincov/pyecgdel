@@ -57,6 +57,7 @@ class ECGLead:
         self.qrs_plot_data = []
 
         self.flutter_dels = []
+        self.flutter = 0
 
     def cwt_filtration(self):
         self.filter = cwt_filtration(self.origin)

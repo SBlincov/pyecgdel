@@ -231,7 +231,7 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                     else:
 
                         # New delineation and morphology
-                        qrs_del_extra_zcs = get_zcs_in_window(leads[lead_id], int(QRSParams['WDC_SCALE_ID']), mean_qrs_on, mean_qrs_off)
+                        qrs_del_extra_zcs = get_zcs_in_window(leads[lead_id].zcs[int(QRSParams['WDC_SCALE_ID'])], mean_qrs_on, mean_qrs_off)
 
                         # If ZCSs exist in averaged interval
                         if qrs_del_extra_zcs:

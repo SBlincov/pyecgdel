@@ -4,6 +4,7 @@
 
 from Source.Model.main.modulus_maxima.modulus_maxima import ModulusMaxima
 from scipy.signal import argrelextrema
+from Source.Model.main.search.closest_position import *
 import numpy as np
 
 def get_mms(wdc):
@@ -16,6 +17,24 @@ def get_mms(wdc):
         mm = ModulusMaxima(peak, id, wdc)
         mms.append(mm)
     return mms
+
+
+def get_left_mm(mms, index):
+    indexes = [x.index for x in mms]
+    id = get_closest(indexes, index)
+    if mms[id].index < index:
+        return mms[id]
+    else:
+        return mms[id - 1]
+
+
+def get_right_mm(mms, index):
+    indexes = [x.index for x in mms]
+    id = get_closest(indexes, index)
+    if mms[id].index > index:
+        return mms[id]
+    else:
+        return mms[id + 1]
 
 
 def get_lr_mms_in(ecg_lead, scale_id, left, right):

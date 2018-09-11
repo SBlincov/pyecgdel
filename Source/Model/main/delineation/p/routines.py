@@ -104,7 +104,7 @@ def get_p_end_index(ecg_lead, qrs_id):
 
     window = get_window(ecg_lead, qrs_id)
     begin_index = qrs_dels[qrs_id].onset_index - window
-    tmp_mm = find_left_mm(qrs_dels[qrs_id].onset_index, wdc)
+    tmp_mm = get_left_mm(ecg_lead.mms[wdc_scale_id], qrs_dels[qrs_id].onset_index)
     end_index_candidate_1 = tmp_mm.index
     end_index_candidate_2 = find_left_thc_index(wdc, qrs_dels[qrs_id].onset_index, begin_index, 0.0)
     end_index = max(end_index_candidate_1, end_index_candidate_2 - 1)
