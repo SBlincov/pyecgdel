@@ -6,9 +6,7 @@ from Source.Model.main.params.p import *
 class PMorphologyData:
 
     def __init__(self, ecg_lead, delineation, target_scale_id):
-
         wdc_all_scales = ecg_lead.wdc
-        rate = ecg_lead.rate
 
         onset_index = delineation.onset_index
         peak_index = delineation.peak_index
@@ -20,7 +18,7 @@ class PMorphologyData:
         end_index = offset_index
 
         wdc = wdc_all_scales[target_scale_id]
-        zcs = get_zcs_with_global_mms(wdc, begin_index, end_index)
+        zcs = get_zcs_in_window(ecg_lead.zcs[target_scale_id], begin_index, end_index)
 
         if len(zcs) > 0:
 

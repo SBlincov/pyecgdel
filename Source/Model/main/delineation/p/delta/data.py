@@ -92,7 +92,7 @@ class AllLeadsData:
             offs_sum.append(del_data.offs[max_dels_lead_id][del_id])
             borders_counts.append(1)
 
-        del_candidates = []  # array with special candidates for deletion
+        del_candidates = {}  # array with special candidates for deletion
 
         # Filling arrays with all complexes:
         for lead_id in range(0, del_data.num_leads):
@@ -141,10 +141,12 @@ class AllLeadsData:
                                 offs_sum.insert(argmin + 1, off_curr)
                                 borders_counts.insert(argmin + 1, 1)
                             else:
-                                del_candidates.append([lead_id, del_id])
+                                if lead_id in del_candidates:
+                                    del_candidates[lead_id].append(del_id)
+                                else:
+                                    del_candidates[lead_id] = [del_id]
 
                     else:
-
                         warnings.warn("Onset and offset out of correspondence", UserWarning)
 
         self.ons_sum = ons_sum

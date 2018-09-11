@@ -57,6 +57,7 @@ class ECGLead:
         self.qrs_plot_data = []
 
         self.flutter_dels = []
+        self.flutter = 0
 
     def cwt_filtration(self):
         self.filter = cwt_filtration(self.origin)
@@ -118,12 +119,6 @@ class ECGLead:
                                 self.zcs[scale_id][zc_id].keys[sub_scale_id] = last_filled + 1
                     else:
                         last_filled += 1
-
-
-
-
-        ololo = 5
-
 
     def qrs_del(self):
         cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, 0, len(self.wdc[0]))

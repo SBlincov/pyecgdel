@@ -41,7 +41,7 @@ for column_id in range(0, len(columns)):
 
     column = columns[column_id]
 
-    file_name = "61123888"
+    file_name = "2517"
 
     data = cb.bulk_data_get([column], "cardio_file.id=" + str(file_name))
 

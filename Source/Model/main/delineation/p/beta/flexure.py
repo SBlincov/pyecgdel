@@ -29,10 +29,10 @@ def get_p_flexure_zc_id(ecg_lead, qrs_id, zcs, peak_zc_id):
     for zc_id in range(1, len(zcs) - 1):
         if abs(zcs[zc_id - 1].index - zcs[zc_id].index) < float(PParams['ALPHA_FLEX_SHIFT']) * rr \
                 and abs(zcs[zc_id + 1].index - zcs[zc_id].index) < float(PParams['ALPHA_FLEX_SHIFT']) * rr \
-                and zcs[zc_id].mm_amplitude < float(PParams['ALPHA_FLEX_AMPL_NGBR']) * zcs[zc_id - 1].mm_amplitude \
-                and zcs[zc_id].mm_amplitude < float(PParams['ALPHA_FLEX_AMPL_NGBR']) * zcs[zc_id + 1].mm_amplitude\
-                and zcs[zc_id - 1].mm_amplitude > float(PParams['ALPHA_FLEX_AMPL_OLD_ZC']) * zcs[peak_zc_id].mm_amplitude\
-                and zcs[zc_id + 1].mm_amplitude > float(PParams['ALPHA_FLEX_AMPL_OLD_ZC']) * zcs[peak_zc_id].mm_amplitude:
+                and zcs[zc_id].s_ampl < float(PParams['ALPHA_FLEX_AMPL_NGBR']) * zcs[zc_id - 1].s_ampl \
+                and zcs[zc_id].s_ampl < float(PParams['ALPHA_FLEX_AMPL_NGBR']) * zcs[zc_id + 1].s_ampl\
+                and zcs[zc_id - 1].s_ampl > float(PParams['ALPHA_FLEX_AMPL_OLD_ZC']) * zcs[peak_zc_id].s_ampl\
+                and zcs[zc_id + 1].s_ampl > float(PParams['ALPHA_FLEX_AMPL_OLD_ZC']) * zcs[peak_zc_id].s_ampl:
             flexure_zc_id = zc_id
 
     return flexure_zc_id

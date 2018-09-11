@@ -28,10 +28,10 @@ def get_p_morph(ecg_lead, del_id, delineation):
         p_zc_id = p_morph_data_aux.peak_zc_id
 
         # Check: how many big zcs in delineation
-        zc_ampl_th = zcs[p_zc_id].mm_amplitude * float(PParams['BETA_PEAK_ZC_AMPL'])
+        zc_ampl_th = zcs[p_zc_id].g_ampl * float(PParams['BETA_PEAK_ZC_AMPL'])
         big_zcs_ids = []
         for zc_id in range(0, len(zcs)):
-            if zcs[zc_id].mm_amplitude > zc_ampl_th:
+            if zcs[zc_id].g_ampl > zc_ampl_th:
                 big_zcs_ids.append(zc_id)
 
         num_big_zcs = len(big_zcs_ids)
@@ -49,7 +49,6 @@ def get_p_morph(ecg_lead, del_id, delineation):
 
         # Getting points
         points = points_processing(ecg_lead, delineation, p_morph_data_aux)
-
     else:
         # Getting points
         if p_morph_data_main.correct:

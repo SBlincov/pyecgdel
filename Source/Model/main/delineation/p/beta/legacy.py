@@ -6,7 +6,7 @@ def check_for_atrial_fibrillation(delineation, zcs):
 
     zcs_amplitudes = []
     for zc in zcs:
-        zcs_amplitudes.append(zc.mm_amplitude)
+        zcs_amplitudes.append(zc.s_ampl)
 
     zcs_amplitudes = np.asarray(zcs_amplitudes)
 

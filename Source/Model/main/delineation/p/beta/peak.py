@@ -15,24 +15,21 @@ from Source.Model.main.delineation.p.routines import *
 
 
 def is_small_p(ecg_lead, qrs_id, zcs, peak_zc_id):
-
     result = False
 
     wdc_scale_id = get_p_wdc_scale_id(ecg_lead)
-    wdc = ecg_lead.wdc[wdc_scale_id]
-    p_amplitude = zcs[peak_zc_id].mm_amplitude
+    p_amplitude = zcs[peak_zc_id].s_ampl
     begin_qrs_index = ecg_lead.qrs_dels[qrs_id].onset_index
     end_qrs_index = ecg_lead.qrs_dels[qrs_id].offset_index
-    qrs_aux_zcs = get_zcs_with_global_mms(wdc, begin_qrs_index, end_qrs_index)
+    qrs_aux_zcs = get_zcs_in_window(ecg_lead.zcs[wdc_scale_id], begin_qrs_index, end_qrs_index)
+
     if qrs_aux_zcs:
-
         qrs_zc = qrs_aux_zcs[0]
-
         for qrs_zc_candidate in qrs_aux_zcs[1:]:
-            if qrs_zc_candidate.mm_amplitude > qrs_zc.mm_amplitude:
+            if qrs_zc_candidate.g_ampl > qrs_zc.g_ampl:
                 qrs_zc = qrs_zc_candidate
 
-        qrs_amplitude = qrs_zc.mm_amplitude
+        qrs_amplitude = qrs_zc.g_ampl
 
         if p_amplitude < float(PParams['ALPHA_PEAK_SMALL_AMPL']) * qrs_amplitude:
             result = True
@@ -98,9 +95,9 @@ def get_p_peak_zc_id(ecg_lead, qrs_id, zcs):
 
         amplitude_part = 1.0 - pow(shift_percentage, float(PParams['ALPHA_PEAK_ADAPT_POW'])) * float(PParams['ALPHA_PEAK_ADAPT_AMPL'])
 
-        if zcs[cand_zc_id].mm_amplitude * amplitude_part >= peak_zc_mm_amplitude:
+        if zcs[cand_zc_id].s_ampl * amplitude_part >= peak_zc_mm_amplitude:
             peak_zc_id = cand_zc_id
-            peak_zc_mm_amplitude = zcs[cand_zc_id].mm_amplitude * amplitude_part
+            peak_zc_mm_amplitude = zcs[cand_zc_id].s_ampl * amplitude_part
 
     return peak_zc_id
 

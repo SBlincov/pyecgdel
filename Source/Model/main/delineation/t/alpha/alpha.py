@@ -41,7 +41,7 @@ def get_t_delineation(ecg_lead, qrs_id):
     #     If first zc has very big left mm - it means that it corresponds to S
     #     (we assume that QRS is separated from T)
     #     Then pop it from first position and check for existing another zcs
-    if abs(zcs[0].left_mm.value) / abs(zcs[0].right_mm.value) > float(TParams['ALPHA_MM_SHARP']):
+    if abs(zcs[0].s_l_mm.value) / abs(zcs[0].s_r_mm.value) > float(TParams['ALPHA_MM_SHARP']):
         zcs.pop(0)
     if not zcs:
         return delineation

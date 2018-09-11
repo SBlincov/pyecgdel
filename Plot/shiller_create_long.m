@@ -3,7 +3,7 @@ data_path = '../Data/';
 database_name = 'shiller/';
 new_database_name = 'shiller_long/';
 
-record_name = 'record_2319/';
+record_name = 'record_2517/';
 record_name_long = record_name;
 
 concat_number = 30;

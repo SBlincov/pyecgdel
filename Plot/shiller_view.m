@@ -3,7 +3,7 @@ clear all;
 base_name = 'shiller';
 freq = 500.0;
 
-record = 50691683;
+record = 2517;
 is_doc_del = 0;
 
 leads = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
@@ -15,7 +15,8 @@ y_total = 0.9;
 y_size = 0.074;
 y_shift = 0.001;
 
-is_filtered = 0;
+is_filtered = 1;
+is_del = 1;
 
 x_axis_type = 1;
 
@@ -77,199 +78,200 @@ for i = 1:num_leads
     grid on;
     hold all;
     
-    file_name_qrs_del = sprintf('%s%s%sqrs_delineation.txt', db_path, record_path, lead_path);
-    qrs_del = importdata(file_name_qrs_del);
-    
-    times_onset     = zeros(size(qrs_del, 1), 1);
-    times_peak      = zeros(size(qrs_del, 1), 1);
-    times_offset    = zeros(size(qrs_del, 1), 1);
-    vals_onset      = zeros(size(qrs_del, 1), 1);
-    vals_peak       = zeros(size(qrs_del, 1), 1);
-    vals_offset     = zeros(size(qrs_del, 1), 1);
-    
-    for del_id = 1:size(qrs_del, 1)
-        times_onset(del_id)  = times(qrs_del(del_id, 1) + 1);
-        times_peak(del_id)   = times(qrs_del(del_id, 2) + 1);
-        times_offset(del_id) = times(qrs_del(del_id, 3) + 1);
-        
-        vals_onset(del_id)   = ecg_lead(qrs_del(del_id, 1) + 1);
-        vals_peak(del_id)    = ecg_lead(qrs_del(del_id, 2) + 1);
-        vals_offset(del_id)  = ecg_lead(qrs_del(del_id, 3) + 1);
-    end
-    
-    hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'r');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'r');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'r');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    file_name_p_del = sprintf('%s%s%sp_delineation.txt', db_path, record_path, lead_path);
-    p_del = importdata(file_name_p_del);
-    
-    times_onset     = zeros(size(p_del, 1), 1);
-    times_peak      = zeros(size(p_del, 1), 1);
-    times_offset    = zeros(size(p_del, 1), 1);
-    vals_onset      = zeros(size(p_del, 1), 1);
-    vals_peak       = zeros(size(p_del, 1), 1);
-    vals_offset     = zeros(size(p_del, 1), 1);
-    
-    for del_id = 1:size(p_del, 1)
-        times_onset(del_id)  = times(p_del(del_id, 1) + 1);
-        times_peak(del_id)   = times(p_del(del_id, 2) + 1);
-        times_offset(del_id) = times(p_del(del_id, 3) + 1);
-        
-        vals_onset(del_id)   = ecg_lead(p_del(del_id, 1) + 1);
-        vals_peak(del_id)    = ecg_lead(p_del(del_id, 2) + 1);
-        vals_offset(del_id)  = ecg_lead(p_del(del_id, 3) + 1);
-    end
-    
-    hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'green');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'green');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'green');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    
-    file_name_t_del = sprintf('%s%s%st_delineation.txt', db_path, record_path, lead_path);
-    t_del = importdata(file_name_t_del);
-    
-    times_onset     = zeros(size(t_del, 1), 1);
-    times_peak      = zeros(size(t_del, 1), 1);
-    times_offset    = zeros(size(t_del, 1), 1);
-    vals_onset      = zeros(size(t_del, 1), 1);
-    vals_peak       = zeros(size(t_del, 1), 1);
-    vals_offset     = zeros(size(t_del, 1), 1);
-    
-    for del_id = 1:size(t_del, 1)
-        times_onset(del_id)      = times(t_del(del_id, 1) + 1);
-        times_peak(del_id)       = times(t_del(del_id, 2) + 1);
-        times_offset(del_id)     = times(t_del(del_id, 3) + 1);
-        
-        vals_onset(del_id)       = ecg_lead(t_del(del_id, 1) + 1);
-        vals_peak(del_id)        = ecg_lead(t_del(del_id, 2) + 1);
-        vals_offset(del_id)      = ecg_lead(t_del(del_id, 3) + 1);
-    end
-    
-    hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker, 'Color',  'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'cyan');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker, 'Color',  'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'cyan');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    hold all;
-    
-    hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'cyan');
-    set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-    
-    if(is_doc_del == 1)
-        
-        file_name_qrs_del = sprintf('%s%s%sqrs_delineation_doc.txt', db_path, record_path, lead_path);
+    if is_del == 1
+        file_name_qrs_del = sprintf('%s%s%sqrs_delineation.txt', db_path, record_path, lead_path);
         qrs_del = importdata(file_name_qrs_del);
-        
+
         times_onset     = zeros(size(qrs_del, 1), 1);
         times_peak      = zeros(size(qrs_del, 1), 1);
         times_offset    = zeros(size(qrs_del, 1), 1);
         vals_onset      = zeros(size(qrs_del, 1), 1);
         vals_peak       = zeros(size(qrs_del, 1), 1);
         vals_offset     = zeros(size(qrs_del, 1), 1);
-        
+
         for del_id = 1:size(qrs_del, 1)
             times_onset(del_id)  = times(qrs_del(del_id, 1) + 1);
             times_peak(del_id)   = times(qrs_del(del_id, 2) + 1);
             times_offset(del_id) = times(qrs_del(del_id, 3) + 1);
-            
+
             vals_onset(del_id)   = ecg_lead(qrs_del(del_id, 1) + 1);
             vals_peak(del_id)    = ecg_lead(qrs_del(del_id, 2) + 1);
             vals_offset(del_id)  = ecg_lead(qrs_del(del_id, 3) + 1);
         end
-        
-        hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker_doc, 'Color', 'g', 'LineWidth', 0.1, 'MarkerFaceColor', [1 0.6 0.8]);
+
+        hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'r');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
         hold all;
-        
-        hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker_doc, 'Color', 'g', 'LineWidth', 0.1, 'MarkerFaceColor', [1 0.6 0.8]);
+
+        hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'r');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
         hold all;
-        
-        hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker_doc, 'Color', 'g', 'LineWidth', 0.1, 'MarkerFaceColor', [1 0.6 0.8]);
+
+        hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'r');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
         hold all;
-        
-        file_name_p_del = sprintf('%s%s%sp_delineation_doc.txt', db_path, record_path, lead_path);
+
+        file_name_p_del = sprintf('%s%s%sp_delineation.txt', db_path, record_path, lead_path);
         p_del = importdata(file_name_p_del);
-        
+
         times_onset     = zeros(size(p_del, 1), 1);
         times_peak      = zeros(size(p_del, 1), 1);
         times_offset    = zeros(size(p_del, 1), 1);
         vals_onset      = zeros(size(p_del, 1), 1);
         vals_peak       = zeros(size(p_del, 1), 1);
         vals_offset     = zeros(size(p_del, 1), 1);
-        
+
         for del_id = 1:size(p_del, 1)
             times_onset(del_id)  = times(p_del(del_id, 1) + 1);
             times_peak(del_id)   = times(p_del(del_id, 2) + 1);
             times_offset(del_id) = times(p_del(del_id, 3) + 1);
-            
+
             vals_onset(del_id)   = ecg_lead(p_del(del_id, 1) + 1);
             vals_peak(del_id)    = ecg_lead(p_del(del_id, 2) + 1);
             vals_offset(del_id)  = ecg_lead(p_del(del_id, 3) + 1);
         end
-        
-        hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker_doc, 'Color', 'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0.5 0]);
+
+        hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'green');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
         hold all;
-        
-        hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker_doc, 'Color', 'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0.5 0]);
+
+        hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'green');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
         hold all;
-        
-        hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker_doc, 'Color', 'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0.5 0]);
+
+        hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'green');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
         hold all;
-        
-        file_name_t_del = sprintf('%s%s%st_delineation_doc.txt', db_path, record_path, lead_path);
+
+
+        file_name_t_del = sprintf('%s%s%st_delineation.txt', db_path, record_path, lead_path);
         t_del = importdata(file_name_t_del);
-        
+
         times_onset     = zeros(size(t_del, 1), 1);
         times_peak      = zeros(size(t_del, 1), 1);
         times_offset    = zeros(size(t_del, 1), 1);
         vals_onset      = zeros(size(t_del, 1), 1);
         vals_peak       = zeros(size(t_del, 1), 1);
         vals_offset     = zeros(size(t_del, 1), 1);
-        
+
         for del_id = 1:size(t_del, 1)
             times_onset(del_id)      = times(t_del(del_id, 1) + 1);
             times_peak(del_id)       = times(t_del(del_id, 2) + 1);
             times_offset(del_id)     = times(t_del(del_id, 3) + 1);
-            
+
             vals_onset(del_id)       = ecg_lead(t_del(del_id, 1) + 1);
             vals_peak(del_id)        = ecg_lead(t_del(del_id, 2) + 1);
             vals_offset(del_id)      = ecg_lead(t_del(del_id, 3) + 1);
         end
-        
-        hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker_doc, 'Color',  'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0 1]);
+
+        hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker, 'Color',  'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'cyan');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
         hold all;
-        
-        hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker_doc, 'Color',  'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0 1]);
+
+        hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker, 'Color',  'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'cyan');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
         hold all;
-        
-        hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker_doc, 'Color', 'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0 1]);
+
+        hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker, 'Color', 'k', 'LineWidth', 0.1, 'MarkerFaceColor', 'cyan');
         set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
-        
+
+        if(is_doc_del == 1)
+
+            file_name_qrs_del = sprintf('%s%s%sqrs_delineation_doc.txt', db_path, record_path, lead_path);
+            qrs_del = importdata(file_name_qrs_del);
+
+            times_onset     = zeros(size(qrs_del, 1), 1);
+            times_peak      = zeros(size(qrs_del, 1), 1);
+            times_offset    = zeros(size(qrs_del, 1), 1);
+            vals_onset      = zeros(size(qrs_del, 1), 1);
+            vals_peak       = zeros(size(qrs_del, 1), 1);
+            vals_offset     = zeros(size(qrs_del, 1), 1);
+
+            for del_id = 1:size(qrs_del, 1)
+                times_onset(del_id)  = times(qrs_del(del_id, 1) + 1);
+                times_peak(del_id)   = times(qrs_del(del_id, 2) + 1);
+                times_offset(del_id) = times(qrs_del(del_id, 3) + 1);
+
+                vals_onset(del_id)   = ecg_lead(qrs_del(del_id, 1) + 1);
+                vals_peak(del_id)    = ecg_lead(qrs_del(del_id, 2) + 1);
+                vals_offset(del_id)  = ecg_lead(qrs_del(del_id, 3) + 1);
+            end
+
+            hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker_doc, 'Color', 'g', 'LineWidth', 0.1, 'MarkerFaceColor', [1 0.6 0.8]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            hold all;
+
+            hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker_doc, 'Color', 'g', 'LineWidth', 0.1, 'MarkerFaceColor', [1 0.6 0.8]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            hold all;
+
+            hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker_doc, 'Color', 'g', 'LineWidth', 0.1, 'MarkerFaceColor', [1 0.6 0.8]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            hold all;
+
+            file_name_p_del = sprintf('%s%s%sp_delineation_doc.txt', db_path, record_path, lead_path);
+            p_del = importdata(file_name_p_del);
+
+            times_onset     = zeros(size(p_del, 1), 1);
+            times_peak      = zeros(size(p_del, 1), 1);
+            times_offset    = zeros(size(p_del, 1), 1);
+            vals_onset      = zeros(size(p_del, 1), 1);
+            vals_peak       = zeros(size(p_del, 1), 1);
+            vals_offset     = zeros(size(p_del, 1), 1);
+
+            for del_id = 1:size(p_del, 1)
+                times_onset(del_id)  = times(p_del(del_id, 1) + 1);
+                times_peak(del_id)   = times(p_del(del_id, 2) + 1);
+                times_offset(del_id) = times(p_del(del_id, 3) + 1);
+
+                vals_onset(del_id)   = ecg_lead(p_del(del_id, 1) + 1);
+                vals_peak(del_id)    = ecg_lead(p_del(del_id, 2) + 1);
+                vals_offset(del_id)  = ecg_lead(p_del(del_id, 3) + 1);
+            end
+
+            hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker_doc, 'Color', 'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0.5 0]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            hold all;
+
+            hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker_doc, 'Color', 'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0.5 0]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            hold all;
+
+            hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker_doc, 'Color', 'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0.5 0]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            hold all;
+
+            file_name_t_del = sprintf('%s%s%st_delineation_doc.txt', db_path, record_path, lead_path);
+            t_del = importdata(file_name_t_del);
+
+            times_onset     = zeros(size(t_del, 1), 1);
+            times_peak      = zeros(size(t_del, 1), 1);
+            times_offset    = zeros(size(t_del, 1), 1);
+            vals_onset      = zeros(size(t_del, 1), 1);
+            vals_peak       = zeros(size(t_del, 1), 1);
+            vals_offset     = zeros(size(t_del, 1), 1);
+
+            for del_id = 1:size(t_del, 1)
+                times_onset(del_id)      = times(t_del(del_id, 1) + 1);
+                times_peak(del_id)       = times(t_del(del_id, 2) + 1);
+                times_offset(del_id)     = times(t_del(del_id, 3) + 1);
+
+                vals_onset(del_id)       = ecg_lead(t_del(del_id, 1) + 1);
+                vals_peak(del_id)        = ecg_lead(t_del(del_id, 2) + 1);
+                vals_offset(del_id)      = ecg_lead(t_del(del_id, 3) + 1);
+            end
+
+            hLine = plot(times_onset, vals_onset,  '>', 'MarkerSize', width_marker_doc, 'Color',  'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0 1]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            hold all;
+
+            hLine = plot(times_peak, vals_peak,  'o', 'MarkerSize', width_marker_doc, 'Color',  'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0 1]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            hold all;
+
+            hLine = plot(times_offset, vals_offset, '<', 'MarkerSize', width_marker_doc, 'Color', 'r', 'LineWidth', 0.1, 'MarkerFaceColor', [0 0 1]);
+            set(get(get(hLine,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+        end
     end
     
     

@@ -1,8 +1,10 @@
-from Source.Model.main.ecg.ecg import *
-from Source.Infrastructure.main.db_config_local import *
-from Source.Scenario.run.record import run_record
+import sys
 
-DBConfig.name = 'shiller_long'
+from Source.Model.main.ecg.ecg import *
+from Source.CardioBase.cardiobase import Cardiobase
+import json
+
+DBConfig.name = 'shiller'
 DBConfig.root = 'pyecgdel'
 DBConfig.data_catalogue = 'Data'
 
@@ -20,5 +22,20 @@ init_params(params_type=ParamsType.t_params)
 init_params(params_type=ParamsType.filter_params)
 init_params(params_type=ParamsType.flutter_params)
 
-record_name = 'record_2517'
-run_record(record_name)
+config_params = ConfigParams
+p_params = PParams
+qrs_params = QRSParams
+t_params = TParams
+filter_params = FilterParams
+flutter_params = FlutterParams
+
+params = {}
+params["config"] = config_params
+params["filter"] = filter_params
+params["flutter"] = flutter_params
+params["p"] = p_params
+params["qrs"] = qrs_params
+params["t"] = t_params
+
+with open("params.json", 'w') as f:
+    json.dump(params, f, indent=4, sort_keys=True)

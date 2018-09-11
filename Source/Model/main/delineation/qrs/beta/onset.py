@@ -50,7 +50,7 @@ def define_qrs_onset_index(ecg_lead, delineation, qrs_zc):
             next_mm = mms[first_mm.id - 1]
         else:
             onset_index_candidate_1 = next_mm.index
-            onset_index_candidate_2 = find_left_thc_index(wdc, first_mm.index, zc.left_mm.index - window, threshold)
+            onset_index_candidate_2 = find_left_thc_index(wdc, first_mm.index, zc.g_l_mm.index - window, threshold)
             onset_index = max(onset_index_candidate_1, onset_index_candidate_2)
             delineation.onset_index = onset_index
             return

@@ -38,6 +38,23 @@ def get_zcs(wdc, mms):
     return zcs
 
 
-def get_zcs_in_window(ecg_lead, scale_id, begin_index, end_index):
-    zcs = [zc for zc in ecg_lead.zcs[scale_id] if begin_index <= zc.index < end_index]
+def get_left_zc(zcs, index):
+    indexes = [x.index for x in zcs]
+    id = get_closest(indexes, index)
+    if zcs[id].index < index:
+        return zcs[id]
+    else:
+        return zcs[id - 1]
+
+
+def get_right_zc(zcs, index):
+    indexes = [x.index for x in zcs]
+    id = get_closest(indexes, index)
+    if zcs[id].index > index:
+        return zcs[id]
+    else:
+        return zcs[id + 1]
+
+def get_zcs_in_window(zcs, begin_index, end_index):
+    zcs = [zc for zc in zcs if begin_index <= zc.index < end_index]
     return zcs
