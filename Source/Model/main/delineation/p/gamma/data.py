@@ -18,7 +18,7 @@ class PMorphologyData:
         end_index = offset_index
 
         wdc = wdc_all_scales[target_scale_id]
-        zcs = get_zcs_in_window(ecg_lead.zcs[target_scale_id], begin_index, end_index)
+        zcs = get_zcs_in_window(ecg_lead.wdc[target_scale_id], ecg_lead.zcs[target_scale_id], begin_index, end_index)
 
         if len(zcs) > 0:
 
