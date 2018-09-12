@@ -92,7 +92,10 @@ def onset_processing(first_zc_id, ecg_lead, delineation, morph_data, points, dir
         #     and define its index as onset
         if not is_onset_found:
             scale_id_bord = int(QRSParams['GAMMA_BORD_SCALE'])
-            tmp_zc = ecg_lead.zcs[scale_id_bord][first_zc.keys[scale_id_bord]]
+            target_index = first_zc.index
+            indexes = [x.index for x in ecg_lead.zcs[scale_id_bord]]
+            target_id = get_closest(indexes, target_index)
+            tmp_zc = ecg_lead.zcs[scale_id_bord][target_id]
             mm_bord = tmp_zc.l_mms[0]
             qrs_onset_index = mm_bord.index
             is_onset_found = True
