@@ -77,3 +77,6 @@ class ZeroCrossing:
             self.s_l_mm = self.g_l_mm
             self.s_r_mm = self.g_r_mm
             self.s_ampl = self.g_ampl
+
+
+

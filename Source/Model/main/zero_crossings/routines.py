@@ -65,3 +65,13 @@ def get_zcs_in_window(zcs, begin_index, end_index):
     if zcs[end_id].index >= end_index:
         end_id -= 1
     return zcs[begin_id : end_id + 1]
+
+
+def get_closest_zcs(zcs, ids_zcs, index):
+    id = ids_zcs[index]
+    if id == -1:
+        return zcs[0]
+    if id == len(zcs) - 1:
+        return zcs[len(zcs) - 1]
+    else:
+        if abs()
