@@ -48,8 +48,8 @@ class ZeroCrossing:
         self.zc_proc()
 
     def zc_proc(self):
-        self.g_l_mm = self.l_mms[np.argmax(abs(mm.value) for mm in self.l_mms)] if len(self.l_mms) > 0 else None
-        self.g_r_mm = self.r_mms[np.argmax(abs(mm.value) for mm in self.r_mms)] if len(self.r_mms) > 0 else None
+        self.g_l_mm = self.l_mms[np.argmax([abs(mm.value) for mm in self.l_mms])] if len(self.l_mms) > 0 else None
+        self.g_r_mm = self.r_mms[np.argmax([abs(mm.value) for mm in self.r_mms])] if len(self.r_mms) > 0 else None
         if self.g_l_mm is not None and self.g_r_mm is not None:
             self.g_ampl = abs(self.g_l_mm.value) + abs(self.g_r_mm.value)
 
@@ -69,8 +69,8 @@ class ZeroCrossing:
         l_mms = [mm for mm in self.l_mms if mm.index > self.index - l_window]
         r_mms = [mm for mm in self.r_mms if mm.index < self.index + r_window]
 
-        self.s_l_mm = l_mms[np.argmax(abs(mm.value) for mm in l_mms)] if len(l_mms) > 0 else None
-        self.s_r_mm = r_mms[np.argmax(abs(mm.value) for mm in r_mms)] if len(r_mms) > 0 else None
+        self.s_l_mm = l_mms[np.argmax([abs(mm.value) for mm in l_mms])] if len(l_mms) > 0 else None
+        self.s_r_mm = r_mms[np.argmax([abs(mm.value) for mm in r_mms])] if len(r_mms) > 0 else None
         if self.s_l_mm is not None and self.s_r_mm is not None:
             self.s_ampl = abs(self.s_l_mm.value) + abs(self.s_r_mm.value)
         else:
