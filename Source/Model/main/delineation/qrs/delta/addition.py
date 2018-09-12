@@ -19,7 +19,7 @@ def add_complex(leads, corr_mtx, g_id, mean_qrs_on, mean_qrs_off):
             lead = leads[lead_id]
 
             # Search ZCSs in averaged interval
-            qrs_del_extra_zcs = get_zcs_with_global_mms(lead.wdc[int(QRSParams['WDC_SCALE_ID'])],
+            qrs_del_extra_zcs = get_zcs_in_window(lead.zcs[int(QRSParams['WDC_SCALE_ID'])],
                                                         qrs_del_extra.onset_index,
                                                         qrs_del_extra.offset_index)
 
@@ -29,7 +29,7 @@ def add_complex(leads, corr_mtx, g_id, mean_qrs_on, mean_qrs_off):
                 # Search ZCS with maximum mm_amplitude
                 qrs_del_extra_zc = qrs_del_extra_zcs[0]
                 for zc_id in range(1, len(qrs_del_extra_zcs)):
-                    if qrs_del_extra_zcs[zc_id].mm_amplitude > qrs_del_extra_zc.mm_amplitude:
+                    if qrs_del_extra_zcs[zc_id].g_ampl > qrs_del_extra_zc.g_ampl:
                         qrs_del_extra_zc = qrs_del_extra_zcs[zc_id]
 
                 qrs_del_extra.peak_index = qrs_del_extra_zc.index
