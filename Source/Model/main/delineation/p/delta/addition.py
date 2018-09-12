@@ -56,7 +56,8 @@ def add_complex(leads, corr_mtx, g_id, mean_p_on, mean_p_off):
                 p_off = p_del_extra.offset_index
 
                 # Search ZCSs in averaged interval
-                p_del_extra_zcs = get_zcs_in_window(lead.zcs[int(PParams['WDC_SCALE_ID'])],
+                p_del_extra_zcs = get_zcs_in_window(lead.wdc[int(PParams['WDC_SCALE_ID'])],
+                                                    lead.zcs[int(PParams['WDC_SCALE_ID'])],
                                                             p_del_extra.onset_index,
                                                             p_del_extra.offset_index)
 
