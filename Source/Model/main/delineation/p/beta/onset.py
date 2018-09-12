@@ -28,7 +28,7 @@ def define_p_onset_index(ecg_lead, delineation, zcs, left_peak_zc_id, begin_inde
     else:
         searching_onset_left_border_index = begin_index
 
-    current_mm = left_peak_zc.l_mms[0]
+    current_mm = all_mms[left_peak_zc.l_mms[0].id]
     onset_mm_candidate_coeff = abs(current_mm.value) * float(PParams['ALPHA_ONSET_MM'])
 
     mm_list = []

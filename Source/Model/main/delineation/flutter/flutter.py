@@ -18,6 +18,7 @@ def flutter_analysis(leads):
     for lead in target_leads:
         wdc = lead.wdc[wdc_scale_id]
         all_zcs = lead.zcs[wdc_scale_id]
+        all_mms = lead.mms[wdc_scale_id]
 
         num_total_segments = len(lead.qrs_dels) - 1
         num_passed_segments = 0
@@ -69,9 +70,9 @@ def flutter_analysis(leads):
                                 flutter_del = WaveDelineation(WaveSpecification.exist)
                                 onset_index = all_zcs[zc.id - 1].index
                                 offset_cand_1 = all_zcs[zc.id + 1].index
-                                next_mm = zc.r_mms[0].index
+                                next_mm = all_mms[zc.r_mms[0].id].index
                                 if len(zc.r_mms) > 1:
-                                    offset_cand_2 = zc.r_mms[1].index
+                                    offset_cand_2 = all_mms[next_mm.id + 1].index
                                 else:
                                     offset_cand_2 = next_mm
 

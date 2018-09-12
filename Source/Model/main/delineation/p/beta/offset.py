@@ -29,7 +29,7 @@ def define_p_offset_index(ecg_lead, delineation, zcs, right_peak_zc_id, end_inde
     else:
         searching_offset_right_border_index = end_index
 
-    current_mm = right_peak_zc.r_mms[0]
+    current_mm = all_mms[right_peak_zc.r_mms[0].id]
     offset_mm_candidate_coeff = abs(current_mm.value) * float(PParams['ALPHA_OFFSET_MM'])
     offset_mm_candidate_coeff_overflow = abs(current_mm.value) * float(PParams['ALPHA_OFFSET_MM_OVERFLOW'])
 

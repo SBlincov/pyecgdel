@@ -76,7 +76,7 @@ def get_qrs_onset_mms(ecg_lead, qrs_zc):
     window = int(float(QRSParams['BETA_ONSET_WINDOW']) * rate)
     mms = ecg_lead.mms[wdc_scale_id]
 
-    onset_mms = [qrs_zc.g_l_mm]
+    onset_mms = [mms[qrs_zc.g_l_mm.id]]
     mm_id = qrs_zc.g_l_mm.id - 1
     while mm_id > 0 and qrs_zc.g_l_mm.index - mms[mm_id].index <= window:
         onset_mms.append(mms[mm_id])
