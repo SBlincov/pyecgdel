@@ -70,11 +70,11 @@ def flutter_analysis(leads):
                                 flutter_del = WaveDelineation(WaveSpecification.exist)
                                 onset_index = all_zcs[zc.id - 1].index
                                 offset_cand_1 = all_zcs[zc.id + 1].index
-                                next_mm = all_mms[zc.r_mms[0].id].index
+                                next_mm = all_mms[zc.r_mms[0].id]
                                 if len(zc.r_mms) > 1:
                                     offset_cand_2 = all_mms[next_mm.id + 1].index
                                 else:
-                                    offset_cand_2 = next_mm
+                                    offset_cand_2 = next_mm.index
 
                                 offset_index = min(offset_cand_1, offset_cand_2)
 
