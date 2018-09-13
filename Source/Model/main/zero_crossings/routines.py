@@ -73,17 +73,21 @@ def get_zcs_in_window(wdc, zcs, begin_index, end_index):
     if zcs[end_id].index >= end_index_for_zc:
         end_id -= 1
 
-    target_zcs = zcs[begin_id: end_id + 1]
+    target_zcs = copy.deepcopy(zcs[begin_id: end_id + 1])
 
     if len(target_zcs) > 0:
 
         left_zc = target_zcs[0]
         if len(left_zc.l_mms) > 0:
             num_passed = 0
-            while num_passed < len(left_zc.l_mms) and left_zc.l_mms[num_passed].index > begin_index_for_mm:
+            while num_passed < len(left_zc.l_mms) and left_zc.l_mms[num_passed].index >= begin_index_for_mm:
                 num_passed += 1
             if num_passed > 0:
-                left_zc.l_mms = left_zc.l_mms[0:num_passed]
+                tmp_mms = left_zc.l_mms[0:num_passed]
+                if len(left_zc.l_mms) > num_passed:
+                    tmp_mm = ModulusMaxima(begin_index_for_mm, left_zc.l_mms[num_passed].id, wdc)
+                    tmp_mms.append(tmp_mm)
+                left_zc.l_mms = tmp_mms
                 left_zc.zc_proc()
             else:
                 first_mm = ModulusMaxima(begin_index_for_mm, left_zc.l_mms[0].id, wdc)
@@ -93,10 +97,14 @@ def get_zcs_in_window(wdc, zcs, begin_index, end_index):
         right_zc = target_zcs[-1]
         if len(right_zc.r_mms) > 0:
             num_passed = 0
-            while num_passed < len(right_zc.r_mms) and right_zc.r_mms[num_passed].index < end_index_for_mm:
+            while num_passed < len(right_zc.r_mms) and right_zc.r_mms[num_passed].index <= end_index_for_mm:
                 num_passed += 1
             if num_passed > 0:
-                right_zc.r_mms = right_zc.r_mms[0:num_passed]
+                tmp_mms = right_zc.r_mms[0:num_passed]
+                if len(right_zc.r_mms) > num_passed:
+                    tmp_mm = ModulusMaxima(end_index_for_mm, right_zc.r_mms[num_passed].id, wdc)
+                    tmp_mms.append(tmp_mm)
+                right_zc.r_mms = tmp_mms
                 right_zc.zc_proc()
             else:
                 last_mm = ModulusMaxima(end_index_for_mm, right_zc.r_mms[-1].id, wdc)

@@ -27,10 +27,10 @@ def get_t_morphology(ecg_lead, del_id, delineation):
         t_zc_id = t_morphology_data_aux.peak_zc_id
 
         # Check: how many big zcs in delineation
-        zc_ampl_th = zcs[t_zc_id].s_ampl * float(TParams['BETA_PEAK_ZC_AMPL'])
+        zc_ampl_th = zcs[t_zc_id].g_ampl * float(TParams['BETA_PEAK_ZC_AMPL'])
         big_zcs_ids = []
         for zc_id in range(0, len(zcs)):
-            if zcs[zc_id].s_ampl > zc_ampl_th:
+            if zcs[zc_id].g_ampl > zc_ampl_th:
                 big_zcs_ids.append(zc_id)
 
         num_big_zcs = len(big_zcs_ids)

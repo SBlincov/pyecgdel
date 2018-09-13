@@ -44,7 +44,7 @@ def left_qrs_morphology(ecg_lead, delineation, morph_data):
         right_index = left_zc_origin.index
 
         # Init left border
-        left_index = max(zcs_all_origin[left_zc_origin.id - 1].index, morph_data.begin_index)
+        left_index = find_left_thc_index(wdc_origin, right_index - 1, morph_data.begin_index, 0.0)
         left_index = max(left_index, onset_index_beta)
 
         # Form mms array in searching interval
