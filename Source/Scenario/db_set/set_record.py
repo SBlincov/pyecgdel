@@ -11,11 +11,11 @@ def set_record(record_name, cb, columns_names):
     file_id = int(record_name[7:])
 
     data = cb.bulk_data_get(columns_names, "cardio_file.id=" + str(file_id))
-    if len(data['data']) is not 0:
+    if len(data['data']) != 0:
         for column_name in columns_names:
             cb.delete(file_id, column_name)
 
-    if file_id is not -1:
+    if file_id != -1:
         print(': file_id: ', file_id)
 
         for lead in cb.leads:
@@ -26,27 +26,27 @@ def set_record(record_name, cb, columns_names):
 
             p_delineation = np.loadtxt(local_path + '/lead_' + lead + '/p_delineation.txt', dtype=np.int)
             print("p_del shape: ", p_delineation.shape)
-            if len(p_delineation) is 0:
+            if len(p_delineation) == 0:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, [])]
-            elif p_delineation.ndim is 1:
+            elif p_delineation.ndim == 1:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, [p_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_p_delineation"] = [(file_id, p_delineation.tolist())]
 
             qrs_delineation = np.loadtxt(local_path + '/lead_' + lead + '/qrs_delineation.txt', dtype=np.int)
             print("qrs_del shape: ", qrs_delineation.shape)
-            if len(qrs_delineation) is 0:
+            if len(qrs_delineation) == 0:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [])]
-            elif qrs_delineation.ndim is 1:
+            elif qrs_delineation.ndim == 1:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, [qrs_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_qrs_delineation"] = [(file_id, qrs_delineation.tolist())]
 
             t_delineation = np.loadtxt(local_path + '/lead_' + lead + '/t_delineation.txt', dtype=np.int)
             print("t_del shape: ", t_delineation.shape)
-            if len(t_delineation) is 0:
+            if len(t_delineation) == 0:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, [])]
-            elif t_delineation.ndim is 1:
+            elif t_delineation.ndim == 1:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, [t_delineation.tolist()])]
             else:
                 d["json_lead_" + lead + "_t_delineation"] = [(file_id, t_delineation.tolist())]
