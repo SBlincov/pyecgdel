@@ -3,11 +3,11 @@ data_path_unstable = 'C:/Users/user/Desktop/pyecgdel/Data/';
 
 database_name = 'shiller/';
 
-record_name = 'record_2517/';
+record_name = 'record_50436612/';
 
 lead_names = {'lead_i', 'lead_ii', 'lead_iii', 'lead_avr', 'lead_avl', 'lead_avf', 'lead_v1', 'lead_v2', 'lead_v3', 'lead_v4', 'lead_v5', 'lead_v6'};
 
-complex_name = 'p';
+complex_name = 't';
 
 difference = {};
 difference_id = 1;
