@@ -61,7 +61,7 @@ def get_zcs_in_window(wdc, zcs, begin_index, end_index):
     indexes = [x.index for x in zcs]
 
     begin_index_for_zc = begin_index + 1
-    end_index_for_zc = end_index - 2
+    end_index_for_zc = end_index - 1
 
     begin_index_for_mm = begin_index
     end_index_for_mm = end_index - 1
@@ -99,7 +99,7 @@ def get_zcs_in_window(wdc, zcs, begin_index, end_index):
                 right_zc.r_mms = right_zc.r_mms[0:num_passed]
                 right_zc.zc_proc()
             else:
-                last_mm = ModulusMaxima(end_index_for_mm, right_zc.l_mms[-1].id, wdc)
+                last_mm = ModulusMaxima(end_index_for_mm, right_zc.r_mms[-1].id, wdc)
                 right_zc.r_mms = [last_mm]
                 right_zc.zc_proc()
 
