@@ -83,43 +83,6 @@ class ECGLead:
             curr_zcs = get_zcs(self.wdc[id], self.mms[id])
             self.zcs.append(curr_zcs)
 
-        for scale_id in range(1, len(self.wdc)):
-            for sub_scale_id in range(0, scale_id):
-                sub_scale_indexes = [x.index for x in self.zcs[sub_scale_id]]
-                for zc_id in range(0, len(self.zcs[scale_id])):
-                    target_index = self.zcs[scale_id][zc_id].index
-                    key = get_closest(sub_scale_indexes, target_index)
-                    self.zcs[scale_id][zc_id].keys.append(key)
-
-        for scale_id in range(len(self.wdc) - 1, -1, -1):
-            for zc_id in range(0, len(self.zcs[scale_id])):
-                self.zcs[scale_id][zc_id].keys.append(zc_id)
-            for sub_scale_id in range(scale_id + 1, len(self.wdc)):
-                for zc_id in range(0, len(self.zcs[scale_id])):
-                    self.zcs[scale_id][zc_id].keys.append(-1)
-                filled_indexes = [x.keys[scale_id] for x in self.zcs[sub_scale_id]]
-                for index_id in range(0, len(filled_indexes)):
-                    index = filled_indexes[index_id]
-                    self.zcs[scale_id][index].keys[sub_scale_id] = index_id
-
-                last_filled = -1
-                for zc_id in range(0, len(self.zcs[scale_id])):
-                    if(self.zcs[scale_id][zc_id].keys[sub_scale_id] == -1):
-                        zcs_index = self.zcs[scale_id][zc_id].index
-                        if last_filled < 0:
-                            self.zcs[scale_id][zc_id].keys[sub_scale_id] = 0
-                        elif last_filled >= len(self.zcs[sub_scale_id]) - 1:
-                            self.zcs[scale_id][zc_id].keys[sub_scale_id] = len(self.zcs[sub_scale_id]) - 1
-                        else:
-                            zcs_left_index = self.zcs[sub_scale_id][last_filled].index
-                            zcs_right_index = self.zcs[sub_scale_id][last_filled + 1].index
-                            if abs(zcs_left_index - zcs_index) > abs(zcs_right_index - zcs_index):
-                                self.zcs[scale_id][zc_id].keys[sub_scale_id] = last_filled
-                            else:
-                                self.zcs[scale_id][zc_id].keys[sub_scale_id] = last_filled + 1
-                    else:
-                        last_filled += 1
-
     def qrs_del(self):
         cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, 0, len(self.wdc[0]))
         self.qrs_dels = cur_qrs_dels
