@@ -21,7 +21,7 @@ def is_small_p(ecg_lead, qrs_id, zcs, peak_zc_id):
     p_amplitude = zcs[peak_zc_id].s_ampl
     begin_qrs_index = ecg_lead.qrs_dels[qrs_id].onset_index
     end_qrs_index = ecg_lead.qrs_dels[qrs_id].offset_index
-    qrs_aux_zcs = get_zcs_in_window(ecg_lead.wdc[wdc_scale_id], ecg_lead.zcs[wdc_scale_id], begin_qrs_index, end_qrs_index)
+    qrs_aux_zcs = get_zcs_in_window(ecg_lead.wdc[wdc_scale_id], ecg_lead.zcs[wdc_scale_id], ecg_lead.ids_zcs[wdc_scale_id], begin_qrs_index, end_qrs_index)
 
     if qrs_aux_zcs:
         qrs_zc = qrs_aux_zcs[0]

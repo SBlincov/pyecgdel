@@ -21,6 +21,7 @@ def add_complex(leads, corr_mtx, g_id, mean_qrs_on, mean_qrs_off):
             # Search ZCSs in averaged interval
             qrs_del_extra_zcs = get_zcs_in_window(lead.wdc[int(QRSParams['WDC_SCALE_ID'])],
                                                   lead.zcs[int(QRSParams['WDC_SCALE_ID'])],
+                                                  lead.ids_zcs[int(QRSParams['WDC_SCALE_ID'])],
                                                         qrs_del_extra.onset_index,
                                                         qrs_del_extra.offset_index)
 

@@ -27,7 +27,7 @@ def flutter_analysis(leads):
             begin_index = lead.qrs_dels[seg_id].offset_index
             end_index = lead.qrs_dels[seg_id + 1].onset_index
 
-            zcs = get_zcs_in_window(lead.wdc[wdc_scale_id], lead.zcs[wdc_scale_id], begin_index, end_index)
+            zcs = get_zcs_in_window(lead.wdc[wdc_scale_id], lead.zcs[wdc_scale_id], lead.ids_zcs[wdc_scale_id], begin_index, end_index)
             if len(zcs) > 0:
 
                 # Special check for first zc

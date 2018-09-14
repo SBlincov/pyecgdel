@@ -39,26 +39,17 @@ def get_zcs(wdc, mms):
     return zcs
 
 
-def get_left_zc(zcs, index):
-    indexes = [x.index for x in zcs]
-    id = get_closest(indexes, index)
-    if zcs[id].index < index:
-        return zcs[id]
-    else:
-        return zcs[id - 1]
+def get_left_zc(zcs, ids_zcs, index):
+    id = get_closest_zc_id_left(zcs, ids_zcs, index)
+    return zcs[id]
 
 
-def get_right_zc(zcs, index):
-    indexes = [x.index for x in zcs]
-    id = get_closest(indexes, index)
-    if zcs[id].index > index:
-        return zcs[id]
-    else:
-        return zcs[id + 1]
+def get_right_zc(zcs, ids_zcs, index):
+    id = get_closest_zc_id_right(zcs, ids_zcs, index)
+    return zcs[id]
 
 
-def get_zcs_in_window(wdc, zcs, begin_index, end_index):
-    indexes = [x.index for x in zcs]
+def get_zcs_in_window(wdc, zcs, ids_zcs, begin_index, end_index):
 
     begin_index_for_zc = begin_index + 1
     end_index_for_zc = end_index - 1
@@ -66,10 +57,10 @@ def get_zcs_in_window(wdc, zcs, begin_index, end_index):
     begin_index_for_mm = begin_index
     end_index_for_mm = end_index - 1
 
-    begin_id = get_closest(indexes, begin_index_for_zc)
+    begin_id = get_closest_zc_id(zcs, ids_zcs, begin_index_for_zc)
     if zcs[begin_id].index < begin_index_for_zc:
         begin_id += 1
-    end_id = get_closest(indexes, end_index_for_zc)
+    end_id = get_closest_zc_id(zcs, ids_zcs, end_index_for_zc)
     if zcs[end_id].index >= end_index_for_zc:
         end_id -= 1
 
@@ -112,3 +103,35 @@ def get_zcs_in_window(wdc, zcs, begin_index, end_index):
                 right_zc.zc_proc()
 
     return target_zcs
+
+
+def get_closest_zc_id(zcs, ids_zcs, index):
+    id = ids_zcs[index]
+    if id == -1:
+        return 0
+    if id == len(zcs) - 1:
+        return len(zcs) - 1
+    else:
+        if abs(zcs[id].index - index) < abs(zcs[id + 1].index - index):
+            return id
+        else:
+            return id + 1
+
+def get_closest_zc_id_left(zcs, ids_zcs, index):
+    id = ids_zcs[index]
+    if id == -1:
+        return 0
+    if id == len(zcs) - 1:
+        return len(zcs) - 1
+    else:
+        return id
+
+def get_closest_zc_id_right(zcs, ids_zcs, index):
+    id = ids_zcs[index]
+    if id == -1:
+        return 0
+    if id == len(zcs) - 1:
+        return len(zcs) - 1
+    else:
+        return id + 1
+

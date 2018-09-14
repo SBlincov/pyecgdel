@@ -41,7 +41,9 @@ class ECGLead:
         self.wdc = []
 
         self.mms = []
+        self.ids_mms = []
         self.zcs = []
+        self.ids_zcs = []
 
         self.qrs_dels = []
         self.qrs_morphs = []
@@ -73,15 +75,37 @@ class ECGLead:
 
     def calc_mms(self):
         self.mms = []
+        self.ids_mms = []
         for id in range(0, len(self.wdc)):
             curr_mms = get_mms(self.wdc[id])
             self.mms.append(curr_mms)
 
+            curr_ids_mms = np.zeros(len(self.wdc[id]), dtype=int)
+            curr_id = -1
+            curr_index = 0
+            for mm in curr_mms:
+                curr_ids_mms[curr_index:mm.index] = curr_id
+                curr_index = mm.index
+                curr_id = mm.id
+            curr_ids_mms[curr_index:] = curr_id
+            self.ids_mms.append(curr_ids_mms)
+
     def calc_zcs(self):
         self.zcs = []
+        self.ids_zcs = []
         for id in range(0, len(self.wdc)):
             curr_zcs = get_zcs(self.wdc[id], self.mms[id])
             self.zcs.append(curr_zcs)
+
+            curr_ids_zcs = np.zeros(len(self.wdc[id]), dtype=int)
+            curr_id = -1
+            curr_index = 0
+            for zc in curr_zcs:
+                curr_ids_zcs[curr_index:zc.index] = curr_id
+                curr_index = zc.index
+                curr_id = zc.id
+            curr_ids_zcs[curr_index:] = curr_id
+            self.ids_zcs.append(curr_ids_zcs)
 
     def qrs_del(self):
         cur_qrs_dels, cur_qrs_morph = get_qrs_dels(self, 0, len(self.wdc[0]))

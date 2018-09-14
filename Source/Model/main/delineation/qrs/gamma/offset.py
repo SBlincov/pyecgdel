@@ -92,7 +92,7 @@ def offset_processing(last_zc_id, ecg_lead, delineation, morph_data, points, dir
         #     and define its index as onset
         if not is_offset_found:
             scale_id_bord = int(QRSParams['GAMMA_BORD_SCALE'])
-            mm_bord = get_right_mm(ecg_lead.mms[scale_id_bord], last_zc.index)
+            mm_bord = get_right_mm(ecg_lead.mms[scale_id_bord], ecg_lead.ids_mms[scale_id_bord], last_zc.index)
             qrs_offset_index = mm_bord.index
             is_offset_found = True
 

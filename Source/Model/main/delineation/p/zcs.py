@@ -26,7 +26,7 @@ def get_p_zcs(ecg_lead, qrs_id, window):
     begin_index = get_p_begin_index(ecg_lead, qrs_id)
     end_index = get_p_end_index(ecg_lead, qrs_id)
 
-    zcs = get_zcs_in_window(ecg_lead.wdc[wdc_scale_id], ecg_lead.zcs[wdc_scale_id], begin_index, end_index)
+    zcs = get_zcs_in_window(ecg_lead.wdc[wdc_scale_id], ecg_lead.zcs[wdc_scale_id], ecg_lead.ids_zcs[wdc_scale_id], begin_index, end_index)
     if len(zcs) > 0:
         if len(zcs) == 1:
             zcs[0].special(ecg_lead.wdc[wdc_scale_id], max(begin_index, zcs[0].index - window), min(end_index, zcs[0].index + window))

@@ -113,7 +113,7 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                     if is_peak_shifted == False or num_points <= 5:
 
                         mms = leads[lead_id].mms[0]
-                        indexes = [x.index for x in mms]
+                        ids_mms = leads[lead_id].ids_mms[0]
 
                         if (branch_onset > 0):
 
@@ -122,7 +122,7 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                             new_on_left = on
                             new_on_right = on
 
-                            mm_id_init = get_closest(indexes, mean_qrs_on)
+                            mm_id_init = get_closest_mm_id(mms, ids_mms, mean_qrs_on)
 
                             # Search closest to mean left non-correct mms and zcs on 0 scale
                             mm_id = mm_id_init
@@ -178,7 +178,7 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                             new_off_left = off
                             new_off_right = off
 
-                            mm_id_init = get_closest(indexes, mean_qrs_off)
+                            mm_id_init = get_closest_mm_id(mms, ids_mms, mean_qrs_off)
 
                             # Search closest to mean left non-correct mms and zcs on 0 scale
                             mm_id = mm_id_init
@@ -231,7 +231,11 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                     else:
 
                         # New delineation and morphology
-                        qrs_del_extra_zcs = get_zcs_in_window(leads[lead_id].wdc[int(QRSParams['WDC_SCALE_ID'])], leads[lead_id].zcs[int(QRSParams['WDC_SCALE_ID'])], mean_qrs_on, mean_qrs_off)
+                        qrs_del_extra_zcs = get_zcs_in_window(leads[lead_id].wdc[int(QRSParams['WDC_SCALE_ID'])],
+                                                              leads[lead_id].zcs[int(QRSParams['WDC_SCALE_ID'])],
+                                                              leads[lead_id].ids_zcs[int(QRSParams['WDC_SCALE_ID'])],
+                                                              mean_qrs_on,
+                                                              mean_qrs_off)
 
                         # If ZCSs exist in averaged interval
                         if qrs_del_extra_zcs:

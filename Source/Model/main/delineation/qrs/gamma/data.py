@@ -44,7 +44,7 @@ class QRSMorphologyData:
 
         for scale_id in range(0, aux_wdc_scale_id + 1):
             curr_wdc = wdc[scale_id]
-            curr_zcs = get_zcs_in_window(ecg_lead.wdc[scale_id], ecg_lead.zcs[scale_id], begin_index, end_index)
+            curr_zcs = get_zcs_in_window(ecg_lead.wdc[scale_id], ecg_lead.zcs[scale_id], ecg_lead.ids_zcs[scale_id], begin_index, end_index)
             zcs.append(curr_zcs)
 
             curr_dels_zcs_ids = []
