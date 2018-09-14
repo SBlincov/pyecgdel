@@ -18,7 +18,7 @@ def get_zcs(wdc, mms):
 
         # Define list of left mms
         if id > 0:
-            l_mms = copy.deepcopy(r_mms)
+            l_mms = list(r_mms)
         else:
             l_mms = []
             while mm_id < len(mms) and mms[mm_id].index < index:
@@ -64,7 +64,7 @@ def get_zcs_in_window(wdc, zcs, ids_zcs, begin_index, end_index):
     if zcs[end_id].index >= end_index_for_zc:
         end_id -= 1
 
-    target_zcs = copy.deepcopy(zcs[begin_id: end_id + 1])
+    target_zcs = list(zcs[begin_id: end_id + 1])
 
     if len(target_zcs) > 0:
 
