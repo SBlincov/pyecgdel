@@ -66,15 +66,32 @@ class ZeroCrossing:
 
 
 
-    def special(self, l_window, r_window):
-        l_mms = [mm for mm in self.l_mms if mm.index > self.index - l_window]
-        r_mms = [mm for mm in self.r_mms if mm.index < self.index + r_window]
+    def special(self, wdc, left_index, right_index):
 
-        self.s_l_mm = l_mms[np.argmax([abs(mm.value) for mm in l_mms])] if len(l_mms) > 0 else None
-        self.s_r_mm = r_mms[np.argmax([abs(mm.value) for mm in r_mms])] if len(r_mms) > 0 else None
-        if self.s_l_mm is not None and self.s_r_mm is not None:
-            self.s_ampl = abs(self.s_l_mm.value) + abs(self.s_r_mm.value)
+        right_index -= 1
+
+        l_mms = [mm for mm in self.l_mms if mm.index > left_index]
+        if len(l_mms) > 0:
+            self.s_l_mm = l_mms[np.argmax([abs(mm.value) for mm in l_mms])]
         else:
-            self.s_l_mm = self.g_l_mm
-            self.s_r_mm = self.g_r_mm
-            self.s_ampl = self.g_ampl
+            self.s_l_mm = None
+        if self.s_l_mm is None:
+            if self.index == left_index:
+                self.s_l_mm = ModulusMaxima(left_index, self.l_mms[0].id, wdc)
+            else:
+                left_mm_index = left_index + np.argmax(np.abs(wdc[left_index:self.index]))
+                self.s_l_mm = ModulusMaxima(left_mm_index, self.l_mms[0].id, wdc)
+
+        r_mms = [mm for mm in self.r_mms if mm.index < right_index]
+        if len(r_mms) > 0:
+            self.s_r_mm = r_mms[np.argmax([abs(mm.value) for mm in r_mms])]
+        else:
+            self.s_r_mm = None
+        if self.s_r_mm is None:
+            if self.index == right_index:
+                self.s_r_mm = ModulusMaxima(right_index, self.r_mms[0].id, wdc)
+            else:
+                right_mm_index = self.index + np.argmax(np.abs(wdc[self.index:right_index]))
+                self.s_r_mm = ModulusMaxima(right_mm_index, self.r_mms[0].id, wdc)
+
+        self.s_ampl = abs(self.s_l_mm.value) + abs(self.s_r_mm.value)
