@@ -126,3 +126,5 @@ ludb/ludb/
 *.json
 
 My Amplifier Results - pyecgdel/
+
+\.vs/pyecgdel/v15/\.suo
