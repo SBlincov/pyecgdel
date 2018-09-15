@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ddd16115-239b-43db-97a9-41948884d5ff}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>Source\Scenario\run\single.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ludb\diagnosis\parse_diag.py" />
+    <Compile Include="Plot\python\plot_ellipse.py" />
+    <Compile Include="Source\CardioBase\cardiobase.py" />
+    <Compile Include="Source\CardioBase\cardiodata.py" />
+    <Compile Include="Source\CardioBase\example.py" />
+    <Compile Include="Source\CardioBase\test.py" />
+    <Compile Include="Source\Infrastructure\main\config.py" />
+    <Compile Include="Source\Infrastructure\main\config_default.py" />
+    <Compile Include="Source\Infrastructure\main\db_config_local.py" />
+    <Compile Include="Source\Infrastructure\main\ecg_data_routines.py" />
+    <Compile Include="Source\Infrastructure\main\load_ecg_data.py" />
+    <Compile Include="Source\Infrastructure\main\save_ecg_data.py" />
+    <Compile Include="Source\Infrastructure\main\__init__.py" />
+    <Compile Include="Source\Infrastructure\__init__.py" />
+    <Compile Include="Source\main.py" />
+    <Compile Include="Source\main_ind.py" />
+    <Compile Include="Source\Model\main\characteristics\characteristics_names.py" />
+    <Compile Include="Source\Model\main\characteristics\flutter_characteristics.py" />
+    <Compile Include="Source\Model\main\characteristics\p_characteristics.py" />
+    <Compile Include="Source\Model\main\characteristics\qrs_characteristics.py" />
+    <Compile Include="Source\Model\main\characteristics\t_characteristics.py" />
+    <Compile Include="Source\Model\main\characteristics\__init__.py" />
+    <Compile Include="Source\Model\main\continuous_wavelet_transform\helpers.py" />
+    <Compile Include="Source\Model\main\continuous_wavelet_transform\mothers.py" />
+    <Compile Include="Source\Model\main\continuous_wavelet_transform\wavelet.py" />
+    <Compile Include="Source\Model\main\continuous_wavelet_transform\__init__.py" />
+    <Compile Include="Source\Model\main\custom_wavelet\custom_wavelet.py" />
+    <Compile Include="Source\Model\main\custom_wavelet\__init__.py" />
+    <Compile Include="Source\Model\main\data_details\ecg_data_details.py" />
+    <Compile Include="Source\Model\main\data_details\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\flutter\flutter.py" />
+    <Compile Include="Source\Model\main\delineation\flutter\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\morfology_point.py" />
+    <Compile Include="Source\Model\main\delineation\peaks_zcs_ids.py" />
+    <Compile Include="Source\Model\main\delineation\p\beta\beta.py" />
+    <Compile Include="Source\Model\main\delineation\p\beta\biphasic.py" />
+    <Compile Include="Source\Model\main\delineation\p\beta\flexure.py" />
+    <Compile Include="Source\Model\main\delineation\p\beta\legacy.py" />
+    <Compile Include="Source\Model\main\delineation\p\beta\offset.py" />
+    <Compile Include="Source\Model\main\delineation\p\beta\onset.py" />
+    <Compile Include="Source\Model\main\delineation\p\beta\peak.py" />
+    <Compile Include="Source\Model\main\delineation\p\beta\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\p\delineation.py" />
+    <Compile Include="Source\Model\main\delineation\p\delta\addition.py" />
+    <Compile Include="Source\Model\main\delineation\p\delta\data.py" />
+    <Compile Include="Source\Model\main\delineation\p\delta\delta.py" />
+    <Compile Include="Source\Model\main\delineation\p\delta\matrix.py" />
+    <Compile Include="Source\Model\main\delineation\p\delta\removal.py" />
+    <Compile Include="Source\Model\main\delineation\p\delta\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\p\fibrillation\fibrillation.py" />
+    <Compile Include="Source\Model\main\delineation\p\fibrillation\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\p\gamma\data.py" />
+    <Compile Include="Source\Model\main\delineation\p\gamma\gamma.py" />
+    <Compile Include="Source\Model\main\delineation\p\gamma\offset.py" />
+    <Compile Include="Source\Model\main\delineation\p\gamma\onset.py" />
+    <Compile Include="Source\Model\main\delineation\p\gamma\peak.py" />
+    <Compile Include="Source\Model\main\delineation\p\gamma\points.py" />
+    <Compile Include="Source\Model\main\delineation\p\gamma\xtd.py" />
+    <Compile Include="Source\Model\main\delineation\p\gamma\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\p\routines.py" />
+    <Compile Include="Source\Model\main\delineation\p\zcs.py" />
+    <Compile Include="Source\Model\main\delineation\p\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\alpha\alpha.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\alpha\first.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\alpha\second.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\alpha\third.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\alpha\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\beta\beta.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\beta\offset.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\beta\onset.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\beta\peak.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\beta\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\delineation.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\delta\addition.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\delta\data.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\delta\delta.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\delta\matrix.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\delta\removal.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\delta\shift.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\delta\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\beta_legacy.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\branches.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\data.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\default.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\gamma.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\left.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\offset.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\onset.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\orders.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\peak.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\right.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\gamma\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\routines.py" />
+    <Compile Include="Source\Model\main\delineation\qrs\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\t\alpha\alpha.py" />
+    <Compile Include="Source\Model\main\delineation\t\alpha\biphasic.py" />
+    <Compile Include="Source\Model\main\delineation\t\alpha\flexure.py" />
+    <Compile Include="Source\Model\main\delineation\t\alpha\offset.py" />
+    <Compile Include="Source\Model\main\delineation\t\alpha\onset.py" />
+    <Compile Include="Source\Model\main\delineation\t\alpha\peak.py" />
+    <Compile Include="Source\Model\main\delineation\t\alpha\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\t\beta\beta.py" />
+    <Compile Include="Source\Model\main\delineation\t\beta\data.py" />
+    <Compile Include="Source\Model\main\delineation\t\beta\offset.py" />
+    <Compile Include="Source\Model\main\delineation\t\beta\onset.py" />
+    <Compile Include="Source\Model\main\delineation\t\beta\peak.py" />
+    <Compile Include="Source\Model\main\delineation\t\beta\points.py" />
+    <Compile Include="Source\Model\main\delineation\t\beta\xtd.py" />
+    <Compile Include="Source\Model\main\delineation\t\beta\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\t\delineation.py" />
+    <Compile Include="Source\Model\main\delineation\t\routines.py" />
+    <Compile Include="Source\Model\main\delineation\t\zcs.py" />
+    <Compile Include="Source\Model\main\delineation\t\__init__.py" />
+    <Compile Include="Source\Model\main\delineation\wave_delineation.py" />
+    <Compile Include="Source\Model\main\delineation\__init__.py" />
+    <Compile Include="Source\Model\main\discrete_wavelet_transform\wdc.py" />
+    <Compile Include="Source\Model\main\discrete_wavelet_transform\__init__.py" />
+    <Compile Include="Source\Model\main\ecg\ecg.py" />
+    <Compile Include="Source\Model\main\ecg\__init__.py" />
+    <Compile Include="Source\Model\main\ecg_lead\ecg_lead.py" />
+    <Compile Include="Source\Model\main\ecg_lead\__init__.py" />
+    <Compile Include="Source\Model\main\filtration\adaptive_filtration.py" />
+    <Compile Include="Source\Model\main\filtration\common_filtration.py" />
+    <Compile Include="Source\Model\main\filtration\cwt_filtration.py" />
+    <Compile Include="Source\Model\main\filtration\__init__.py" />
+    <Compile Include="Source\Model\main\modulus_maxima\modulus_maxima.py" />
+    <Compile Include="Source\Model\main\modulus_maxima\routines.py" />
+    <Compile Include="Source\Model\main\modulus_maxima\__init__.py" />
+    <Compile Include="Source\Model\main\params\common.py" />
+    <Compile Include="Source\Model\main\params\filter.py" />
+    <Compile Include="Source\Model\main\params\filter_default.py" />
+    <Compile Include="Source\Model\main\params\flutter.py" />
+    <Compile Include="Source\Model\main\params\flutter_default.py" />
+    <Compile Include="Source\Model\main\params\p.py" />
+    <Compile Include="Source\Model\main\params\p_default.py" />
+    <Compile Include="Source\Model\main\params\qrs.py" />
+    <Compile Include="Source\Model\main\params\qrs_default.py" />
+    <Compile Include="Source\Model\main\params\t.py" />
+    <Compile Include="Source\Model\main\params\t_default.py" />
+    <Compile Include="Source\Model\main\params\__init__.py" />
+    <Compile Include="Source\Model\main\plot_data\qrs.py" />
+    <Compile Include="Source\Model\main\plot_data\utils.py" />
+    <Compile Include="Source\Model\main\plot_data\__init__.py" />
+    <Compile Include="Source\Model\main\search\closest_position.py" />
+    <Compile Include="Source\Model\main\search\__init__.py" />
+    <Compile Include="Source\Model\main\threshold_crossings\routines.py" />
+    <Compile Include="Source\Model\main\threshold_crossings\__init__.py" />
+    <Compile Include="Source\Model\main\zero_crossings\routines.py" />
+    <Compile Include="Source\Model\main\zero_crossings\zero_crossing.py" />
+    <Compile Include="Source\Model\main\zero_crossings\__init__.py" />
+    <Compile Include="Source\Model\main\__init__.py" />
+    <Compile Include="Source\Model\__init__.py" />
+    <Compile Include="Source\Scenario\db_delete_single.py" />
+    <Compile Include="Source\Scenario\db_get\delineation\delineation_doc.py" />
+    <Compile Include="Source\Scenario\db_get\delineation\__init__.py" />
+    <Compile Include="Source\Scenario\db_get\diagnosis\diagnosis.py" />
+    <Compile Include="Source\Scenario\db_get\diagnosis\__init__.py" />
+    <Compile Include="Source\Scenario\db_get\params\params.py" />
+    <Compile Include="Source\Scenario\db_get\params\__init__.py" />
+    <Compile Include="Source\Scenario\db_get\patient_info\patient_info.py" />
+    <Compile Include="Source\Scenario\db_get\patient_info\__init__.py" />
+    <Compile Include="Source\Scenario\db_get\signal\all.py" />
+    <Compile Include="Source\Scenario\db_get\signal\by_ids_from_file.py" />
+    <Compile Include="Source\Scenario\db_get\signal\delineated_by_doc.py" />
+    <Compile Include="Source\Scenario\db_get\signal\single.py" />
+    <Compile Include="Source\Scenario\db_get\signal\__init__.py" />
+    <Compile Include="Source\Scenario\db_get\__init__.py" />
+    <Compile Include="Source\Scenario\db_get_original_delineation.py" />
+    <Compile Include="Source\Scenario\db_set\all.py" />
+    <Compile Include="Source\Scenario\db_set\params.py" />
+    <Compile Include="Source\Scenario\db_set\params_init.py" />
+    <Compile Include="Source\Scenario\db_set\set_record.py" />
+    <Compile Include="Source\Scenario\db_set\single.py" />
+    <Compile Include="Source\Scenario\db_set\__init__.py" />
+    <Compile Include="Source\Scenario\debug_local_single.py" />
+    <Compile Include="Source\Scenario\json\test.py" />
+    <Compile Include="Source\Scenario\json\__init__.py" />
+    <Compile Include="Source\Scenario\params\gen_params.py" />
+    <Compile Include="Source\Scenario\params\__init__.py" />
+    <Compile Include="Source\Scenario\run\all.py" />
+    <Compile Include="Source\Scenario\run\delineated_by_doc.py" />
+    <Compile Include="Source\Scenario\run\record.py" />
+    <Compile Include="Source\Scenario\run\single.py" />
+    <Compile Include="Source\Scenario\run\__init__.py" />
+    <Compile Include="Source\Scenario\test_db_behaviour.py" />
+    <Compile Include="Source\Scenario\test_main.py" />
+    <Compile Include="Source\Scenario\__init__.py" />
+    <Compile Include="Source\update_filtering.py" />
+    <Compile Include="Source\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ludb\" />
+    <Folder Include="ludb\diagnosis" />
+    <Folder Include="Plot\" />
+    <Folder Include="Plot\python" />
+    <Folder Include="Source" />
+    <Folder Include="Source\CardioBase" />
+    <Folder Include="Source\Infrastructure" />
+    <Folder Include="Source\Infrastructure\main" />
+    <Folder Include="Source\Model" />
+    <Folder Include="Source\Model\main" />
+    <Folder Include="Source\Model\main\characteristics" />
+    <Folder Include="Source\Model\main\continuous_wavelet_transform" />
+    <Folder Include="Source\Model\main\custom_wavelet" />
+    <Folder Include="Source\Model\main\data_details" />
+    <Folder Include="Source\Model\main\delineation" />
+    <Folder Include="Source\Model\main\delineation\flutter" />
+    <Folder Include="Source\Model\main\delineation\p" />
+    <Folder Include="Source\Model\main\delineation\p\beta" />
+    <Folder Include="Source\Model\main\delineation\p\delta" />
+    <Folder Include="Source\Model\main\delineation\p\fibrillation" />
+    <Folder Include="Source\Model\main\delineation\p\gamma" />
+    <Folder Include="Source\Model\main\delineation\qrs" />
+    <Folder Include="Source\Model\main\delineation\qrs\alpha" />
+    <Folder Include="Source\Model\main\delineation\qrs\beta" />
+    <Folder Include="Source\Model\main\delineation\qrs\delta" />
+    <Folder Include="Source\Model\main\delineation\qrs\gamma" />
+    <Folder Include="Source\Model\main\delineation\t" />
+    <Folder Include="Source\Model\main\delineation\t\alpha" />
+    <Folder Include="Source\Model\main\delineation\t\beta" />
+    <Folder Include="Source\Model\main\discrete_wavelet_transform" />
+    <Folder Include="Source\Model\main\ecg" />
+    <Folder Include="Source\Model\main\ecg_lead" />
+    <Folder Include="Source\Model\main\filtration" />
+    <Folder Include="Source\Model\main\modulus_maxima" />
+    <Folder Include="Source\Model\main\params" />
+    <Folder Include="Source\Model\main\plot_data" />
+    <Folder Include="Source\Model\main\search" />
+    <Folder Include="Source\Model\main\threshold_crossings" />
+    <Folder Include="Source\Model\main\zero_crossings" />
+    <Folder Include="Source\Scenario" />
+    <Folder Include="Source\Scenario\db_get" />
+    <Folder Include="Source\Scenario\db_get\delineation" />
+    <Folder Include="Source\Scenario\db_get\diagnosis" />
+    <Folder Include="Source\Scenario\db_get\params" />
+    <Folder Include="Source\Scenario\db_get\patient_info" />
+    <Folder Include="Source\Scenario\db_get\signal" />
+    <Folder Include="Source\Scenario\db_set" />
+    <Folder Include="Source\Scenario\json" />
+    <Folder Include="Source\Scenario\params" />
+    <Folder Include="Source\Scenario\run" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="ludb\diagnosis\venv\">
+      <Id>venv</Id>
+      <Description>venv (Anaconda 5.2.0)</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <Version>3.6</Version>
+      <Architecture>X64</Architecture>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+    </Interpreter>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
