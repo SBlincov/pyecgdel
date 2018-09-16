@@ -1,5 +1,7 @@
 import numpy as np
 from Source.Model.main.delineation.qrs.delta.data import *
+from Source.Model.main.search.closest_position import *
+
 
 def get_com_matrix(del_data, all_leads_data):
 
@@ -24,17 +26,28 @@ def get_com_matrix(del_data, all_leads_data):
 
         for del_id in range(0, del_data.len_of_dels[lead_id]):
 
-            on_diffs = []
-            off_diffs = []
+            on_argmin = get_closest(on_all_avg, ons_lead[del_id])
+            off_argmin = get_closest(off_all_avg, offs_lead[del_id])
 
-            for g_id in range(0, num_total):
-                on_diffs.append(ons_lead[del_id] - on_all_avg[g_id])
-                off_diffs.append(offs_lead[del_id] - off_all_avg[g_id])
+            # Additional checking:
+            #   If global closest onset and offset correspond to the neighbour (not the same) complexes, we check:
+            #       What provides smaller difference?
+            if abs(on_argmin - off_argmin) == 1:
+                on_diff_own = ons_lead[del_id] - on_all_avg[on_argmin]
+                on_diff_der = ons_lead[del_id] - on_all_avg[off_argmin]
 
-            min_data = MinData(on_diffs, off_diffs)
+                off_diff_own = offs_lead[del_id] - off_all_avg[off_argmin]
+                off_diff_der = offs_lead[del_id] - off_all_avg[on_argmin]
 
-            if min_data.on_argmin == min_data.off_argmin:
-                argmin = min_data.on_argmin
+                total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
+
+                if total_min == abs(on_diff_own) or total_min == abs(off_diff_der):
+                    off_argmin = on_argmin
+                else:
+                    on_argmin = off_argmin
+
+            if on_argmin == off_argmin:
+                argmin = on_argmin
                 corr_lead[argmin] = del_id
 
         corr_mtx.append(corr_lead)
@@ -47,3 +60,4 @@ def restore_morph_order(leads):
         lead = leads[lead_id]
         for morph_id in range(0, len(lead.qrs_morphs)):
             lead.qrs_morphs[morph_id].del_id = morph_id
+
