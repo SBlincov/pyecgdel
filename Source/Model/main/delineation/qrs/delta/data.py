@@ -1,6 +1,8 @@
 import numpy as np
 from Source.Model.main.params.qrs import QRSParams
+from Source.Model.main.search.closest_position import *
 import warnings
+
 
 class DelData:
 
@@ -102,38 +104,57 @@ class AllLeadsData:
 
                     curr_num_global = len(borders_counts)  # Current number of global complexes
 
-                    on_diffs = []  # Differences between current onset and all global onsets (averaged)
-                    off_diffs = []  # Differences between current offset and all global offsets (averaged)
+                    on_normed = []
+                    off_normed = []
                     for global_id in range(0, curr_num_global):
-                        on_diffs.append(ons_lead[del_id] - ons_sum[global_id] / borders_counts[global_id])
-                        off_diffs.append(offs_lead[del_id] - offs_sum[global_id] / borders_counts[global_id])
+                        on_normed.append(ons_sum[global_id] / borders_counts[global_id])
+                        off_normed.append(offs_sum[global_id] / borders_counts[global_id])
 
-                    min_data = MinData(on_diffs, off_diffs)
+                    on_argmin = get_closest(on_normed, ons_lead[del_id])
+                    off_argmin = get_closest(off_normed, offs_lead[del_id])
 
-                    # Calculate current optimal onset and offset
-                    on_curr = ons_sum[min_data.on_argmin] / borders_counts[min_data.on_argmin] + on_diffs[min_data.on_argmin]
-                    off_curr = offs_sum[min_data.off_argmin] / borders_counts[min_data.off_argmin] + off_diffs[min_data.off_argmin]
+                    on_diff_own = ons_lead[del_id] - on_normed[on_argmin]
+                    on_diff_der = ons_lead[del_id] - on_normed[off_argmin]
+                    off_diff_own = offs_lead[del_id] - off_normed[off_argmin]
+                    off_diff_der = offs_lead[del_id] - off_normed[on_argmin]
+
+                    # Additional checking:
+                    #   If global closest onset and offset correspond to the neighbour (not the same) complexes, we check:
+                    #       What provides smaller difference?
+                    if abs(on_argmin - off_argmin) == 1:
+
+                        total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
+
+                        if total_min == abs(on_diff_own) or total_min == abs(off_diff_der):
+                            off_argmin = on_argmin
+                            off_diff_own = offs_lead[del_id] - off_normed[off_argmin]
+                        else:
+                            on_argmin = off_argmin
+                            on_diff_own = ons_lead[del_id] - on_normed[on_argmin]
+
+                    on_min = ons_lead[del_id] - on_normed[on_argmin]
+                    off_min = offs_lead[del_id] - off_normed[off_argmin]
 
                     # If global closest onset and offset correspond to the same complexes
-                    if min_data.on_argmin == min_data.off_argmin:
+                    if on_argmin == off_argmin:
 
-                        argmin = min_data.on_argmin
+                        argmin = on_argmin
 
-                        if (abs(min_data.on_min) < loc) or (abs(min_data.off_min) < loc):  # Global complex already exist
+                        if (abs(on_min) < loc) or (abs(off_min) < loc):  # Global complex already exist
 
-                            ons_sum[argmin] += on_curr
-                            offs_sum[argmin] += off_curr
+                            ons_sum[argmin] += ons_lead[del_id]
+                            offs_sum[argmin] += offs_lead[del_id]
                             borders_counts[argmin] += 1
 
                         else:  # Need to insert additional global complex or delete special unique complex
 
-                            if (on_diffs[argmin] < 0.0) and (off_diffs[argmin] < 0.0):
-                                ons_sum.insert(argmin, on_curr)
-                                offs_sum.insert(argmin, off_curr)
+                            if (on_diff_own < 0.0) and (off_diff_own < 0.0):
+                                ons_sum.insert(argmin, ons_lead[del_id])
+                                offs_sum.insert(argmin, offs_lead[del_id])
                                 borders_counts.insert(argmin, 1)
-                            elif (on_diffs[argmin] > 0.0) and (off_diffs[argmin] > 0.0):
-                                ons_sum.insert(argmin + 1, on_curr)
-                                offs_sum.insert(argmin + 1, off_curr)
+                            elif (on_diff_own > 0.0) and (off_diff_own > 0.0):
+                                ons_sum.insert(argmin + 1, ons_lead[del_id])
+                                offs_sum.insert(argmin + 1, offs_lead[del_id])
                                 borders_counts.insert(argmin + 1, 1)
                             else:
                                 if lead_id in del_candidates:
