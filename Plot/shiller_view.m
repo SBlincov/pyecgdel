@@ -18,7 +18,7 @@ y_shift = 0.001;
 is_filtered = 1;
 is_del = 1;
 
-x_axis_type = 1;
+x_axis_type = 0;
 
 width_marker = 8;
 width_marker_doc = 5;

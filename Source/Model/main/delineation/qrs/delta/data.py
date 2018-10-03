@@ -70,177 +70,68 @@ class DelData:
         self.__init__(leads)
 
 
-class AllLeadsData:
-
-    def __init__(self, del_data):
-
-        # Computing params, which scales from mean QRS length
-        loc = del_data.mean_qrs_global * float(QRSParams['DELTA_MEAN_QRS_LOC'])
-
-        # Computing lead id with maximum number of dels
-        max_dels_lead_id = np.argmax(np.asarray(del_data.len_of_dels))
-
-        # Creating arrays with all complexes:
-        ons_sum = []  # sum of onset values
-        offs_sum = []  # sum of offset values
-        borders_counts = []  # occurrence rate
-        for del_id in range(0, del_data.len_of_dels[max_dels_lead_id]):
-            ons_sum.append(del_data.ons[max_dels_lead_id][del_id])
-            offs_sum.append(del_data.offs[max_dels_lead_id][del_id])
-            borders_counts.append(1)
-
-        del_candidates = {}  # array with special candidates for deletion
-
-        # Filling arrays with all complexes:
+class IntegralData:
+    def __init__(self, leads, del_data):
+        # Integral list
+        integral = np.zeros(len(leads[0].origin))
         for lead_id in range(0, del_data.num_leads):
+            for del_id in range(0, del_data.len_of_dels[lead_id]):
+                for index in range(del_data.ons[lead_id][del_id], del_data.offs[lead_id][del_id] + 1):
+                    integral[index] += 1
 
-            # For all leads except init lead
-            if lead_id != max_dels_lead_id:
+        # 'Common' lead
+        integral_ons = []
+        integral_offs = []
+        positives = np.argwhere(np.asarray(integral) > 0)
+        curr_pos = positives[0]
+        integral_ons.append(positives[0])
+        for pos in positives[1::]:
+            if pos - curr_pos > 1:
+                integral_offs.append(curr_pos)
+                integral_ons.append(pos)
+            curr_pos = pos
+        integral_offs.append(positives[-1])
 
-                ons_lead = del_data.ons[lead_id]
-                offs_lead = del_data.offs[lead_id]
+        num_dels = len(integral_ons)
 
-                for del_id in range(0, del_data.len_of_dels[lead_id]):
+        # Matrix of correspondence:
+        mtx = []
+        for lead_id in range(0, del_data.num_leads):
+            lead_row = []
+            lead_del_id = 0
+            for del_id in range(0, num_dels):
+                if del_data.ons[lead_id][lead_del_id] >= integral_ons[del_id] and del_data.offs[lead_id][lead_del_id] <= integral_offs[del_id]:
+                    lead_row.append(lead_del_id)
+                    lead_del_id += 1
+                else:
+                    lead_row.append(-1)
+            mtx.append(lead_row)
 
-                    curr_num_global = len(borders_counts)  # Current number of global complexes
+        # Average data
+        counts = np.zeros(num_dels)
+        ons = [ [] for i in range(num_dels) ]
+        peaks = [ [] for i in range(num_dels) ]
+        offs = [ [] for i in range(num_dels) ]
+        for del_id in range(0, num_dels):
+            ons[del_id] = []
+            peaks[del_id] = []
+            offs[del_id] = []
+            for lead_id in range(0, del_data.num_leads):
+                if mtx[lead_id][del_id] >= 0:
+                    counts[del_id] += 1
+                    ons[del_id].append(del_data.ons[lead_id][mtx[lead_id][del_id]])
+                    peaks[del_id].append(del_data.peaks[lead_id][mtx[lead_id][del_id]])
+                    offs[del_id].append(del_data.offs[lead_id][mtx[lead_id][del_id]])
 
-                    on_normed = []
-                    off_normed = []
-                    for global_id in range(0, curr_num_global):
-                        on_normed.append(ons_sum[global_id] / borders_counts[global_id])
-                        off_normed.append(offs_sum[global_id] / borders_counts[global_id])
+        self.num_dels = num_dels
+        self.integral = integral
+        self.integral_ons = integral_ons
+        self.integral_offs = integral_offs
 
-                    on_argmin = get_closest(on_normed, ons_lead[del_id])
-                    off_argmin = get_closest(off_normed, offs_lead[del_id])
+        self.mtx = mtx
 
-                    on_diff_own = ons_lead[del_id] - on_normed[on_argmin]
-                    on_diff_der = ons_lead[del_id] - on_normed[off_argmin]
-                    off_diff_own = offs_lead[del_id] - off_normed[off_argmin]
-                    off_diff_der = offs_lead[del_id] - off_normed[on_argmin]
-
-                    # Additional checking:
-                    #   If global closest onset and offset correspond to the neighbour (not the same) complexes, we check:
-                    #       What provides smaller difference?
-                    if abs(on_argmin - off_argmin) == 1:
-
-                        total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
-
-                        if total_min == abs(on_diff_own) or total_min == abs(off_diff_der):
-                            off_argmin = on_argmin
-                            off_diff_own = offs_lead[del_id] - off_normed[off_argmin]
-                        else:
-                            on_argmin = off_argmin
-                            on_diff_own = ons_lead[del_id] - on_normed[on_argmin]
-
-                    on_min = ons_lead[del_id] - on_normed[on_argmin]
-                    off_min = offs_lead[del_id] - off_normed[off_argmin]
-
-                    # If global closest onset and offset correspond to the same complexes
-                    if on_argmin == off_argmin:
-
-                        argmin = on_argmin
-
-                        if (abs(on_min) < loc) or (abs(off_min) < loc):  # Global complex already exist
-
-                            ons_sum[argmin] += ons_lead[del_id]
-                            offs_sum[argmin] += offs_lead[del_id]
-                            borders_counts[argmin] += 1
-
-                        else:  # Need to insert additional global complex or delete special unique complex
-
-                            if (on_diff_own < 0.0) and (off_diff_own < 0.0):
-                                ons_sum.insert(argmin, ons_lead[del_id])
-                                offs_sum.insert(argmin, offs_lead[del_id])
-                                borders_counts.insert(argmin, 1)
-                            elif (on_diff_own > 0.0) and (off_diff_own > 0.0):
-                                ons_sum.insert(argmin + 1, ons_lead[del_id])
-                                offs_sum.insert(argmin + 1, offs_lead[del_id])
-                                borders_counts.insert(argmin + 1, 1)
-                            else:
-                                if lead_id in del_candidates:
-                                    del_candidates[lead_id].append(del_id)
-                                else:
-                                    del_candidates[lead_id] = [del_id]
-                    else:
-                        warnings.warn("Onset and offset out of correspondence", UserWarning)
-
-        self.ons_sum = ons_sum
-        self.offs_sum = offs_sum
-        self.borders_counts = borders_counts
-        self.del_candidates = del_candidates
-
-
-class MinData:
-
-    def __init__(self, on_diffs, off_diffs):
-
-        # Finding global onset closest to current onset
-        on_argmin = np.argmin(np.absolute(np.asarray(on_diffs)))
-        on_min = on_diffs[on_argmin]
-
-        # Finding global offset closest to current offset
-        off_argmin = np.argmin(np.absolute(np.asarray(off_diffs)))
-        off_min = off_diffs[off_argmin]
-
-        # Additional checking:
-        #   If global closest onset and offset correspond to the neighbour (not the same) complexes, we check:
-        #       What provides smaller difference?
-        if abs(on_argmin - off_argmin) == 1:
-
-            on_diff_own = on_diffs[on_argmin]
-            on_diff_der = on_diffs[off_argmin]
-
-            off_diff_own = off_diffs[off_argmin]
-            off_diff_der = off_diffs[on_argmin]
-
-            total_min = min([abs(on_diff_own), abs(on_diff_der), abs(off_diff_own), abs(off_diff_der)])
-
-            if total_min == abs(on_diff_own) or total_min == abs(off_diff_der):
-
-                off_argmin = on_argmin
-                off_min = off_diffs[off_argmin]
-
-            else:
-
-                on_argmin = off_argmin
-                on_min = on_diffs[on_argmin]
-
-        self.on_argmin = on_argmin
-        self.on_min = on_min
-        self.off_argmin = off_argmin
-        self.off_min = off_min
-
-
-class StatData:
-
-    def __init__(self, leads, all_leads_data, del_data, corr_mtx):
-
-        num_leads = len(leads)
-
-        self.counts = []
-        self.ons = []
-        self.peaks = []
-        self.offs = []
-
-        for g_id in range(0, len(all_leads_data.borders_counts)):
-
-            qrs_count = 0
-            qrs_ons = []
-            qrs_peaks = []
-            qrs_offs = []
-
-            for lead_id in range(0, num_leads):
-
-                mtx_id = corr_mtx[lead_id][g_id]
-
-                if mtx_id > -1:
-                    qrs_count += 1
-                    qrs_ons.append(del_data.ons[lead_id][mtx_id])
-                    qrs_peaks.append(del_data.peaks[lead_id][mtx_id])
-                    qrs_offs.append(del_data.offs[lead_id][mtx_id])
-
-            self.counts.append(qrs_count)
-            self.ons.append(qrs_ons)
-            self.peaks.append(qrs_peaks)
-            self.offs.append(qrs_offs)
+        self.counts = counts
+        self.ons = ons
+        self.peaks = peaks
+        self.offs = offs
 

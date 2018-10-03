@@ -74,38 +74,38 @@ def is_qrs_peak_shifted(del_data, lead_id, mtx_id, mean_qrs_peak, std_qrs_peak):
         return True
 
 
-def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
+def shift_all(leads, del_data, integral_data):
 
-    num_leads = len(leads)
+    mtx = integral_data.mtx
 
-    for g_id in range(0, len(all_leads_data.borders_counts)):
+    for del_id in range(0, integral_data.num_dels):
 
-        qrs_count = stat_data.counts[g_id]
-        qrs_ons = stat_data.ons[g_id]
-        qrs_peaks = stat_data.peaks[g_id]
-        qrs_offs = stat_data.offs[g_id]
+        count = integral_data.counts[del_id]
+        ons = integral_data.ons[del_id]
+        peaks = integral_data.peaks[del_id]
+        offs = integral_data.offs[del_id]
 
-        if qrs_count > 0:
+        if count > 0:
 
-            mean_qrs_on = int(np.mean(qrs_ons))
-            mean_qrs_peak = int(np.mean(qrs_peaks))
-            mean_qrs_off = int(np.mean(qrs_offs))
+            mean_ons = int(np.mean(ons))
+            mean_peaks = int(np.mean(peaks))
+            mean_offs = int(np.mean(offs))
 
-            std_qrs_on = np.std(qrs_ons)
-            std_qrs_peak = np.std(qrs_peaks)
-            std_qrs_off = np.std(qrs_offs)
+            std_ons = np.std(ons)
+            std_peaks = np.std(peaks)
+            std_offs = np.std(offs)
 
             # Check for shifting
-            for lead_id in range(0, num_leads):
+            for lead_id in range(0, del_data.num_leads):
 
-                mtx_id = corr_mtx[lead_id][g_id]
+                mtx_id = mtx[lead_id][del_id]
 
                 if mtx_id > -1:
 
                     # Check shift branches
-                    is_peak_shifted = is_qrs_peak_shifted(del_data, lead_id, mtx_id, mean_qrs_peak, std_qrs_peak)
-                    branch_onset = get_qrs_on_shift_branch(del_data, lead_id, mtx_id, mean_qrs_on, std_qrs_on)
-                    branch_offset = get_qrs_off_shift_branch(del_data, lead_id, mtx_id, mean_qrs_off, std_qrs_off)
+                    is_peak_shifted = is_qrs_peak_shifted(del_data, lead_id, mtx_id, mean_peaks, std_peaks)
+                    branch_onset = get_qrs_on_shift_branch(del_data, lead_id, mtx_id, mean_ons, std_ons)
+                    branch_offset = get_qrs_off_shift_branch(del_data, lead_id, mtx_id, mean_offs, std_offs)
                     num_points = len(leads[lead_id].qrs_morphs[mtx_id].points)
 
                     peak = del_data.peaks[lead_id][mtx_id]
@@ -122,14 +122,14 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                             new_on_left = on
                             new_on_right = on
 
-                            mm_id_init = get_closest_mm_id(mms, ids_mms, mean_qrs_on)
+                            mm_id_init = get_closest_mm_id(mms, ids_mms, mean_ons)
 
                             # Search closest to mean left non-correct mms and zcs on 0 scale
                             mm_id = mm_id_init
-                            if mms[mm_id].index > mean_qrs_on:
+                            if mms[mm_id].index > mean_ons:
                                 mm_id -= 1
                             mm_left = mms[mm_id]
-                            left_zc_index = find_left_thc_index(leads[lead_id].wdc[0], mean_qrs_on, on, 0.0)
+                            left_zc_index = find_left_thc_index(leads[lead_id].wdc[0], mean_ons, on, 0.0)
 
                             if mm_left.correctness is False:
                                 new_on_left = max(mm_left.index, left_zc_index)
@@ -138,10 +138,10 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
 
                             # Search closest to mean right non-correct mms and zcs on 0 scale
                             mm_id = mm_id_init
-                            if mms[mm_id].index < mean_qrs_on:
+                            if mms[mm_id].index < mean_ons:
                                 mm_id += 1
                             mm_right = mms[mm_id]
-                            right_zc_index = find_right_thc_index(leads[lead_id].wdc[0], mean_qrs_on, peak, 0.0)
+                            right_zc_index = find_right_thc_index(leads[lead_id].wdc[0], mean_ons, peak, 0.0)
 
                             if mm_right.correctness is False:
                                 new_on_right = min(mm_right.index, right_zc_index)
@@ -149,7 +149,7 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                                 new_on_right = right_zc_index
 
                             # Now best from left and right
-                            if abs(new_on_left - mean_qrs_on) > abs(new_on_right - mean_qrs_on):
+                            if abs(new_on_left - mean_ons) > abs(new_on_right - mean_ons):
                                 new_on = new_on_right
                             else:
                                 new_on = new_on_left
@@ -178,14 +178,14 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                             new_off_left = off
                             new_off_right = off
 
-                            mm_id_init = get_closest_mm_id(mms, ids_mms, mean_qrs_off)
+                            mm_id_init = get_closest_mm_id(mms, ids_mms, mean_offs)
 
                             # Search closest to mean left non-correct mms and zcs on 0 scale
                             mm_id = mm_id_init
-                            if mms[mm_id].index > mean_qrs_off:
+                            if mms[mm_id].index > mean_offs:
                                 mm_id -= 1
                             mm_left = mms[mm_id]
-                            left_zc_index = find_left_thc_index(leads[lead_id].wdc[0], mean_qrs_off, peak, 0.0)
+                            left_zc_index = find_left_thc_index(leads[lead_id].wdc[0], mean_offs, peak, 0.0)
 
                             if mm_left.correctness is False:
                                 new_off_left = max(mm_left.index, left_zc_index)
@@ -194,10 +194,10 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
 
                             # Search closest to mean left non-correct mms and zcs on 0 scale
                             mm_id = mm_id_init
-                            if mms[mm_id].index < mean_qrs_off:
+                            if mms[mm_id].index < mean_offs:
                                 mm_id += 1
                             mm_right = mms[mm_id]
-                            right_zc_index = find_right_thc_index(leads[lead_id].wdc[0], mean_qrs_off, off, 0.0)
+                            right_zc_index = find_right_thc_index(leads[lead_id].wdc[0], mean_offs, off, 0.0)
 
                             if mm_right.correctness is False:
                                 new_off_right = min(mm_right.index, right_zc_index)
@@ -205,7 +205,7 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                                 new_off_right = right_zc_index
 
                             # Now best from left and right
-                            if abs(new_off_left - mean_qrs_off) > abs(new_off_right - mean_qrs_off):
+                            if abs(new_off_left - mean_offs) > abs(new_off_right - mean_offs):
                                 new_off = new_off_right
                             else:
                                 new_off = new_off_left
@@ -234,8 +234,8 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                         qrs_del_extra_zcs = get_zcs_in_window(leads[lead_id].wdc[int(QRSParams['WDC_SCALE_ID'])],
                                                               leads[lead_id].zcs[int(QRSParams['WDC_SCALE_ID'])],
                                                               leads[lead_id].ids_zcs[int(QRSParams['WDC_SCALE_ID'])],
-                                                              mean_qrs_on,
-                                                              mean_qrs_off)
+                                                              mean_ons,
+                                                              mean_offs)
 
                         # If ZCSs exist in averaged interval
                         if qrs_del_extra_zcs:
@@ -246,9 +246,9 @@ def shift_all(leads, del_data, all_leads_data, corr_mtx, stat_data):
                                 if qrs_del_extra_zcs[zc_id].g_ampl > qrs_del_extra_zc.g_ampl:
                                     qrs_del_extra_zc = qrs_del_extra_zcs[zc_id]
 
-                            leads[lead_id].qrs_dels[mtx_id].onset_index = mean_qrs_on
+                            leads[lead_id].qrs_dels[mtx_id].onset_index = mean_ons
                             leads[lead_id].qrs_dels[mtx_id].peak_index = qrs_del_extra_zc.index
-                            leads[lead_id].qrs_dels[mtx_id].offset_index = mean_qrs_off
+                            leads[lead_id].qrs_dels[mtx_id].offset_index = mean_offs
 
                             # Init morphology for new QRS
                             morphology = get_qrs_morphology(leads[lead_id], mtx_id, leads[lead_id].qrs_dels[mtx_id])
