@@ -100,7 +100,11 @@ class IntegralData:
             lead_row = []
             lead_del_id = 0
             for del_id in range(0, num_dels):
-                if del_data.ons[lead_id][lead_del_id] >= integral_ons[del_id] and del_data.offs[lead_id][lead_del_id] <= integral_offs[del_id]:
+                if \
+                        lead_del_id < len(del_data.peaks[lead_id]) and \
+                        del_data.ons[lead_id][lead_del_id] >= integral_ons[del_id] and \
+                        del_data.offs[lead_id][lead_del_id] <= integral_offs[del_id]:
+
                     lead_row.append(lead_del_id)
                     lead_del_id += 1
                 else:
